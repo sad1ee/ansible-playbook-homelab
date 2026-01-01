@@ -1,0 +1,21 @@
+Paths:
+  CACHE_PATH: /mnt/{{ homeserver_mount_dirs.ssd1 }}
+  BACKING_PATH: /mnt/{{ homeserver_mount_dirs.mergerfs_pool_hdds }}
+  LOG_PATH: /var/log/cache-mover.log
+
+Settings:
+  AUTO_UPDATE: false
+  UPDATE_BRANCH: main
+  THRESHOLD_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.threshold }}
+  TARGET_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.target }}
+  MAX_WORKERS: 8
+  MAX_LOG_SIZE_MB: 100
+  BACKUP_COUNT: 5
+  SCHEDULE: "0 3 * * *" # Docker only - ignored for cron
+  LOG_LEVEL: INFO # INFO, DEBUG
+  NOTIFICATIONS_ENABLED: false
+  NOTIFY_THRESHOLD: true
+  NOTIFICATION_URLS: []
+
+  EXCLUDED_DIRS:
+    {{ homeserver_mergerfs_cache_mover.excluded }}

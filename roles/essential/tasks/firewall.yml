@@ -1,0 +1,52 @@
+---
+# TODO: Find solution for parsing status output and comparing it to allowed ports
+# IDEA: when: motd_contents.stdout.find('hi') != -1
+# - name: firewall | Get UFW status
+#   ansible.builtin.command: ufw status
+#   register: essential_ufw_status
+#   changed_when: false
+#   tags: [essential, general]
+# - name: firewall | Verify only allowed ports are opened in UFW status
+#   ansible.builtin.debug:
+#     msg: {{ essential_ufw_status.stdout }}
+
+- name: firewall | Enable on boot and reload
+  community.general.ufw:
+    state: enabled
+  tags: [essential, firewall]
+
+- name: firewall | Set default logging level
+  community.general.ufw:
+    logging: low
+  tags: [essential, firewall]
+  notify: Reload UFW
+
+- name: firewall | Set default policy for in/out/routed
+  community.general.ufw:
+    default: "{{ item.default }}"
+    direction: "{{ item.direction }}"
+  loop:
+    - { default: allow, direction: outgoing }
+    - { default: deny, direction: incoming }
+    - { default: deny, direction: routed }
+  tags: [essential, firewall]
+  notify: Reload UFW
+
+- name: firewall | Allow defined incoming tcp/udp ports
+  community.general.ufw:
+    rule: allow
+    direction: in
+    proto: "{{ item.proto }}"
+    port: "{{ item.port }}"
+  loop: "{{ essential_firewall_allowed_tcp_udp_ports }}"
+  tags: [essential, firewall]
+  notify: Reload UFW
+
+- name: firewall | Allow defined incoming IPs
+  community.general.ufw:
+    rule: allow
+    direction: in
+    src: "{{ item.ip }}"
+  loop: "{{ essential_firewall_allowed_ips }}"
+  tags: [essential, firewall]
+  notify: Reload UFW

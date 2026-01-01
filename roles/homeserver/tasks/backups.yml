@@ -1,0 +1,38 @@
+---
+- name: backups | Copy rsnapshot config
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/rsnapshot.conf.j2"
+    dest: /etc/rsnapshot.conf
+    mode: "0644"
+    owner: root
+    group: root
+  tags: [homeserver, backup]
+
+- name: backups | Set up daily local rsnapshot backup
+  ansible.builtin.cron:
+    name: Daily rsnapshot backup
+    user: root
+    minute: "0"
+    hour: "2"
+    job: rsnapshot daysAgo
+  tags: [homeserver, backup]
+
+- name: backups | Set up weekly local rsnapshot backup
+  ansible.builtin.cron:
+    name: Weekly rsnapshot backup
+    user: root
+    minute: "0"
+    hour: "3"
+    weekday: "0"
+    job: rsnapshot weeksAgo
+  tags: [homeserver, backup]
+
+- name: backups | Set up monthly local rsnapshot backup
+  ansible.builtin.cron:
+    name: Monthly rsnapshot backup
+    user: root
+    minute: "0"
+    hour: "4"
+    day: "1"
+    job: rsnapshot monthsAgo
+  tags: [homeserver, backup]

@@ -1,0 +1,31 @@
+---
+essential_username: user
+essential_ssh_port: 22
+
+# general.yml
+essential_x11_variant: nodeadkeys
+
+# packages.yml
+essential_packages: []
+#  - ufw
+
+# firewall.yml
+essential_firewall_allowed_tcp_udp_ports: []
+essential_firewall_allowed_ips: []
+
+# geerlingguy.security
+essential_security_ssh_port: "{{ essential_ssh_port }}"
+essential_security_ssh_password_authentication: "yes"
+essential_security_ssh_allowed_user: "{{ essential_username }}"
+essential_security_sudoer_passwordless: "{{ essential_username }}"
+essential_security_autoupdate_reboot: true
+essential_security_autoupdate_reboot_time: 06:00
+
+# geerlingguy.pip
+essential_pip_install_packages:
+  - name: docker
+
+# geerlingguy.docker
+essential_docker_user: "{{ essential_username }}"
+essential_docker_daemon_options:
+  icc: false

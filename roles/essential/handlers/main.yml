@@ -1,0 +1,27 @@
+---
+- name: Restart cron
+  ansible.builtin.systemd:
+    name: cron
+    state: restarted
+  tags: [essential, general]
+
+- name: Set LANG
+  ansible.builtin.command: localectl set-locale LANG=en_US.UTF-8
+  changed_when: true
+  tags: [essential, general]
+
+  # NOTE: Does not work on debian (ubuntu) might be useful for arch workstation
+  # - name: Set VC Keymap
+  #   ansible.builtin.command: localectl set-keymap de
+  #   changed_when: true
+  #   tags: [essential, general]
+  # - name: Set X11 Layout, Model and Variant
+  #   ansible.builtin.command: >
+  #     localectl set-x11-keymap de pc105 {{ essential_x11_variant }}
+  #   changed_when: true
+  #   tags: [essential, general]
+
+- name: Reload UFW
+  community.general.ufw:
+    state: reloaded
+  tags: [essential, firewall]

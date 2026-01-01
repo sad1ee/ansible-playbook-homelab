@@ -1,0 +1,23 @@
+---
+- name: dirs | Create localhost docker compose dir
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  loop:
+    - "{{ playbook_dir }}/.ansible/templates"
+  delegate_to: localhost
+  tags: [services, dirs]
+
+- name: dirs | Create docker compose dir
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0750"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  loop:
+    - "{{ services_path.compose }}"
+  tags: [services, dirs]

@@ -1,0 +1,36 @@
+name: sonarr
+
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      DOCKER_MODS: linuxserver/mods:radarr-striptracks
+      STRIPTRACKS_ARGS: "--audio :eng:deu:und --subs :eng:deu"
+
+    volumes:
+      - "{{ services_path.sonarr }}:/config"
+      - "{{ services_path.media }}:/media"
+
+    container_name: sonarr
+    hostname: sonarr
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - flaresolverr
+      - recyclarr
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  flaresolverr:
+    external: true
+    name: flaresolverr
+  recyclarr:
+    external: true
+    name: recyclarr

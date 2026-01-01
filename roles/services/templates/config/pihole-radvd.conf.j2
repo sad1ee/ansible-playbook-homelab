@@ -1,0 +1,17 @@
+interface enp0s31f6
+{
+  AdvSendAdvert on;
+  MinRtrAdvInterval 30;
+  MaxRtrAdvInterval 100;
+
+  prefix fd42:1234:5678::/64
+  {
+    AdvOnLink on;
+    AdvAutonomous on;
+  };
+
+  RDNSS fd42:1234:5678::1
+  {
+    AdvRDNSSLifetime 7200;
+  };
+};

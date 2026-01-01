@@ -1,0 +1,20 @@
+---
+- name: Ensure drives are mounted
+  ansible.builtin.import_tasks: mount_disks.yml
+  tags: [homeserver]
+
+- name: Ensure mergerfs-cache-mover is setup
+  ansible.builtin.import_tasks: cache_mover.yml
+  tags: [homeserver]
+
+- name: Ensure HDD spindown is configured
+  ansible.builtin.import_tasks: hdd_spindown.yml
+  tags: [homeserver, spindown]
+
+- name: Ensure hardware transcoding for jellyfin is configured
+  ansible.builtin.import_tasks: transcoding.yml
+  tags: [homeserver]
+
+- name: Ensure rsnapshot backups are configured
+  ansible.builtin.import_tasks: backups.yml
+  tags: [homeserver, backup]

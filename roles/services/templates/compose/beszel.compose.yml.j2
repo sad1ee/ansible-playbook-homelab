@@ -1,0 +1,21 @@
+name: beszel
+
+services:
+  beszel:
+    image: henrygd/beszel:latest
+
+    volumes:
+      - "{{ services_path.beszel.data }}:/beszel_data"
+      - /etc/localtime:/etc/localtime:ro
+
+    container_name: beszel
+    hostname: beszel
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

@@ -1,0 +1,6 @@
+.ansible
+.vagrant
+*become.yml
+*become.yaml
+*secret.yml
+*secret.yaml

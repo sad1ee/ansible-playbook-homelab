@@ -1,0 +1,71 @@
+name: paperless
+
+services:
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+
+    environment:
+      USERMAP_UID: "{{ services_puid }}"
+      USERMAP_GID: "{{ services_pgid }}"
+      PAPERLESS_URL: "{{ services_domain.paperless }}"
+      PAPERLESS_PORT: "{{ services_webui_port.paperless }}"
+      PAPERLESS_TIME_ZONE: "{{ services_timezone }}"
+      PAPERLESS_OCR_LANGUAGE: deu
+      PAPERLESS_OCR_LANGUAGES: eng
+      PAPERLESS_REDIS: redis://redis:6379/0
+      PAPERLESS_REDIS_PREFIX: paperless
+      PAPERLESS_DBHOST: postgres
+      PAPERLESS_DBPORT: 5432
+      PAPERLESS_DBNAME: paperless
+      PAPERLESS_DBUSER: paperless
+      PAPERLESS_DBPASS: "{{ services_paperless_db_pass }}"
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+      PAPERLESS_CONSUMER_DISABLE: 1
+
+    volumes:
+      - "{{ services_path.paperless.data}}/data:/usr/src/paperless/data"
+      - "{{ services_path.paperless.data}}/media:/usr/src/paperless/media"
+      - "{{ services_path.paperless.export}}:/usr/src/paperless/export"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      gotenberg:
+        condition: service_started
+      tika:
+        condition: service_started
+
+    healthcheck:
+      disable: true
+
+    container_name: paperless
+    hostname: paperless
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - postgres
+      - redis
+      - gotenberg
+      - tika
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  postgres:
+    external: true
+    name: postgres
+  redis:
+    external: true
+    name: redis
+  gotenberg:
+    external: true
+    name: gotenberg
+  tika:
+    external: true
+    name: tika

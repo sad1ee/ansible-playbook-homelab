@@ -1,0 +1,72 @@
+---
+- name: pihole | Disable systemd-resolved stub listener and set dns servers
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    create: true
+  loop:
+    - regex: ^#?DNS=
+      line: DNS=127.0.0.1
+    - regex: ^#?FallbackDNS=
+      line: FallbackDNS=8.8.8.8 8.8.4.4
+    - regex: ^#?DNSStubListener=
+      line: DNSStubListener=no
+  notify: Restart systemd-resolved
+  tags: [services, pihole]
+
+- name: pihole | Set NTP to pihole
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/timesyncd.conf
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    create: true
+  loop:
+    - regex: ^#?NTP=
+      line: NTP=127.0.0.1
+    - regex: ^#?FallbackNTP=
+      line: FallbackNTP=ntp.ubuntu.com
+  notify: Restart systemd-timesyncd
+  tags: [services, pihole]
+
+- name: pihole | Deploy Netplan config
+  ansible.builtin.template:
+    src: config/pihole-netplan.yml.j2
+    dest: /etc/netplan/01-static.yaml
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Apply Netplan config
+  tags: [services, pihole]
+
+  # HACK: All of the following are temporary solutions for ISP Router
+
+- name: pihole | Configure RDNSS Advertisment
+  ansible.builtin.template:
+    src: config/pihole-radvd.conf.j2
+    dest: /etc/radvd.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Start and enable radvd
+  tags: [services, pihole]
+
+- name: pihole | Ensure radvd dameon is on
+  ansible.builtin.lineinfile:
+    path: /etc/default/radvd
+    line: RUN_DAEMON="yes"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    create: true
+  notify: Start and enable radvd
+  tags: [services, pihole]

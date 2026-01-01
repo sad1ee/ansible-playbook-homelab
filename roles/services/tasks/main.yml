@@ -1,0 +1,17 @@
+---
+- name: Ensure dirs on boot drive exist
+  ansible.builtin.include_tasks: dirs.yml
+  tags: [services, dirs]
+
+- name: Copy configuration files
+  ansible.builtin.include_tasks: configs.yml
+  tags: [services, configs]
+
+- name: Configure system configuration for pihole
+  ansible.builtin.include_tasks: pihole.yml
+  when: "'pihole' in services_list"
+  tags: [services, pihole]
+
+- name: Run containers tasks
+  ansible.builtin.include_tasks: containers.yml
+  tags: [services, containers, compose]

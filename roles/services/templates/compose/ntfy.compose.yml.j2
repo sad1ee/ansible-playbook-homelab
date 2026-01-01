@@ -1,0 +1,33 @@
+name: ntfy
+
+services:
+
+  ntfy:
+    image: binwiederhier/ntfy:latest
+
+    environment:
+      TZ: "{{ services_timezone }}"
+      NTFY_BEHIND_PROXY: "true"
+      NTFY_BASE_URL: "{{ services_domain.ntfy }}"
+      NTFY_LISTEN_HTTP: ":{{ services_webui_port.ntfy }}"
+
+    volumes:
+      - "{{ services_path.ntfy.cache }}:/var/cache/ntfy"
+      - "{{ services_path.ntfy.data }}:/etc/ntfy"
+
+    user: "{{ services_puid }}:{{ services_pgid }}"
+
+    command:
+      - serve
+
+    container_name: ntfy
+    hostname: ntfy
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

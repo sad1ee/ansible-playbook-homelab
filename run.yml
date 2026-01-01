@@ -1,0 +1,33 @@
+---
+- name: Run homelab playbook (all)
+  hosts: all
+  become: true
+  gather_facts: false
+  vars_files:
+    - group_vars/become.yml
+
+  pre_tasks:
+    - name: Gather minimal facts
+      ansible.builtin.setup:
+        gather_subset:
+          - "!all"
+
+    - name: Show available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+      when: false
+
+  roles:
+    - role: essential
+
+- name: Run homelab playbook (homeserver)
+  hosts: homeserver
+  become: true
+  gather_facts: false
+  vars_files:
+    - group_vars/become.yml
+    - group_vars/homeserver-secret.yml
+
+  roles:
+    - role: homeserver
+    - role: services

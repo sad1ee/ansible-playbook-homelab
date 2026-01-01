@@ -1,0 +1,33 @@
+---
+- name: Restart systemd-resolved
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: restarted
+    enabled: true
+  tags: [services, pihole]
+
+- name: Restart systemd-timesyncd
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    state: restarted
+    enabled: true
+  tags: [services, pihole]
+
+# - name: Restart isc-dhcp-relay
+#   ansible.builtin.systemd:
+#     name: isc-dhcp-relay
+#     state: restarted
+#     enabled: true
+#   tags: [services, pihole]
+
+- name: Apply Netplan config
+  ansible.builtin.command: netplan apply
+  changed_when: true
+  tags: [services, pihole]
+
+- name: Start and enable radvd
+  ansible.builtin.systemd:
+    name: radvd
+    state: started
+    enabled: true
+  tags: [services, pihole]

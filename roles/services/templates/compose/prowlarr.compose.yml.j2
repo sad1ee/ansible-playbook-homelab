@@ -1,0 +1,29 @@
+name: prowlarr
+
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+
+    volumes:
+      - "{{ services_path.prowlarr }}:/config"
+
+    container_name: prowlarr
+    hostname: prowlarr
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - flaresolverr
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  flaresolverr:
+    external: true
+    name: flaresolverr

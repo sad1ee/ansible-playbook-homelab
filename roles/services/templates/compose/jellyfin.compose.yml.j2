@@ -1,0 +1,30 @@
+name: jellyfin
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      DOCKER_MODS: linuxserver/mods:jellyfin-opencl-intel
+
+    volumes:
+      - "{{ services_path.jellyfin }}:/config"
+      - "{{ services_path.media }}/library:/media/library"
+
+    devices:
+      - /dev/dri:/dev/dri
+
+    container_name: jellyfin
+    hostname: jellyfin
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

@@ -1,0 +1,201 @@
+---
+services_username: user
+services_puid: 1000
+services_pgid: 1000
+services_docker_pgid: 988
+services_timezone: Europe/Berlin
+
+services_list:
+  # - authelia
+  - bazarr
+  - beszel-agent
+  - beszel
+  - cwa
+  - cwad
+  - dozzle
+  - flaresolverr
+  - gluetun
+  - gotenberg
+  - homepage
+  - jellyfin
+  - jellyseerr
+  - npm
+  - ntfy
+  - paperless
+  - pihole
+  - postgres
+  - prowlarr
+  # - pyload
+  - qbittorrent
+  - radarr
+  - recyclarr
+  - redis
+  - samba
+  - sonarr
+  - syncthing
+  - tika
+  - traefik
+  - wud
+
+services_bridge_networks:
+  - traefik
+  - flaresolverr
+  - recyclarr
+  - samba
+
+services_internal_networks:
+  - gotenberg
+  - postgres
+  - redis
+  - tika
+
+services_path:
+  cacheMount: /mnt/ssd1
+  storageMount: /mnt/storage
+  compose: /opt/docker
+  docker: "{{ services_path.cacheMount }}/docker"
+  media: "{{ services_path.storageMount }}/media"
+
+  qbittorrent: "{{ services_path.docker }}/qbittorrent"
+  radarr: "{{ services_path.docker }}/radarr"
+  sonarr: "{{ services_path.docker }}/sonarr"
+  prowlarr: "{{ services_path.docker }}/prowlarr"
+  bazarr: "{{ services_path.docker }}/bazarr"
+  recyclarr: "{{ services_path.docker }}/recyclarr"
+  jellyseerr: "{{ services_path.docker }}/jellyseerr"
+  jellyfin: "{{ services_path.docker }}/jellyfin"
+  calibre:
+    config: "{{ services_path.docker }}/cwa/config"
+    ingest: "{{ services_path.docker }}/cwa/ingest"
+    library: "{{ services_path.docker }}/cwa/library"
+
+  authelia: "{{ services_path.docker }}/authelia"
+
+  beszel:
+    data: "{{ services_path.docker }}/beszel/data"
+    agent: "{{ services_path.docker }}/beszel/agent"
+
+  homepage: "{{ services_path.docker }}/homepage"
+
+  npm:
+    data: "{{ services_path.docker }}/npm/data"
+    letsencrypt: "{{ services_path.docker }}/npm/letsencrypt"
+    snippets: "{{ services_path.docker }}/npm/snippets"
+
+  ntfy:
+    cache: "{{ services_path.docker }}/ntfy/cache"
+    data: "{{ services_path.docker }}/ntfy/data"
+
+  paperless:
+    data: "{{ services_path.docker }}/paperless/data"
+    export: "{{ services_path.docker }}/paperless/export"
+
+  pihole:
+    pihole: "{{ services_path.docker }}/pihole/pihole"
+    dnsmasq: "{{ services_path.docker }}/pihole/dnsmasq"
+
+  postgres: "{{ services_path.docker }}/postgres/data"
+
+  pyload:
+    config: "{{ services_path.docker }}/pyload/config"
+    downloads: "{{ services_path.docker }}/pyload/downloads"
+
+  redis: "{{ services_path.docker }}/redis"
+
+  samba: "{{ services_path.storageMount }}"
+
+  syncthing:
+    config: "{{ services_path.docker }}/syncthing/config"
+    data: "{{ services_path.docker }}/syncthing/data"
+
+  traefik: "{{ services_path.docker }}/traefik"
+
+services_webui_port:
+  qbittorrent: 8112
+  cwad: 8084
+  radarr: 7878
+  sonarr: 8989
+  prowlarr: 9696
+  bazarr: 6767
+  jellyseerr: 5055
+  jellyfin: 8096
+  cwa: 8083
+  authelia: 9091
+  beszel: 8090
+  dozzle: 8080
+  homepage: 3000
+  npm: 81
+  ntfy: 2586
+  paperless: 8000
+  pihole: 82
+  pyload: 8000
+  syncthing: 8384
+  wud: 3000
+
+services_domain:
+  qbittorrent: https://qbittorrent.{{ services_domain_base }}
+  cwad: https://cwad.{{ services_domain_base }}
+  radarr: https://radarr.{{ services_domain_base }}
+  sonarr: https://sonarr.{{ services_domain_base }}
+  prowlarr: https://prowlarr.{{ services_domain_base }}
+  bazarr: https://bazarr.{{ services_domain_base }}
+  jellyseerr: https://jellyseerr.{{ services_domain_base }}
+  jellyfin: https://jellyfin.{{ services_domain_base }}
+  cwa: https://cwa.{{ services_domain_base }}
+  authelia: https://authelia.{{ services_domain_base }}
+  beszel: https://beszel.{{ services_domain_base }}
+  dozzle: https://dozzle.{{ services_domain_base }}
+  homepage: https://homepage.{{ services_domain_base }}
+  npm: https://npm.{{ services_domain_base }}
+  ntfy: https://ntfy.{{ services_domain_base }}
+  paperless: https://paperless.{{ services_domain_base }}
+  pihole: https://pihole.{{ services_domain_base }}
+  pyload: https://pyload.{{ services_domain_base }}
+  syncthing: https://syncthing.{{ services_domain_base }}
+  traefik: https://traefik.{{ services_domain_base }}
+  wud: https://wud.{{ services_domain_base }}
+
+# *********************************************************************************** #
+# ************************ Override in group_vars/secret.yml ************************ #
+# *********************************************************************************** #
+services_gluetun_openvpn_user: OverrideMeInSecrets
+services_gluetun_openvpn_password: OverrideMeInSecrets
+services_gluetun_protonvpn_email: OverrideMeInSecrets
+services_gluetun_protonvpn_password: OverrideMeInSecrets
+services_jellyseerr_db_pass: OverrideMeInSecrets
+services_authelia_db_pass: OverrideMeInSecrets
+services_npm_db_pass: OverrideMeInSecrets
+services_paperless_db_pass: OverrideMeInSecrets
+services_postgres_db_pass: OverrideMeInSecrets
+services_beszel_user: OverrideMeInSecrets
+services_beszel_pass: OverrideMeInSecrets
+services_beszel_key: OverrideMeInSecrets
+services_beszel_token: OverrideMeInSecrets
+services_jellyfin_key: OverrideMeInSecrets
+services_jellyseerr_key: OverrideMeInSecrets
+services_calibre_user: OverrideMeInSecrets
+services_calibre_pass: OverrideMeInSecrets
+services_radarr_key: OverrideMeInSecrets
+services_sonarr_key: OverrideMeInSecrets
+services_prowlarr_key: OverrideMeInSecrets
+services_bazarr_key: OverrideMeInSecrets
+services_qbittorrent_user: OverrideMeInSecrets
+services_qbittorrent_pass: OverrideMeInSecrets
+services_paperless_user: OverrideMeInSecrets
+services_paperless_pass: OverrideMeInSecrets
+services_pyload_user: OverrideMeInSecrets
+services_pyload_pass: OverrideMeInSecrets
+services_npm_user: OverrideMeInSecrets
+services_npm_pass: OverrideMeInSecrets
+services_pihole_pass: OverrideMeInSecrets
+services_samba_user: OverrideMeInSecrets
+services_samba_password: OverrideMeInSecrets
+services_traefik_user: OverrideMeInSecrets
+services_traefik_pass: OverrideMeInSecrets
+services_wud_github_token: OverrideMeInSecrets
+services_duckdns_token: OverrideMeInSecrets
+services_domain_base: OverrideMeInSecrets
+services_pihole_dhcp_hosts: [OverrideMeInSecrets]
+services_pihole_dns_hosts: [OverrideMeInSecrets]
+services_pihole_cname_records: [OverrideMeInSecrets]
+# *********************************************************************************** #

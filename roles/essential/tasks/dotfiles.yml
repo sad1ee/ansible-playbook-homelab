@@ -1,0 +1,43 @@
+---
+- name: dotfiles | Check if chezmoi is already installed
+  ansible.builtin.stat:
+    path: /home/{{ essential_username }}/.local/bin/chezmoi
+  register: essential_chezmoi_bin
+  tags: [essential, dotfiles]
+
+- name: dotfiles | Get chezmoi installer script
+  ansible.builtin.get_url:
+    url: https://get.chezmoi.io
+    dest: /tmp/chezmoi.sh
+    owner: "{{ essential_username }}"
+    group: "{{ essential_username }}"
+    mode: "0755"
+  when: not essential_chezmoi_bin.stat.exists
+  tags: [essential, dotfiles]
+
+- name: dotfiles | Run chezmoi install script
+  ansible.builtin.command: >
+    sh /tmp/chezmoi.sh -b /home/{{ essential_username }}/.local/bin
+  args:
+    creates: /home/{{ essential_username }}/.local/bin/chezmoi
+  when: not essential_chezmoi_bin.stat.exists
+  tags: [essential, dotfiles]
+
+- name: dotfiles | Set ownership for chezmoi bin
+  ansible.builtin.file:
+    path: /home/{{ essential_username }}/.local/bin/chezmoi
+    owner: "{{ essential_username }}"
+    group: "{{ essential_username }}"
+  tags: [essential, dotfiles]
+
+# sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply sad1ee
+
+# TODO: Requires input for rbw (mail, password, 2fa)
+# - name: dotfiles | Initialize and apply chezmoi dotfiles
+#   ansible.builtin.command: >
+#     "{{ ansible_env.HOME }}/.local/bin/chezmoi init --apply sad1ee"
+#   args:
+#     chdir: "{{ ansible_env.HOME }}"
+#     creates: "{{ ansible_env.HOME }}/.config/chezmoi"
+#   when: not essential_chezmoi_bin.stat.exists
+#   tags: [essential, dotfiles]

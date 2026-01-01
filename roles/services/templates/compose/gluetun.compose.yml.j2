@@ -1,0 +1,62 @@
+name: gluetun
+
+services:
+  gluetun:
+    image: ghcr.io/qdm12/gluetun:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      LOGLEVEL: info # debug, info, warning, error
+      VPN_SERVICE_PROVIDER: protonvpn
+      VPN_TYPE: openvpn
+      OPENVPN_USER: "{{ services_gluetun_openvpn_user }}+pmp"
+      OPENVPN_PASSWORD: "{{ services_gluetun_openvpn_password }}"
+      SERVER_COUNTRIES: Germany
+      PORT_FORWARD_ONLY: on
+      VPN_PORT_FORWARDING: on
+      VPN_PORT_FORWARDING_PROVIDER: protonvpn
+      UPDATER_PERIOD: 24h
+      UPDATER_PROTONVPN_EMAIL: "{{ services_gluetun_protonvpn_email }}"
+      UPDATER_PROTONVPN_PASSWORD: "{{ services_gluetun_protonvpn_password }}"
+      VPN_PORT_FORWARDING_UP_COMMAND: |
+        /bin/sh -c 'wget -O- --retry-connrefused --post-data
+        {% raw %}
+        "json={
+        \"listen_port\":{{PORT}},
+        \"current_network_interface\":\"{{VPN_INTERFACE}}\",
+        \"random_port\":false,
+        \"upnp\":false
+        }"
+        {% endraw %}
+        http://127.0.0.1:{{ services_webui_port.qbittorrent }}
+        /api/v2/app/setPreferences 2>&1'
+      VPN_PORT_FORWARDING_DOWN_COMMAND: |
+        /bin/sh -c 'wget -O- --retry-connrefused --post-data
+        {% raw %}
+        "json={
+        \"listen_port\":0,
+        \"current_network_interface\":\"lo"
+        }"
+        {% endraw %}
+        http://127.0.0.1:{{ services_webui_port.qbittorrent }}
+        /api/v2/app/setPreferences 2>&1'
+
+    devices:
+      - /dev/net/tun:/dev/net/tun
+
+    cap_add:
+      - NET_ADMIN
+
+    container_name: gluetun
+    hostname: gluetun
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

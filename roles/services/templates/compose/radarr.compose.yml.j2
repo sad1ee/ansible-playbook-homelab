@@ -1,0 +1,36 @@
+name: radarr
+
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      DOCKER_MODS: linuxserver/mods:radarr-striptracks
+      STRIPTRACKS_ARGS: "--audio :eng:deu:und --subs :eng:deu"
+
+    volumes:
+      - "{{ services_path.radarr }}:/config"
+      - "{{ services_path.media }}:/media"
+
+    container_name: radarr
+    hostname: radarr
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - flaresolverr
+      - recyclarr
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  flaresolverr:
+    external: true
+    name: flaresolverr
+  recyclarr:
+    external: true
+    name: recyclarr

@@ -1,0 +1,31 @@
+---
+essential_packages:
+  - ufw
+  - hd-idle # for disk spindown
+  - fwupd # for firmware updates
+  - mergerfs # for mounting pools
+  - python3-venv # for cache_mover dependencies
+  - rsnapshot # for backup of data on ssd cache to hdds
+  - powertop # for c-states checking
+  - intel-gpu-tools # for intel_gpu_top to see gpu transcoding activity
+  - smartmontools # for disk health reports
+  - radvd # for netowork RDNSS override # HACK: Temporary fix for ISP router
+
+essential_firewall_allowed_tcp_udp_ports:
+  - port: 22 # ssh
+    proto: tcp
+  - port: 53 # pihole dns
+    proto: tcp
+  - port: 53 # pihole dns
+    proto: udp
+  - port: 67 # pihole dhcp
+    proto: udp
+  - port: 123 # pihole ntp
+    proto: udp
+  # HACK: Disgusting webui exposure cause network_mode host (dhcp relay didnt work)
+  - port: 82 # pihole webui
+    proto: tcp
+
+# HACK: Even more disgusting. TMP fix for ISP RA meaning for radvd
+essential_firewall_allowed_ips:
+  - ip: fd42:1234:5678::/64

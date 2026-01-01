@@ -1,0 +1,216 @@
+---
+- Monitoring:
+    - Beszel:
+        icon: beszel
+        href: "{{ services_domain.beszel }}"
+        server: local-docker
+        container: beszel
+        widget:
+          type: beszel
+          url: "{{ services_domain.beszel }}"
+          username: "{{ services_beszel_user }}"
+          password: "{{ services_beszel_pass }}"
+          systemId: pn326lg1axy991d
+          fields: ["cpu", "memory", "disk", "network"]
+          version: 2
+
+    - Dozzle:
+        icon: dozzle
+        href: "{{ services_domain.dozzle }}"
+        server: local-docker
+        container: dozzle
+
+    - Ntfy:
+        icon: ntfy
+        href: "{{ services_domain.ntfy }}"
+        server: local-docker
+        container: ntfy
+
+    - Whats-up-docker:
+        icon: whats-up-docker
+        href: "{{ services_domain.wud }}"
+        server: local-docker
+        container: wud
+        widget:
+          type: whatsupdocker
+          url: "{{ services_domain.wud }}"
+          # username: username # optional
+          # password: password # optional
+
+- Media:
+    - Frontend:
+        - Jellyfin:
+            icon: jellyfin
+            href: "{{ services_domain.jellyfin }}"
+            description: Media server
+            server: local-docker
+            container: jellyfin
+            widget:
+              type: jellyfin
+              url: "{{ services_domain.jellyfin }}"
+              key: "{{ services_jellyfin_key }}"
+              fields: ["movies", "series", "episodes"]
+              enableBlocks: true # optional, defaults to false
+              enableNowPlaying: true # optional, defaults to true
+              enableUser: true # optional, defaults to false
+              enableMediaControl: false # optional, defaults to true
+              showEpisodeNumber: true # optional, defaults to false
+              expandOneStreamToTwoRows: true # optional, defaults to true
+
+        - Jellyseerr:
+            icon: jellyseerr
+            href: "{{ services_domain.jellyseerr }}"
+            description: Media search
+            server: local-docker
+            container: jellyseerr
+            widget:
+              type: jellyseerr
+              url: "{{ services_domain.jellyseerr }}"
+              fields: ["pending", "approved", "available", "issues"]
+              key: "{{ services_jellyseerr_key }}"
+
+        - CWA:
+            icon: calibre-web
+            href: "{{ services_domain.cwa }}"
+            server: local-docker
+            container: cwa
+            widget:
+              type: calibreweb
+              url: "{{ services_domain.cwa }}"
+              username: "{{ services_calibre_user }}"
+              password: "{{ services_calibre_pass }}"
+
+        - CWAD:
+            icon: calibre-web-automated-book-downloader
+            href: "{{ services_domain.cwad }}"
+            server: local-docker
+            container: cwad
+
+    - Backend:
+        - Radarr:
+            icon: radarr
+            href: "{{ services_domain.radarr }}"
+            server: local-docker
+            container: radarr
+            widget:
+              type: radarr
+              url: "{{ services_domain.radarr }}"
+              key: "{{ services_radarr_key }}"
+              enableQueue: true # optional, defaults to false
+
+        - Sonarr:
+            icon: sonarr
+            href: "{{ services_domain.sonarr }}"
+            server: local-docker
+            container: sonarr
+            widget:
+              type: sonarr
+              url: "{{ services_domain.sonarr }}"
+              key: "{{ services_sonarr_key }}"
+              enableQueue: true # optional, defaults to false
+
+        - Prowlarr:
+            icon: prowlarr
+            href: "{{ services_domain.prowlarr }}"
+            server: local-docker
+            container: prowlarr
+            widget:
+              type: prowlarr
+              url: "{{ services_domain.prowlarr }}"
+              key: "{{ services_prowlarr_key }}"
+
+        - Bazarr:
+            icon: bazarr
+            href: "{{ services_domain.bazarr }}"
+            server: local-docker
+            container: bazarr
+            widget:
+              type: bazarr
+              url: "{{ services_domain.bazarr }}"
+              key: "{{ services_bazarr_key }}"
+
+        - QBittorrent:
+            icon: qbittorrent
+            href: "{{ services_domain.qbittorrent }}"
+            server: local-docker
+            container: qbittorrent
+            widget:
+              type: qbittorrent
+              url: "{{ services_domain.qbittorrent }}"
+              username: "{{ services_qbittorrent_user }}"
+              password: "{{ services_qbittorrent_pass }}"
+              enableLeechProgress: true # optional, defaults to false
+              enableLeechSize: true # optional, defaults to false
+
+        # - Gluetun:
+        #     icon: gluetun
+        #     server: local-docker
+        #     container: gluetun
+        #     widget:
+        #       type: gluetun
+        #       url: http://gluetun.host.or.ip:port
+        #       fields: ["public_ip", "region", "country", "port_forwarded"]
+        #       key: gluetunkey # Not required if /v1/publicip/ip endpoint is configured with `auth = none`
+        #       version: 2 # optional, default is 1
+
+- Services:
+    - Paperless:
+        icon: paperless
+        href: "{{ services_domain.paperless }}"
+        server: local-docker
+        container: paperless
+        widget:
+          type: paperlessngx
+          url: "{{ services_domain.paperless }}"
+          username: "{{ services_paperless_user }}"
+          password: "{{ services_paperless_pass }}"
+
+    # - Pyload:
+    #     icon: pyload
+    #     href: "{{ services_domain.pyload }}"
+    #     server: local-docker
+    #     container: pyload
+    #   widget:
+    #     type: pyload
+    #     url: "{{ services_domain.pyload }}"
+    #     username: "{{ services_pyload_user }}"
+    #     password: "{{ services_pyload_pass }}"
+
+    - Syncthing:
+        icon: syncthing
+        href: "{{ services_domain.syncthing }}"
+        server: local-docker
+        container: syncthing
+
+- System:
+    - Pihole:
+        icon: pi-hole-unbound
+        href: "{{ services_domain.pihole }}"
+        server: local-docker
+        container: pihole
+        widget:
+          type: pihole
+          url: "{{ services_domain.pihole }}"
+          version: 6
+
+    - Nginx Proxy Manager:
+        icon: nginx-proxy-manager
+        href: "{{ services_domain.npm }}"
+        server: local-docker
+        container: npm
+        widget:
+          type: npm
+          url: "{{ services_domain.npm }}"
+          username: "{{ services_npm_user }}"
+          password: "{{ services_npm_pass }}"
+
+    - Traefik:
+        icon: traefik
+        href: "{{ services_domain.traefik }}"
+        server: local-docker
+        container: traefik
+        widget:
+          type: traefik
+          url: "{{ services_domain.traefik }}"
+          username: "{{ services_traefik_user }}"
+          password: "{{ services_traefik_pass }}"

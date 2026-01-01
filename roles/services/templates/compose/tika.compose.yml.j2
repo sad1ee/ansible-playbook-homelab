@@ -1,0 +1,20 @@
+name: tika
+
+services:
+  tika:
+    image: docker.io/apache/tika:latest
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+    container_name: tika
+    hostname: tika
+    restart: unless-stopped
+
+    networks:
+      - tika
+
+networks:
+  tika:
+    external: true
+    name: tika

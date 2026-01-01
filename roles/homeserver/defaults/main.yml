@@ -1,0 +1,67 @@
+---
+homeserver_username: user
+homeserver_uid: 1000
+homeserver_gid: 1000
+
+homeserver_mount_dirs:
+  ssd1: ssd1
+  hdd1: hdd1
+  hdd2: hdd2
+  mergerfs_pool_hdds: hdd-pool
+  mergerfs_pool_all: storage
+
+homeserver_physical_drives:
+  - mnt: "{{ homeserver_mount_dirs.ssd1 }}"
+    uuid: fda22c38-eb4d-481a-adff-1b14d8f0288d
+    type: ext4
+    opts: defaults
+    spindown: false
+  - mnt: "{{ homeserver_mount_dirs.hdd1 }}"
+    uuid: da637766-54e1-4441-8b5b-5c906138d8a7
+    type: xfs
+    opts: defaults,noatime
+    spindown: true
+  - mnt: "{{ homeserver_mount_dirs.hdd2 }}"
+    uuid: 2a085e2e-a05a-4e30-b730-b28e22ded775
+    type: xfs
+    opts: defaults,noatime
+    spindown: true
+
+homeserver_mergerfs_pools:
+  - mnt: "{{ homeserver_mount_dirs.mergerfs_pool_hdds }}"
+    src: /mnt/{{ homeserver_mount_dirs.hdd1 }}:/mnt/{{ homeserver_mount_dirs.hdd2 }}
+    opts:
+      cache.files=partial,category.create=pfrd,func.getattr=newest,dropcacheonclose=true,use_ino,allow_other,uid={{
+      homeserver_uid }},gid={{ homeserver_gid }}
+  - mnt: "{{ homeserver_mount_dirs.mergerfs_pool_all }}"
+    src:
+      /mnt/{{ homeserver_mount_dirs.ssd1 }}:/mnt/{{ homeserver_mount_dirs.hdd1
+      }}:/mnt/{{ homeserver_mount_dirs.hdd2 }}
+    opts:
+      cache.files=partial,category.create=ff,func.getattr=newest,dropcacheonclose=true,use_ino,allow_other,uid={{
+      homeserver_uid }},gid={{ homeserver_gid }}
+
+homeserver_mergerfs_cache_mover:
+  cron:
+    weekday: "*"
+    hour: 4
+    minute: 0
+  trigger:
+    threshold: 75
+    target: 35
+  excluded:
+    - lost+found
+    - docker
+
+homeserver_disabled_services: []
+
+homeserver_fwupd_get_update_time: 05:00
+
+homeserver_rsnapshot:
+  count:
+    daily: 7
+    weekly: 4
+    monthly: 3
+  paths:
+    - src: /mnt/{{ homeserver_mount_dirs.ssd1 }}/docker/
+      dest: homeserver/

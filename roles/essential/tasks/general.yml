@@ -1,0 +1,71 @@
+---
+- name: general | Ensure default editor is vim
+  community.general.alternatives:
+    name: vim
+    path: /usr/bin/vim.basic
+
+  tags: [essential, general]
+
+- name: general | Ensure timezone is Europe/Berlin
+  community.general.timezone:
+    name: Europe/Berlin
+  notify: Restart cron
+  tags: [essential, general]
+
+- name: general | Ensure en_US.UTF-8 locale exists
+  community.general.locale_gen:
+    name: en_US.UTF-8
+    state: present
+  tags: [essential, general]
+
+- name: general | Get localectl status
+  ansible.builtin.command: localectl status
+  register: essential_localectl_status
+  changed_when: false
+  tags: [essential, general]
+
+- name: general | Verify LANG is en_US.UTF-8
+  ansible.builtin.debug:
+    msg: LANG is not en_US.UTF-8
+  when:
+    "'System Locale: LANG=en_US.UTF-8' not in essential_localectl_status.stdout_lines"
+  changed_when: true
+  notify: Set LANG
+  tags: [essential, general]
+
+# NOTE: Does not work on debian (ubuntu) might be useful for arch workstation
+# - name: general | Verify VC Keymap is de
+#   ansible.builtin.debug:
+#     msg: VC Keymap is not de
+#   when: "'VC Keymap: de' not in essential_localectl_status.stdout_lines"
+#   changed_when: true
+#   notify: Set XKG
+#   tags: [essential, general]
+# - name: general | Verify X11 Layout, Model and Variant
+#   ansible.builtin.debug:
+#     msg: X11 Layout, Model or Variant is not as specified
+#   when: "'X11 Layout: de' not in essential_localectl_status.stdout_lines or
+#     'X11 Model: pc105' not in essential_localectl_status.stdout_lines or
+#     essential_x11_variant not in essential_localectl_status.stdout_lines"
+#   changed_when: true
+#   notify: Set XKG
+#   tags: [essential, general]
+
+- name: general | Set XKG
+  ansible.builtin.lineinfile:
+    path: /etc/defaults/keyboard
+    regexp: "{{ item.regex }}"
+    line: "{{ item.value }}"
+    state: present
+    owner: root
+    group: root
+    mode: "0644"
+    create: true
+  loop:
+    - regex: ^#?XKBMODEL=
+      value: XKBMODEL=pc105
+    - regex: ^#?XKBLAYOUT=
+      value: XKBLAYOUT=de
+    - regex: ^#?XKBVARIANT=
+      value: XKBVARIANT=nodeadkeys
+  tags: [essential, general]

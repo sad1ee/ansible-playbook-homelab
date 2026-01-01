@@ -1,0 +1,42 @@
+name: flaresolverr
+
+services:
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+
+    environment:
+      TZ: "{{ services_timezone }}"
+      LOG_LEVEL: info # info, debug
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: jellyseerr
+      DB_USER: jellyseerr
+      DB_PASS: "{{ services_jellyseerr_db_pass }}"
+
+    volumes:
+      - "{{ services_path.jellyseerr }}:/app/config"
+
+    user: "{{ services_puid }}:{{ services_pgid }}"
+
+    init: true
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    container_name: jellyseerr
+    hostname: jellyseerr
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - postgres
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  postgres:
+    external: true
+    name: postgres

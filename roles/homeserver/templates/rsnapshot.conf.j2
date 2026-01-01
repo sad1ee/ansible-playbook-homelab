@@ -1,0 +1,63 @@
+#################################################
+# rsnapshot.conf - rsnapshot configuration file #
+#################################################
+#                                               #
+#   This file requires tabs between elements    #
+#                                               #
+#################################################
+#
+#######################
+# CONFIG FILE VERSION #
+#######################
+
+config_version	1.2
+
+###########################
+# SNAPSHOT ROOT DIRECTORY #
+###########################
+
+snapshot_root	/mnt/{{ homeserver_mount_dirs.mergerfs_pool_hdds }}/.rsnapshot
+
+#################################
+# EXTERNAL PROGRAM DEPENDENCIES #
+#################################
+
+cmd_cp	/bin/cp
+
+cmd_rm	/bin/rm
+
+cmd_rsync	/usr/bin/rsync
+
+# cmd_ssh	/usr/bin/ssh
+
+cmd_logger	/usr/bin/logger
+
+cmd_du	/usr/bin/du
+
+cmd_rsnapshot_diff	/usr/bin/rsnapshot-diff
+
+#########################################
+#     BACKUP LEVELS / INTERVALS         #
+#########################################
+
+retain	daysAgo	{{ homeserver_rsnapshot.count.daily }}
+retain	weeksAgo	{{ homeserver_rsnapshot.count.weekly }}
+retain	monthsAgo	{{ homeserver_rsnapshot.count.monthly }}
+
+############################################
+#              GLOBAL OPTIONS              #
+############################################
+
+loglevel	3
+
+logfile	/var/log/rsnapshot.log
+
+lockfile	/var/run/rsnapshot.pid
+
+###############################
+### BACKUP POINTS / SCRIPTS ###
+###############################
+
+{% for item in homeserver_rsnapshot.paths %}
+backup	{{ item.src }}	{{ item.dest }}
+{% endfor %}

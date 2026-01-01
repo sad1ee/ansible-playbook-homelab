@@ -1,0 +1,31 @@
+name: wud
+
+services:
+  wud:
+    image: ghcr.io/getwud/wud:latest
+
+    environment:
+      TZ: "{{ services_timezone }}"
+      WUD_LOG_LEVEL: info # error info debug trace
+      WUD_REGISTRY_LSCR_PRIVATE_USERNAME: sad1ee
+      WUD_REGISTRY_LSCR_PRIVATE_TOKEN: "{{ services_wud_github_token }}"
+      WUD_WATCHER_LOCAL_CRON: "0 3 * * *"
+
+    volumes:
+      - "{{ services_path.homepage }}:/config"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    healthcheck:
+      disable: true
+
+    container_name: wud
+    hostname: wud
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

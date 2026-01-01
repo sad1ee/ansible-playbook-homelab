@@ -1,0 +1,32 @@
+name: dozzle
+
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.dozzle.entrypoints: web
+      traefik.http.routers.dozzle.rule: Host(`dozzle.sad1ee.duckdns.org`)
+      # traefik.http.routers.traefik.loadBalancer.port: 8080
+
+    environment:
+      DOZZLE_ENABLE_ACTIONS: true
+      DOZZLE_ENABLE_SHELL: false
+      DOZZLE_NO_ANALYTICS: true
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+
+    container_name: dozzle
+    hostname: dozzle
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

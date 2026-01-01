@@ -1,0 +1,26 @@
+name: bazarr
+
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+
+    volumes:
+      - "{{ services_path.bazarr }}:/config"
+      - "{{ services_path.media }}/library:/media/library"
+
+    container_name: bazarr
+    hostname: bazarr
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

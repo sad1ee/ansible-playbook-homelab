@@ -1,0 +1,28 @@
+name: cwa
+
+services:
+  cwa:
+    image: crocodilestick/calibre-web-automated:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      CWA_PORT_OVERRIDE: "{{ services_webui_port.cwa }}"
+
+    volumes:
+      - "{{ services_path.calibre.config }}:/config"
+      - "{{ services_path.calibre.ingest }}:/cwa-book-ingest"
+      - "{{ services_path.calibre.library }}:/calibre-library"
+
+    container_name: cwa
+    hostname: cwa
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

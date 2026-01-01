@@ -1,0 +1,26 @@
+name: pyload
+
+services:
+  pyload:
+    image: lscr.io/linuxserver/pyload-ng:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+
+    volumes:
+      - "{{ services_path.pyload.config }}:/config"
+      - "{{ services_path.pyload.downloads }}:/downloads"
+
+    container_name: pyload
+    hostname: pyload
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

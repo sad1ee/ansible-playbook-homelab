@@ -1,0 +1,31 @@
+name: syncthing
+
+services:
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+
+    volumes:
+      - "{{ services_path.syncthing.config }}:/config"
+      - "{{ services_path.syncthing.data }}:/sync"
+
+    ports:
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+
+    container_name: syncthing
+    hostname: syncthing
+    restart: unless-stopped
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    name: traefik

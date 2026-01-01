@@ -1,0 +1,25 @@
+name: qbittorrent
+
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+
+    environment:
+      PUID: "{{ services_puid }}"
+      PGID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      WEBUI_PORT: "{{ services_webui_port.qbittorrent }}"
+
+    volumes:
+      - "{{ services_path.qbittorrent}}:/config"
+      - "{{ services_path.media }}:/media"
+
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+
+    container_name: qbittorrent
+    restart: unless-stopped
+
+    network_mode: "container:gluetun"

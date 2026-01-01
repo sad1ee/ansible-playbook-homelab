@@ -1,0 +1,8 @@
+---
+rules:
+  document-start: enable
+  line-length:
+    max: 88
+  quoted-strings:
+    quote-type: double
+    required: only-when-needed
