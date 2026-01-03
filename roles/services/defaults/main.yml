@@ -2,7 +2,6 @@
 services_username: user
 services_puid: 1000
 services_pgid: 1000
-services_docker_pgid: 988
 services_timezone: Europe/Berlin
 
 services_list:
@@ -12,6 +11,7 @@ services_list:
   - beszel
   - cwa
   - cwad
+  - docker-proxy
   - dozzle
   - flaresolverr
   - gluetun
@@ -19,7 +19,7 @@ services_list:
   - homepage
   - jellyfin
   - jellyseerr
-  - npm
+  # - npm
   - ntfy
   - paperless
   - pihole
@@ -37,13 +37,17 @@ services_list:
   - traefik
   - wud
 
+services_compose_includes:
+  - networks
+
 services_bridge_networks:
-  - traefik
   - flaresolverr
   - recyclarr
   - samba
+  - traefik
 
 services_internal_networks:
+  - docker-proxy
   - gotenberg
   - postgres
   - redis
@@ -130,30 +134,10 @@ services_webui_port:
   pihole: 82
   pyload: 8000
   syncthing: 8384
+  traefik: 8080
   wud: 3000
 
-services_domain:
-  qbittorrent: https://qbittorrent.{{ services_domain_base }}
-  cwad: https://cwad.{{ services_domain_base }}
-  radarr: https://radarr.{{ services_domain_base }}
-  sonarr: https://sonarr.{{ services_domain_base }}
-  prowlarr: https://prowlarr.{{ services_domain_base }}
-  bazarr: https://bazarr.{{ services_domain_base }}
-  jellyseerr: https://jellyseerr.{{ services_domain_base }}
-  jellyfin: https://jellyfin.{{ services_domain_base }}
-  cwa: https://cwa.{{ services_domain_base }}
-  authelia: https://authelia.{{ services_domain_base }}
-  beszel: https://beszel.{{ services_domain_base }}
-  dozzle: https://dozzle.{{ services_domain_base }}
-  homepage: https://homepage.{{ services_domain_base }}
-  npm: https://npm.{{ services_domain_base }}
-  ntfy: https://ntfy.{{ services_domain_base }}
-  paperless: https://paperless.{{ services_domain_base }}
-  pihole: https://pihole.{{ services_domain_base }}
-  pyload: https://pyload.{{ services_domain_base }}
-  syncthing: https://syncthing.{{ services_domain_base }}
-  traefik: https://traefik.{{ services_domain_base }}
-  wud: https://wud.{{ services_domain_base }}
+services_docker_proxy_host: tcp://127.0.0.1:2375
 
 # *********************************************************************************** #
 # ************************ Override in group_vars/secret.yml ************************ #

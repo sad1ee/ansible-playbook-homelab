@@ -1,8 +1,12 @@
-name: radarr
-
 services:
   radarr:
     image: lscr.io/linuxserver/radarr:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.radarr.rule: Host(`radarr.{{ services_domain_base }}`)
+      traefik.http.routers.radarr.entrypoints: websecure
+      traefik.http.services.radarr.loadbalancer.server.port: "{{ services_webui_port.radarr }}"
 
     environment:
       PUID: "{{ services_puid }}"
@@ -23,14 +27,3 @@ services:
       - traefik
       - flaresolverr
       - recyclarr
-
-networks:
-  traefik:
-    external: true
-    name: traefik
-  flaresolverr:
-    external: true
-    name: flaresolverr
-  recyclarr:
-    external: true
-    name: recyclarr

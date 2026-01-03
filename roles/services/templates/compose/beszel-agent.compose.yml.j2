@@ -1,5 +1,3 @@
-name: beszel-agent
-
 services:
   beszel-agent:
     image: henrygd/beszel-agent-intel:latest
@@ -9,11 +7,11 @@ services:
       LISTEN: 45876
       KEY: "{{ services_beszel_key }}"
       TOKEN: "{{ services_beszel_token }}"
-      HUB_URL: "{{ services_domain.beszel }}"
+      HUB_URL: "https://beszel.{{ services_domain_base }}"
+      DOCKER_HOST: "{{ services_docker_proxy_host }}"
 
     volumes:
       - "{{ services_path.beszel.agent }}:/var/lib/beszel-agent"
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
       - /var/run/systemd/private:/var/run/systemd/private:ro
       - /mnt/ssd1/.beszel:/extra-filesystems/sdc1__ssd1:ro

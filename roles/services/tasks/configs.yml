@@ -1,14 +1,77 @@
 ---
-- name: configs | Deploy homepage configuration
+- name: configs | Ensure traefik acme.json exists
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ services_path.traefik }}/acme.json"
+    force: false
+    owner: user
+    group: user
+    mode: "0600"
+  when: "'traefik' in services_list"
+  tags: [services, configs]
+
+- name: configs | Render jinja config templates locally
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/config/homepage-{{ item }}.j2"
-    dest: "{{ services_path.homepage }}/{{ item }}"
-    owner: root
-    group: root
-    mode: "0644"
+    src: "{{ role_path }}/templates/config/{{ item.service }}-{{ item.file }}.j2"
+    dest: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    mode: "0640"
+    owner: user
+    group: user
+  when: item.service in services_list
   loop:
-    - bookmarks.yaml
-    - docker.yaml
-    - services.yaml
-    - settings.yaml
+    - service: homepage
+      file: bookmarks.yaml
+    - service: homepage
+      file: docker.yaml
+    - service: homepage
+      file: services.yaml
+    - service: homepage
+      file: settings.yaml
+    - service: pihole
+      file: netplan.yml
+    - service: pihole
+      file: radvd.conf
+    - service: recyclarr
+      file: recyclarr.yml
+    - service: traefik
+      file: traefik.yml
+  delegate_to: localhost
+  tags: [services, configs]
+
+- name: configs | Copy locally rendered compose templates to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    dest: "{{ services_path[item.service] }}/{{ item.file }}"
+    mode: "0640"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  when: item.service in services_list
+  loop:
+    - service: homepage
+      file: docker.yaml
+    - service: homepage
+      file: services.yaml
+    - service: homepage
+      file: settings.yaml
+    - service: recyclarr
+      file: recyclarr.yml
+    - service: traefik
+      file: traefik.yml
+  tags: [services, configs]
+
+- name: configs | Copy locally rendered compose templates to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    dest: "{{ services_path[item.service][item.sub] }}/{{ item.file }}"
+    mode: "0640"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  when: item.service in services_list
+  loop:
+    - service: pihole
+      file: netplan.yml
+      sub: pihole
+    - service: pihole
+      file: radvd.conf
+      sub: pihole
   tags: [services, configs]

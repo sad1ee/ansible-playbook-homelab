@@ -1,8 +1,12 @@
-name: sonarr
-
 services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.sonarr.rule: Host(`sonarr.{{ services_domain_base }}`)
+      traefik.http.routers.sonarr.entrypoints: websecure
+      traefik.http.services.sonarr.loadbalancer.server.port: "{{ services_webui_port.sonarr }}"
 
     environment:
       PUID: "{{ services_puid }}"
@@ -23,14 +27,3 @@ services:
       - traefik
       - flaresolverr
       - recyclarr
-
-networks:
-  traefik:
-    external: true
-    name: traefik
-  flaresolverr:
-    external: true
-    name: flaresolverr
-  recyclarr:
-    external: true
-    name: recyclarr

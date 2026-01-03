@@ -1,5 +1,3 @@
-name: npm
-
 services:
   npm:
     image: jc21/nginx-proxy-manager:latest
@@ -42,22 +40,3 @@ services:
     networks:
       - traefik
       - postgres
-
-networks:
-  traefik:
-    external: true
-    name: traefik
-  postgres:
-    external: true
-    name: postgres
-
-# TODO: uses traefik for now cause soon to be replaced
-#     networks:
-#       - npm
-# networks:
-#   npm:
-#     external: true
-#     name: npm
-# postgres:
-#   external: true
-#   name: postgres

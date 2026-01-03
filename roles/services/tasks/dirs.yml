@@ -1,5 +1,5 @@
 ---
-- name: dirs | Create localhost docker compose dir
+- name: dirs | Create local template dirs
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -8,6 +8,7 @@
     group: "{{ services_username }}"
   loop:
     - "{{ playbook_dir }}/.ansible/templates"
+    - "{{ playbook_dir }}/.ansible/configs"
   delegate_to: localhost
   tags: [services, dirs]
 

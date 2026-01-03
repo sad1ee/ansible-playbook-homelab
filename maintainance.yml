@@ -17,7 +17,14 @@
     - name: Prune containers, images, networks, volumes and builder_cache
       community.docker.docker_prune:
         containers: true
+        containers_filters:
+          until: 10m
         images: true
+        images_filters:
+          util: 168h
+          dangling: true
         networks: true
+        networks_filter:
+          until: 10m
         volumes: true
         builder_cache: true

@@ -1,8 +1,12 @@
-name: flaresolverr
-
 services:
   jellyseerr:
     image: ghcr.io/fallenbagel/jellyseerr:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.jellyseerr.rule: Host(`jellyseerr.{{ services_domain_base }}`)
+      traefik.http.routers.jellyseerr.entrypoints: websecure
+      traefik.http.services.jellyseerr.loadbalancer.server.port: "{{ services_webui_port.jellyseerr }}"
 
     environment:
       TZ: "{{ services_timezone }}"
@@ -32,11 +36,3 @@ services:
     networks:
       - traefik
       - postgres
-
-networks:
-  traefik:
-    external: true
-    name: traefik
-  postgres:
-    external: true
-    name: postgres

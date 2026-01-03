@@ -1,13 +1,13 @@
 ---
-- Monitoring:
+- Admin:
     - Beszel:
         icon: beszel
-        href: "{{ services_domain.beszel }}"
+        href: "https://beszel.{{ services_domain_base }}"
         server: local-docker
         container: beszel
         widget:
           type: beszel
-          url: "{{ services_domain.beszel }}"
+          url: "http://beszel:{{ services_webui_port.beszel }}"
           username: "{{ services_beszel_user }}"
           password: "{{ services_beszel_pass }}"
           systemId: pn326lg1axy991d
@@ -16,38 +16,88 @@
 
     - Dozzle:
         icon: dozzle
-        href: "{{ services_domain.dozzle }}"
+        href: "https://dozzle.{{ services_domain_base }}"
         server: local-docker
         container: dozzle
 
     - Ntfy:
         icon: ntfy
-        href: "{{ services_domain.ntfy }}"
+        href: "https://ntfy.{{ services_domain_base }}"
         server: local-docker
         container: ntfy
 
     - Whats-up-docker:
         icon: whats-up-docker
-        href: "{{ services_domain.wud }}"
+        href: "https://wud.{{ services_domain_base }}"
         server: local-docker
         container: wud
         widget:
           type: whatsupdocker
-          url: "{{ services_domain.wud }}"
+          url: "http://wud:{{ services_webui_port.wud }}"
           # username: username # optional
           # password: password # optional
+
+    - Pihole:
+        icon: pi-hole-unbound
+        href: "https://pihole.{{ services_domain_base }}"
+        server: local-docker
+        container: pihole
+        widget:
+          type: pihole
+          url: "http://host.docker.internal:{{ services_webui_port.pihole }}"
+          version: 6
+
+    - Traefik:
+        icon: traefik
+        href: "https://traefik.{{ services_domain_base }}"
+        server: local-docker
+        container: traefik
+        widget:
+          type: traefik
+          url: "https://traefik:443" # {{ services_webui_port.traefik }}"
+          # username: "{{ services_traefik_user }}"
+          # password: "{{ services_traefik_pass }}"
+
+- Services:
+    - Paperless:
+        icon: paperless
+        href: "https://paperless.{{ services_domain_base }}"
+        server: local-docker
+        container: paperless
+        widget:
+          type: paperlessngx
+          url: "http://paperless:{{ services_webui_port.paperless }}"
+          username: "{{ services_paperless_user }}"
+          password: "{{ services_paperless_pass }}"
+
+    # - Pyload:
+    #     icon: pyload
+    #     href: "https://pyload.{{ services_domain_base }}"
+    #     server: local-docker
+    #     container: pyload
+    #   widget:
+    #     type: pyload
+    #     url: "pyload:{{ services_webui_port.pyload }}"
+    #     username: "{{ services_pyload_user }}"
+    #     password: "{{ services_pyload_pass }}"
+
+    - Syncthing:
+        icon: syncthing
+        href: "https://syncthing.{{ services_domain_base }}"
+        server: local-docker
+        container: syncthing
 
 - Media:
     - Frontend:
         - Jellyfin:
             icon: jellyfin
-            href: "{{ services_domain.jellyfin }}"
+            href: "https://jellyfin.{{ services_domain_base }}"
             description: Media server
             server: local-docker
             container: jellyfin
             widget:
               type: jellyfin
-              url: "{{ services_domain.jellyfin }}"
+              url: "http://jellyfin:{{ services_webui_port.jellyfin }}"
               key: "{{ services_jellyfin_key }}"
               fields: ["movies", "series", "episodes"]
               enableBlocks: true # optional, defaults to false
@@ -59,84 +109,84 @@
 
         - Jellyseerr:
             icon: jellyseerr
-            href: "{{ services_domain.jellyseerr }}"
+            href: "https://jellyseerr.{{ services_domain_base }}"
             description: Media search
             server: local-docker
             container: jellyseerr
             widget:
               type: jellyseerr
-              url: "{{ services_domain.jellyseerr }}"
+              url: "http://jellyseerr:{{ services_webui_port.jellyseerr }}"
               fields: ["pending", "approved", "available", "issues"]
               key: "{{ services_jellyseerr_key }}"
 
         - CWA:
             icon: calibre-web
-            href: "{{ services_domain.cwa }}"
+            href: "https://cwa.{{ services_domain_base }}"
             server: local-docker
             container: cwa
             widget:
               type: calibreweb
-              url: "{{ services_domain.cwa }}"
+              url: "http://cwa:{{ services_webui_port.cwa }}"
               username: "{{ services_calibre_user }}"
               password: "{{ services_calibre_pass }}"
 
         - CWAD:
             icon: calibre-web-automated-book-downloader
-            href: "{{ services_domain.cwad }}"
+            href: "https://cwad.{{ services_domain_base }}"
             server: local-docker
             container: cwad
 
     - Backend:
         - Radarr:
             icon: radarr
-            href: "{{ services_domain.radarr }}"
+            href: "https://radarr.{{ services_domain_base }}"
             server: local-docker
             container: radarr
             widget:
               type: radarr
-              url: "{{ services_domain.radarr }}"
+              url: "http://radarr:{{ services_webui_port.radarr }}"
               key: "{{ services_radarr_key }}"
               enableQueue: true # optional, defaults to false
 
         - Sonarr:
             icon: sonarr
-            href: "{{ services_domain.sonarr }}"
+            href: "https://sonarr.{{ services_domain_base }}"
             server: local-docker
             container: sonarr
             widget:
               type: sonarr
-              url: "{{ services_domain.sonarr }}"
+              url: "http://sonarr:{{ services_webui_port.sonarr }}"
               key: "{{ services_sonarr_key }}"
               enableQueue: true # optional, defaults to false
 
         - Prowlarr:
             icon: prowlarr
-            href: "{{ services_domain.prowlarr }}"
+            href: "https://prowlarr.{{ services_domain_base }}"
             server: local-docker
             container: prowlarr
             widget:
               type: prowlarr
-              url: "{{ services_domain.prowlarr }}"
+              url: "http://prowlarr:{{ services_webui_port.prowlarr }}"
               key: "{{ services_prowlarr_key }}"
 
         - Bazarr:
             icon: bazarr
-            href: "{{ services_domain.bazarr }}"
+            href: "https://bazarr.{{ services_domain_base }}"
             server: local-docker
             container: bazarr
             widget:
               type: bazarr
-              url: "{{ services_domain.bazarr }}"
+              url: "http://bazarr:{{ services_webui_port.bazarr }}"
               key: "{{ services_bazarr_key }}"
 
         - QBittorrent:
             icon: qbittorrent
-            href: "{{ services_domain.qbittorrent }}"
+            href: "https://qbittorrent.{{ services_domain_base }}"
             server: local-docker
             container: qbittorrent
             widget:
               type: qbittorrent
-              url: "{{ services_domain.qbittorrent }}"
+              url: "http://gluetun:{{ services_webui_port.qbittorrent }}"
               username: "{{ services_qbittorrent_user }}"
               password: "{{ services_qbittorrent_pass }}"
               enableLeechProgress: true # optional, defaults to false
@@ -148,69 +198,7 @@
         #     container: gluetun
         #     widget:
         #       type: gluetun
-        #       url: http://gluetun.host.or.ip:port
+        #       url: "http://gluetun"
         #       fields: ["public_ip", "region", "country", "port_forwarded"]
         #       key: gluetunkey # Not required if /v1/publicip/ip endpoint is configured with `auth = none`
         #       version: 2 # optional, default is 1
-
-- Services:
-    - Paperless:
-        icon: paperless
-        href: "{{ services_domain.paperless }}"
-        server: local-docker
-        container: paperless
-        widget:
-          type: paperlessngx
-          url: "{{ services_domain.paperless }}"
-          username: "{{ services_paperless_user }}"
-          password: "{{ services_paperless_pass }}"
-
-    # - Pyload:
-    #     icon: pyload
-    #     href: "{{ services_domain.pyload }}"
-    #     server: local-docker
-    #     container: pyload
-    #   widget:
-    #     type: pyload
-    #     url: "{{ services_domain.pyload }}"
-    #     username: "{{ services_pyload_user }}"
-    #     password: "{{ services_pyload_pass }}"
-
-    - Syncthing:
-        icon: syncthing
-        href: "{{ services_domain.syncthing }}"
-        server: local-docker
-        container: syncthing
-
-- System:
-    - Pihole:
-        icon: pi-hole-unbound
-        href: "{{ services_domain.pihole }}"
-        server: local-docker
-        container: pihole
-        widget:
-          type: pihole
-          url: "{{ services_domain.pihole }}"
-          version: 6
-
-    - Nginx Proxy Manager:
-        icon: nginx-proxy-manager
-        href: "{{ services_domain.npm }}"
-        server: local-docker
-        container: npm
-        widget:
-          type: npm
-          url: "{{ services_domain.npm }}"
-          username: "{{ services_npm_user }}"
-          password: "{{ services_npm_pass }}"
-
-    - Traefik:
-        icon: traefik
-        href: "{{ services_domain.traefik }}"
-        server: local-docker
-        container: traefik
-        widget:
-          type: traefik
-          url: "{{ services_domain.traefik }}"
-          username: "{{ services_traefik_user }}"
-          password: "{{ services_traefik_pass }}"

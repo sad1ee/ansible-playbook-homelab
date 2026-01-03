@@ -1,6 +1,6 @@
 radarr:
   radarr-main:
-    base_url: "{{ services_domain.radarr }}"
+    base_url: http://radarr:{{ services_webui_port.radarr }}"
     api_key: "{{ services_radarr_key }}"
 
     delete_old_custom_formats: true
@@ -24,7 +24,7 @@ radarr:
 
 sonarr:
   sonarr-main:
-    base_url: "{{ services_domain.sonarr }}"
+    base_url: http://sonarr:{{ services_webui_port.sonarr }}"
     api_key: "{{ services_sonarr_key }}"
 
     delete_old_custom_formats: true

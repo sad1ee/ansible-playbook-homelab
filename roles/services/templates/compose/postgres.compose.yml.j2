@@ -1,7 +1,4 @@
-name: postgres
-
 services:
-
   postgres:
     image: docker.io/library/postgres:18
 
@@ -28,8 +25,3 @@ services:
 
     networks:
       - postgres
-
-networks:
-  postgres:
-    external: true
-    name: postgres

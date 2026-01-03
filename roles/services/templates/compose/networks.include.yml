@@ -1,0 +1,30 @@
+networks:
+  # Bridge
+  flaresolverr:
+    external: true
+    name: flaresolverr
+  recyclarr:
+    external: true
+    name: recyclarr
+  samba:
+    external: true
+    name: samba
+  traefik:
+    external: true
+    name: traefik
+  # Internal
+  docker-proxy:
+    external: true
+    name: docker-proxy
+  gotenberg:
+    external: true
+    name: gotenberg
+  postgres:
+    external: true
+    name: postgres
+  redis:
+    external: true
+    name: redis
+  tika:
+    external: true
+    name: tika

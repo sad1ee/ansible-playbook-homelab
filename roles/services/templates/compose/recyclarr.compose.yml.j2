@@ -1,5 +1,3 @@
-name: recyclarr
-
 services:
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:latest
@@ -10,9 +8,8 @@ services:
     volumes:
       - "{{ services_path.recyclarr }}:/config:ro"
 
-
     user: "{{ services_puid }}:{{ services_pgid }}"
-    security_opt: ['no-new-privileges:true']
+    security_opt: ["no-new-privileges:true"]
 
     container_name: recyclarr
     hostname: recyclarr
@@ -20,8 +17,3 @@ services:
 
     networks:
       - recyclarr
-
-networks:
-  recyclarr:
-    external: true
-    name: recyclarr

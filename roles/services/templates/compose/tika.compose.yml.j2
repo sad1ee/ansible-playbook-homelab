@@ -1,5 +1,3 @@
-name: tika
-
 services:
   tika:
     image: docker.io/apache/tika:latest
@@ -13,8 +11,3 @@ services:
 
     networks:
       - tika
-
-networks:
-  tika:
-    external: true
-    name: tika

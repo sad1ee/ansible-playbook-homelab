@@ -1,8 +1,15 @@
-name: pihole
-
 services:
   pihole:
     image: mpgirro/pihole-unbound:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.pihole.rule: Host(`pihole.{{ services_domain_base }}`)
+      traefik.http.routers.pihole.entrypoints: websecure
+      traefik.http.services.pihole.loadbalancer.server.port: "{{ services_webui_port.pihole }}"
+      traefik.http.routers.pihole.middlewares: "pihole-redirect"
+      traefik.http.middlewares.pihole-redirect.redirectregex.regex: ^/$
+      traefik.http.middlewares.pihole-redirect.redirectregex.replacement: /admin
 
     environment:
       PIHOLE_UID: "{{ services_puid }}"
@@ -10,7 +17,7 @@ services:
       TZ: "{{ services_timezone }}"
       FTLCONF_webserver_port: "{{ services_webui_port.pihole }}"
       FTLCONF_webserver_api_password: "{{ services_pihole_pass }}"
-      FTLCONF_webserver_domain: "pihole.{{ services_domain_base }}"
+      FTLCONF_webserver_domain: "https://pihole.{{ services_domain_base }}"
       FTLCONF_dns_upstreams: 127.0.0.1#5335
       FTLCONF_dns_piholePTR: NONE
       FTLCONF_dns_domainNeeded: true

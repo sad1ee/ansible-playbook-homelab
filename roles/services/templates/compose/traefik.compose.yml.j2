@@ -1,71 +1,39 @@
-name: traefik
-
 services:
   traefik:
     image: traefik:v3.6
 
     environment:
       TZ: "{{ services_timezone }}"
-      TRAEFIK_LOG_LEVEL: INFO # INFO, ERROR, DEBUG
-      TRAEFIK_ACCESSLOG: false
-
-      # General
-      TRAEFIK_PROVIDERS_DOCKER: true
-      TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
-      TRAEFIK_PROVIDERS_DOCKER_NETWORK: traefik
-      TRAEFIK_API_DASHBOARD: true
-      TRAEFIK_API_DISABLEDASHBOARDAD: true
-      TRAEFIK_PING: true
-      TRAEFIK_GLOBAL_CHECKNEWVERSION: false
-      TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: false
-
-      # Web redirect to websecure
-      TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":80"
-      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: websecure
-      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: https
-      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_PERMANENT: true
-
-      # Websecure tls/ssl
-      TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
-      TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS: true
-      TRAEFIK_ENTRYPOINTS_WEBSECURE_ASDEFAULT: true
-
-      # Domain certificate
-      TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS_CERTRESOLVER: le
-      TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS_DOMAINS[0]_MAIN: "{{ services_domain_base }}"
-      TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS_DOMAINS[0]_SANS: "*.{{ services_domain_base }}"
-      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_EMAIL: "{{ services_email_homelab }}"
-      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_STORAGE: /certs/acme.json
-      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_DNSCHALLENGE: true
-      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_DNSCHALLENGE_PROVIDER: duckdns
-      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_DNSCHALLENGE_RESOLVERS: "1.1.1.1:53,8.8.8.8:53"
-      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS: 600
-      DUCKDNS_TOKEN: "{{ services_duckdns_token }}"
-      # TEST:
-      # TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      CF_DNS_API_TOKEN: "{{ services_cf_dns_api_token }}"
+      DOCKER_HOST: "{{ services_docker_proxy_host }}"
 
     labels:
       traefik.enable: true
-      traefik.http.routers.dashboard.rule:
-        Host(`traefik.{{ services_domain_base }}`) &&
-        (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
-      traefik.http.routers.dashboard.entrypoints: websecure
-      traefik.http.routers.dashboard.service: api@internal
-      traefik.http.routers.dashboard.tls: true
-      traefik.http.routers.dashboard.tls.certresolver: le
-      traefik.http.routers.dashboard.tls.domains[0].main: "{{ services_domain_base }}"
-      traefik.http.routers.dashboard.tls.domains[0].sans: "*.{{ services_domain_base }}"
+      traefik.http.routers.traefik-dashboard.rule: Host(`traefik.{{ services_domain_base }}`) && PathPrefix(`/dashboard`) || Host(`traefik.{{ services_domain_base }}`) && PathPrefix(`/api`) || Host(`traefik.{{ services_domain_base }}`) && Path(`/`)
+      traefik.http.routers.traefik-dashboard.entrypoints: "websecure"
+      traefik.http.routers.traefik-dashboard.service: "api@internal"
+      traefik.http.routers.traefik-dashboard.middlewares: "dashboard-redirect"
+
+      # Redirect base path to dashboard
+      traefik.http.middlewares.dashboard-redirect.redirectregex.regex: ^/$
+      traefik.http.middlewares.dashboard-redirect.redirectregex.replacement: /dashboard/
+
+      # Wildcard cert configuration
+      traefik.http.routers.traefik-dashboard.tls: true
+      traefik.http.routers.traefik-dashboard.tls.certresolver: cloudflare
+      traefik.http.routers.traefik-dashboard.tls.domains[0].main: "{{ services_domain_base }}"
+      traefik.http.routers.traefik-dashboard.tls.domains[0].sans: "*.{{ services_domain_base }}"
 
     volumes:
-      - "{{ services_path.traefik }}:/certs"
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "{{ services_path.traefik }}/acme.json:/certs/acme.json:rw"
+      - "{{ services_path.traefik }}/traefik.yml:/etc/traefik/traefik.yml:ro"
 
     ports:
       - "80:80"
       - "443:443"
 
     security_opt: ["no-new-privileges:true"]
-    user: "{{ services_puid }}:{{ services_docker_pgid }}"
+    user: "{{ services_puid }}:{{ services_pgid }}"
 
     healthcheck:
       test: ["CMD", "traefik", "healthcheck"]
@@ -79,10 +47,9 @@ services:
     hostname: traefik
     restart: unless-stopped
 
+    extra_hosts:
+      - host.docker.internal:172.25.0.1
+
     networks:
       - traefik
-
-networks:
-  traefik:
-    external: true
-    name: traefik
+      - docker-proxy

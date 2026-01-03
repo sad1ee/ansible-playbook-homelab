@@ -1,4 +1,15 @@
 ---
+- name: containers | Ensure proxy network exist
+  community.docker.docker_network:
+    name: traefik
+    driver: bridge
+    ipam_config:
+      - subnet: 172.25.0.0/16
+        gateway: 172.25.0.1
+    state: present
+  when: "'traefik' in services_list or 'npm' in services_list"
+  tags: [services, containers]
+
 - name: containers | Ensure bridge networks exist
   community.docker.docker_network:
     name: "{{ item }}"
@@ -41,6 +52,16 @@
   loop: "{{ services_list }}"
   tags: [services, containers, compose]
 
+- name: containers | Copy compose includes to remote
+  ansible.builtin.copy:
+    src: "{{ role_path }}/templates/compose/{{ item }}.include.yml"
+    dest: "{{ services_path.compose }}/{{ item }}.include.yml"
+    mode: "0600"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  loop: "{{ services_compose_includes }}"
+  tags: [services, containers, compose]
+
 - name: containers | Select compose files
   ansible.builtin.set_fact:
     services_list_compose_files:
@@ -49,9 +70,18 @@
   loop: "{{ services_list }}"
   tags: [services, containers, compose]
 
+- name: containers | Select include files
+  ansible.builtin.set_fact:
+    services_compose_includes_files:
+      "{{ services_compose_includes_files | default([]) + [item | string +
+      '.compose.yml'] }}"
+  loop: "{{ services_list }}"
+  tags: [services, containers, compose]
+
 - name: containers | Run docker compose with all found compose files
   community.docker.docker_compose_v2:
     project_src: "{{ services_path.compose }}"
-    files: "{{ services_list_compose_files }}"
+    files: "{{ services_list_compose_files + services_compose_includes_files }}"
+    project_name: services
     state: present
   tags: [services, containers, compose]

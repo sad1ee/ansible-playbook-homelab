@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
+
+accessLog: true
+ping: {}
+
+log:
+  level: DEBUG # DEBUG, INFO, WARN, ERROR
+
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+  disableDashboardAd: true
+
+providers:
+  docker:
+    endpoint: "{{ services_docker_proxy_host }}"
+    exposedByDefault: false
+    network: traefik
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        certResolver: cloudflare
+
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: "{{ services_email_homelab }}"
+      storage: /certs/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers: ["1.1.1.1:53", "8.8.8.8:53"]

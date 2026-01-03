@@ -6,3 +6,8 @@ rules:
   quoted-strings:
     quote-type: double
     required: only-when-needed
+yaml-files:
+  - "*.yaml"
+  - "*.yml"
+  - "*.yml.j2"
+  - "*.yaml.j2"

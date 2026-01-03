@@ -1,5 +1,3 @@
-name: cwad
-
 services:
   cwad:
     image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
@@ -12,7 +10,7 @@ services:
       FLASK_PORT: "{{ services_webui_port.cwad }}"
       BOOK_LANGUAGE: de,en
       USE_BOOK_TITLE: true
-      CALIBRE_WEB_URL: "{{ services_domain.cwa }}"
+      CALIBRE_WEB_URL: "cwa.{{ services_domain_base }}"
 
     volumes:
       - "{{ services_path.calibre.ingest }}:/cwa-book-ingest"
@@ -28,4 +26,4 @@ services:
     container_name: cwad
     restart: unless-stopped
 
-    network_mode: "container:gluetun"
+    network_mode: "service:gluetun"

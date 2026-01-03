@@ -1,8 +1,12 @@
-name: jellyfin
-
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.jellyfin.rule: Host(`jellyfin.{{ services_domain_base }}`)
+      traefik.http.routers.jellyfin.entrypoints: websecure
+      traefik.http.services.jellyfin.loadbalancer.server.port: "{{ services_webui_port.jellyfin }}"
 
     environment:
       PUID: "{{ services_puid }}"
@@ -23,8 +27,3 @@ services:
 
     networks:
       - traefik
-
-networks:
-  traefik:
-    external: true
-    name: traefik

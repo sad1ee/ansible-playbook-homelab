@@ -1,0 +1,50 @@
+services:
+  docker-proxy:
+    image: lscr.io/linuxserver/socket-proxy:latest
+
+    environment:
+      TZ: "{{ services_timezone }}"
+      LOG_LEVEL: debug # info, debug
+      ALLOW_START: 0
+      ALLOW_STOP: 0
+      ALLOW_RESTARTS: 1
+      AUTH: 0
+      BUILD: 0
+      COMMIT: 0
+      CONFIGS: 0
+      CONTAINERS: 1
+      DISTRIBUTION: 0
+      EVENTS: 1
+      EXEC: 0
+      IMAGES: 0
+      INFO: 1
+      NETWORKS: 0
+      NODES: 0
+      PING: 1
+      PLUGINS: 0
+      POST: 0
+      SECRETS: 0
+      SERVICES: 0
+      SESSION: 0
+      SWARM: 0
+      SYSTEM: 0
+      TASKS: 0
+      VERSION: 1
+      VOLUMES: 0
+
+    read_only: true
+    tmpfs:
+      - /run
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    ports:
+      - 127.0.0.1:2375:2375
+
+    container_name: docker-proxy
+    hostname: docker-proxy
+    restart: unless-stopped
+
+    networks:
+      - docker-proxy
