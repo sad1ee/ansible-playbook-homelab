@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.bazarr.rule: Host(`bazarr.{{ services_domain_base }}`)
-      traefik.http.routers.bazarr.entrypoints: websecure
       traefik.http.services.bazarr.loadbalancer.server.port: "{{ services_webui_port.bazarr }}"
 
     environment:

@@ -54,9 +54,9 @@
         container: traefik
         widget:
           type: traefik
-          url: "https://traefik:443" # {{ services_webui_port.traefik }}"
-          # username: "{{ services_traefik_user }}"
-          # password: "{{ services_traefik_pass }}"
+          url: "http://traefik:{{ services_webui_port.traefik_webinternal }}"
+          username: "{{ services_traefik_user }}"
+          password: "{{ services_traefik_pass }}"
 
 - Services:
     - Paperless:

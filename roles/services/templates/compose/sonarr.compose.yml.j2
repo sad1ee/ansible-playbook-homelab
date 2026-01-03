@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.sonarr.rule: Host(`sonarr.{{ services_domain_base }}`)
-      traefik.http.routers.sonarr.entrypoints: websecure
       traefik.http.services.sonarr.loadbalancer.server.port: "{{ services_webui_port.sonarr }}"
 
     environment:

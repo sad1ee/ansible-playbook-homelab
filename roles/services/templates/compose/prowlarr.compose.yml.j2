@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.prowlarr.rule: Host(`prowlarr.{{ services_domain_base }}`)
-      traefik.http.routers.prowlarr.entrypoints: websecure
       traefik.http.services.prowlarr.loadbalancer.server.port: "{{ services_webui_port.prowlarr }}"
 
     environment:

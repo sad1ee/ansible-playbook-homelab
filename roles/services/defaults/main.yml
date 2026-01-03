@@ -5,7 +5,7 @@ services_pgid: 1000
 services_timezone: Europe/Berlin
 
 services_list:
-  # - authelia
+  - authelia
   - bazarr
   - beszel-agent
   - beszel
@@ -134,7 +134,7 @@ services_webui_port:
   pihole: 82
   pyload: 8000
   syncthing: 8384
-  traefik: 8080
+  traefik_webinternal: 8081
   wud: 3000
 
 services_docker_proxy_host: tcp://docker-proxy:2375

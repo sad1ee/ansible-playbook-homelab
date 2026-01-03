@@ -6,12 +6,10 @@ services:
       traefik.enable: true
 
       traefik.http.routers.cwad.rule: Host(`cwad.{{ services_domain_base }}`)
-      traefik.http.routers.cwad.entrypoints: websecure
       traefik.http.routers.cwad.service: cwad
       traefik.http.services.cwad.loadbalancer.server.port: "{{ services_webui_port.cwad }}"
 
       traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.{{ services_domain_base }}`)
-      traefik.http.routers.qbittorrent.entrypoints: websecure
       traefik.http.routers.qbittorrent.service: qbittorrent
       traefik.http.services.qbittorrent.loadbalancer.server.port: "{{ services_webui_port.qbittorrent }}"
 

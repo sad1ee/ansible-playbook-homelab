@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.paperless.rule: Host(`paperless.{{ services_domain_base }}`)
-      traefik.http.routers.paperless.entrypoints: websecure
       traefik.http.services.paperless.loadbalancer.server.port: "{{ services_webui_port.paperless }}"
 
     environment:

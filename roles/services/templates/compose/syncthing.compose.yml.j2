@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.syncthing.rule: Host(`syncthing.{{ services_domain_base }}`)
-      traefik.http.routers.syncthing.entrypoints: websecure
       traefik.http.services.syncthing.loadbalancer.server.port: "{{ services_webui_port.syncthing }}"
 
     environment:

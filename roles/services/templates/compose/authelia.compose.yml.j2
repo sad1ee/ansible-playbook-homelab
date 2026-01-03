@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.authelia.rule: Host(`authelia.{{ services_domain_base }}`)
-      traefik.http.routers.authelia.entrypoints: websecure
       traefik.http.services.authelia.loadbalancer.server.port: "{{ services_webui_port.authelia }}"
 
     environment:

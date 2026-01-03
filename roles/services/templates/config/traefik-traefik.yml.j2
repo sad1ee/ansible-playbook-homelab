@@ -21,6 +21,8 @@ providers:
     network: traefik
 
 entryPoints:
+  web-internal:
+    address: ":{{ services_webui_port.traefik_webinternal }}"
   web:
     address: ":80"
     http:
@@ -34,6 +36,7 @@ entryPoints:
     http:
       tls:
         certResolver: cloudflare
+    asDefault: true
 
 certificatesResolvers:
   cloudflare:

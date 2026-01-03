@@ -5,7 +5,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.ntfy.rule: Host(`ntfy.{{ services_domain_base }}`)
-      traefik.http.routers.ntfy.entrypoints: websecure
       traefik.http.services.ntfy.loadbalancer.server.port: "{{ services_webui_port.ntfy }}"
 
     environment:
