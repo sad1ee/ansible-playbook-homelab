@@ -20,8 +20,6 @@
   when: item.service in services_list
   loop:
     - service: homepage
-      file: bookmarks.yaml
-    - service: homepage
       file: docker.yaml
     - service: homepage
       file: services.yaml

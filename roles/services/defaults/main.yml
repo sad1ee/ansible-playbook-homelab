@@ -137,7 +137,7 @@ services_webui_port:
   traefik: 8080
   wud: 3000
 
-services_docker_proxy_host: tcp://127.0.0.1:2375
+services_docker_proxy_host: tcp://docker-proxy:2375
 
 # *********************************************************************************** #
 # ************************ Override in group_vars/secret.yml ************************ #

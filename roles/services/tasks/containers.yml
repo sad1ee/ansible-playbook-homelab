@@ -74,8 +74,8 @@
   ansible.builtin.set_fact:
     services_compose_includes_files:
       "{{ services_compose_includes_files | default([]) + [item | string +
-      '.compose.yml'] }}"
-  loop: "{{ services_list }}"
+      '.include.yml'] }}"
+  loop: "{{ services_compose_includes }}"
   tags: [services, containers, compose]
 
 - name: containers | Run docker compose with all found compose files
