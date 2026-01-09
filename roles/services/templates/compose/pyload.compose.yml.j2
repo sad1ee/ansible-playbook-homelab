@@ -1,11 +1,12 @@
 services:
   pyload:
-    image: lscr.io/linuxserver/pyload-ng:latest
+    image: "lscr.io/linuxserver/pyload-ng:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.pyload.rule: Host(`pyload.{{ services_domain_base }}`)
       traefik.http.services.pyload.loadbalancer.server.port: "{{ services_webui_port.pyload }}"
+      traefik.http.routers.pyload.middlewares: authelia@docker
 
     environment:
       PUID: "{{ services_puid }}"
@@ -16,9 +17,9 @@ services:
       - "{{ services_path.pyload.config }}:/config"
       - "{{ services_path.pyload.downloads }}:/downloads"
 
-    container_name: pyload
-    hostname: pyload
-    restart: unless-stopped
+    container_name: "pyload"
+    hostname: "pyload"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
+      - "traefik"

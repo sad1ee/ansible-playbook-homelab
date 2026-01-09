@@ -4,6 +4,11 @@ loop_var_prefix: ^(__|{role}_)
 var_naming_pattern: ^[a-z_][a-z0-9_]*$
 use_default_rules: true
 
+exclude_paths:
+  - group_vars/all-secret.yml
+  - group_vars/homeserver-secret.yml
+  - group_vars/netserver-secret.yml
+
 mock_roles:
   - geerlingguy.security
   - geerlingguy.pip

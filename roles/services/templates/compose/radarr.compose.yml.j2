@@ -1,28 +1,29 @@
 services:
   radarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: "lscr.io/linuxserver/radarr:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.radarr.rule: Host(`radarr.{{ services_domain_base }}`)
       traefik.http.services.radarr.loadbalancer.server.port: "{{ services_webui_port.radarr }}"
+      traefik.http.routers.radarr.middlewares: authelia@docker
 
     environment:
       PUID: "{{ services_puid }}"
       PGID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      DOCKER_MODS: linuxserver/mods:radarr-striptracks
+      DOCKER_MODS: "linuxserver/mods:radarr-striptracks"
       STRIPTRACKS_ARGS: "--audio :eng:deu:und --subs :eng:deu"
 
     volumes:
       - "{{ services_path.radarr }}:/config"
       - "{{ services_path.media }}:/media"
 
-    container_name: radarr
-    hostname: radarr
-    restart: unless-stopped
+    container_name: "radarr"
+    hostname: "radarr"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
-      - flaresolverr
-      - recyclarr
+      - "traefik"
+      - "flaresolverr"
+      - "recyclarr"

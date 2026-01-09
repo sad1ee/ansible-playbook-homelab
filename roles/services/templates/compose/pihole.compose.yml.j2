@@ -1,14 +1,14 @@
 services:
   pihole:
-    image: mpgirro/pihole-unbound:latest
+    image: "mpgirro/pihole-unbound:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.pihole.rule: Host(`pihole.{{ services_domain_base }}`)
       traefik.http.services.pihole.loadbalancer.server.port: "{{ services_webui_port.pihole }}"
-      traefik.http.routers.pihole.middlewares: "pihole-redirect"
-      traefik.http.middlewares.pihole-redirect.redirectregex.regex: ^/$
-      traefik.http.middlewares.pihole-redirect.redirectregex.replacement: /admin
+      traefik.http.routers.pihole.middlewares: authelia@docker,pihole-dashboard-redirect
+      traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.regex: "^/$"
+      traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.replacement: "/admin"
 
     environment:
       PIHOLE_UID: "{{ services_puid }}"
@@ -16,32 +16,32 @@ services:
       TZ: "{{ services_timezone }}"
       FTLCONF_webserver_port: "{{ services_webui_port.pihole }}"
       FTLCONF_webserver_api_password: "{{ services_pihole_pass }}"
-      FTLCONF_webserver_domain: "https://pihole.{{ services_domain_base }}"
-      FTLCONF_dns_upstreams: 127.0.0.1#5335
-      FTLCONF_dns_piholePTR: NONE
-      FTLCONF_dns_domainNeeded: true
-      FTLCONF_dns_dnssec: false
-      FTLCONF_dns_listeningMode: LOCAL
-      FTLCONF_dns_domain_name: lan
-      FTLCONF_dns_rateLimit_count: 1500
-      FTLCONF_dns_rateLimit_interval: 60
-      FTLCONF_dhcp_active: true
-      FTLCONF_dhcp_start: 192.168.0.150
-      FTLCONF_dhcp_end: 192.168.0.247
-      FTLCONF_dhcp_router: 192.168.0.1
-      FTLCONF_dhcp_netmask: 255.255.255.0
-      FTLCONF_dhcp_leaseTime: 1d
-      FTLCONF_dhcp_ipv6: true
-      FTLCONF_dhcp_multiDNS: true
-      FTLCONF_dhcp_hosts: | 
+      FTLCONF_webserver_domain: pihole.lan # "pihole.{{ services_domain_base }}"
+      FTLCONF_dns_upstreams: "127.0.0.1#5335"
+      FTLCONF_dns_piholePTR: "NONE"
+      FTLCONF_dns_domainNeeded: "true"
+      FTLCONF_dns_dnssec: "false"
+      FTLCONF_dns_listeningMode: "LOCAL"
+      FTLCONF_dns_domain_name: "lan"
+      FTLCONF_dns_rateLimit_count: "1500"
+      FTLCONF_dns_rateLimit_interval: "60"
+      FTLCONF_dhcp_active: "true"
+      FTLCONF_dhcp_start: "{{ services_lan.dhcp_start }}"
+      FTLCONF_dhcp_end: "{{ services_lan.dhcp_end }}"
+      FTLCONF_dhcp_router: "{{ services_lan.router }}"
+      FTLCONF_dhcp_netmask: "{{ services_lan.netmask }}"
+      FTLCONF_dhcp_leaseTime: "1d"
+      FTLCONF_dhcp_ipv6: "true"
+      FTLCONF_dhcp_multiDNS: "true"
+      FTLCONF_dhcp_hosts: |
 {% for host in services_pihole_dhcp_hosts %}
         {{ host }}
 {% endfor %}
-      FTLCONF_dns_hosts: | 
+      FTLCONF_dns_hosts: |
 {% for host in services_pihole_dns_hosts %}
         {{ host }}
 {% endfor %}
-      FTLCONF_dns_cnameRecords: | 
+      FTLCONF_dns_cnameRecords: |
 {% for host in services_pihole_cname_records %}
         {{ host }}
 {% endfor %}
@@ -51,13 +51,13 @@ services:
       - "{{ services_path.pihole.dnsmasq }}:/etc/dnsmasq.d"
 
     cap_add:
-      - NET_ADMIN
-      - SYS_TIME
-      - CAP_NET_BIND_SERVICE
-      - SYS_NICE
+      - "NET_ADMIN"
+      - "SYS_TIME"
+      - "CAP_NET_BIND_SERVICE"
+      - "SYS_NICE"
 
-    container_name: pihole
-    hostname: pihole
-    restart: unless-stopped
+    container_name: "pihole"
+    hostname: "pihole"
+    restart: "unless-stopped"
 
     network_mode: "host"

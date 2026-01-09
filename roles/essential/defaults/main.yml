@@ -6,12 +6,28 @@ essential_ssh_port: 22
 essential_x11_variant: nodeadkeys
 
 # packages.yml
-essential_packages: []
-#  - ufw
+essential_packages:
+  - ufw
 
 # firewall.yml
-essential_firewall_allowed_tcp_udp_ports: []
-essential_firewall_allowed_ips: []
+essential_firewall_iptables_commands: []
+essential_firewall_allowed_tcp_udp_ports:
+  - port: "{{ essential_ssh_port }}"
+    proto: tcp
+    comment: "SSH"
+
+# network.yml
+essential_network_lan:
+  interface: enp0s31f6
+  ipv4:
+    addr: 192.168.0.100
+    cidr: /24
+    router: 192.168.0.1
+    dns: 192.168.0.99
+  ipv6:
+    addr: fd42:1234:5678::2
+    dns: fd42:1234:5678::1
+    cidr: /64
 
 # geerlingguy.security
 essential_security_ssh_port: "{{ essential_ssh_port }}"

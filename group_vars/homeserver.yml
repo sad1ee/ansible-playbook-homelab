@@ -9,24 +9,41 @@ essential_packages:
   - powertop # for c-states checking
   - intel-gpu-tools # for intel_gpu_top to see gpu transcoding activity
   - smartmontools # for disk health reports
-  - radvd # for netowork RDNSS override # HACK: Temporary fix for ISP router
+
+beszel_agent_image: "henrygd/beszel-agent-intel"
 
 essential_firewall_allowed_tcp_udp_ports:
-  - port: 22 # ssh
+  - port: 22
     proto: tcp
-  - port: 53 # pihole dns
-    proto: tcp
-  - port: 53 # pihole dns
-    proto: udp
-  - port: 67 # pihole dhcp
-    proto: udp
-  - port: 123 # pihole ntp
-    proto: udp
-  # HACK: Disgusting webui exposure cause network_mode host (dhcp relay didnt work)
-  # TODO: RM do via host.docker.internal
-  - port: 82 # pihole webui
-    proto: tcp
+    comment: "SSH"
 
-# HACK: Even more disgusting. TMP fix for ISP RA meaning for radvd
-essential_firewall_allowed_ips:
-  - ip: fd42:1234:5678::/64
+services_list:
+  - authelia
+  - bazarr
+  - beszel-agent
+  - beszel
+  - cwa
+  - cwad
+  - docker-proxy
+  - dozzle
+  - flaresolverr
+  - gluetun
+  - gotenberg
+  - homepage
+  - jellyfin
+  - jellyseerr
+  - lldap
+  - ntfy
+  - paperless
+  - postgres
+  - prowlarr
+  - qbittorrent
+  - radarr
+  - recyclarr
+  - redis
+  - samba
+  - sonarr
+  - syncthing
+  - tika
+  - traefik
+  - wud

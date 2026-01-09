@@ -1,6 +1,6 @@
 ---
-- name: Run homeserver maintainance
-  hosts: homeserver
+- name: Run maintainance
+  hosts: all
   become: true
   gather_facts: false
 

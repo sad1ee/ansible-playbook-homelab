@@ -1,28 +1,29 @@
 services:
   sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: "lscr.io/linuxserver/sonarr:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.sonarr.rule: Host(`sonarr.{{ services_domain_base }}`)
       traefik.http.services.sonarr.loadbalancer.server.port: "{{ services_webui_port.sonarr }}"
+      traefik.http.routers.sonarr.middlewares: authelia@docker
 
     environment:
       PUID: "{{ services_puid }}"
       PGID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      DOCKER_MODS: linuxserver/mods:radarr-striptracks
+      DOCKER_MODS: "linuxserver/mods:radarr-striptracks"
       STRIPTRACKS_ARGS: "--audio :eng:deu:und --subs :eng:deu"
 
     volumes:
       - "{{ services_path.sonarr }}:/config"
       - "{{ services_path.media }}:/media"
 
-    container_name: sonarr
-    hostname: sonarr
-    restart: unless-stopped
+    container_name: "sonarr"
+    hostname: "sonarr"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
-      - flaresolverr
-      - recyclarr
+      - "traefik"
+      - "flaresolverr"
+      - "recyclarr"

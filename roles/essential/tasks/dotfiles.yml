@@ -29,10 +29,9 @@
     owner: "{{ essential_username }}"
     group: "{{ essential_username }}"
   tags: [essential, dotfiles]
-
-# sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply sad1ee
-
+#
 # TODO: Requires input for rbw (mail, password, 2fa)
+# Normal command: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply sad1ee
 # - name: dotfiles | Initialize and apply chezmoi dotfiles
 #   ansible.builtin.command: >
 #     "{{ ansible_env.HOME }}/.local/bin/chezmoi init --apply sad1ee"

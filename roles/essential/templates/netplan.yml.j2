@@ -1,0 +1,16 @@
+network:
+  version: 2
+  ethernets:
+    {{ essential_network_lan.interface }}:
+      dhcp4: no
+      dhcp6: no
+      addresses:
+        - "{{ essential_network_lan.ipv4.addr }}{{ essential_network_lan.ipv4.cidr }}"
+        - "{{ essential_network_lan.ipv6.addr }}{{ essential_network_lan.ipv6.cidr }}"
+      routes:
+        - to: 0.0.0.0/0
+          via: "{{ essential_network_lan.ipv4.router }}"
+      nameservers:
+        addresses:
+          - "{{ essential_network_lan.ipv4.dns }}"
+          - "{{ essential_network_lan.ipv6.dns }}"

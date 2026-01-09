@@ -11,6 +11,10 @@
   ansible.builtin.include_tasks: dotfiles.yml
   tags: [essential, dotfiles]
 
+- name: Configure network
+  ansible.builtin.include_tasks: network.yml
+  tags: [essential, network]
+
 - name: Configure UFW firewall
   ansible.builtin.include_tasks: firewall.yml
-  tags: [essential, firewall]
+  tags: [essential, firewall, ipv6]

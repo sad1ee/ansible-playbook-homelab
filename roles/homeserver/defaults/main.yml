@@ -35,8 +35,8 @@ homeserver_mergerfs_pools:
       homeserver_uid }},gid={{ homeserver_gid }}
   - mnt: "{{ homeserver_mount_dirs.mergerfs_pool_all }}"
     src:
-      /mnt/{{ homeserver_mount_dirs.ssd1 }}:/mnt/{{ homeserver_mount_dirs.hdd1
-      }}:/mnt/{{ homeserver_mount_dirs.hdd2 }}
+      /mnt/{{ homeserver_mount_dirs.ssd1 }}:/mnt/{{ homeserver_mount_dirs.hdd1 }}:/mnt/{{
+      homeserver_mount_dirs.hdd2 }}
     opts:
       cache.files=partial,category.create=ff,func.getattr=newest,dropcacheonclose=true,use_ino,allow_other,uid={{
       homeserver_uid }},gid={{ homeserver_gid }}

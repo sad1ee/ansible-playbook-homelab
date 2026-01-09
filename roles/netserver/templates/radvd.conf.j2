@@ -1,16 +1,15 @@
-interface enp0s31f6
+interface {{ netserver_lan.interface }}
 {
   AdvSendAdvert on;
   MinRtrAdvInterval 30;
   MaxRtrAdvInterval 100;
 
-  prefix fd42:1234:5678::/64
+  prefix {{ netserver_lan.ipv6.prefix }}{{ netserver_lan.ipv6.cidr }}
   {
     AdvOnLink on;
     AdvAutonomous on;
   };
-
-  RDNSS fd42:1234:5678::1
+  RDNSS {{ netserver_lan.ipv6.addr }}
   {
     AdvRDNSSLifetime 7200;
   };

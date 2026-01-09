@@ -1,11 +1,12 @@
 services:
   syncthing:
-    image: lscr.io/linuxserver/syncthing:latest
+    image: "lscr.io/linuxserver/syncthing:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.syncthing.rule: Host(`syncthing.{{ services_domain_base }}`)
       traefik.http.services.syncthing.loadbalancer.server.port: "{{ services_webui_port.syncthing }}"
+      traefik.http.routers.syncthing.middlewares: authelia@docker
 
     environment:
       PUID: "{{ services_puid }}"
@@ -17,13 +18,13 @@ services:
       - "{{ services_path.syncthing.data }}:/sync"
 
     ports:
-      - 22000:22000/tcp
-      - 22000:22000/udp
-      - 21027:21027/udp
+      - "22000:22000/tcp"
+      - "22000:22000/udp"
+      - "21027:21027/udp"
 
-    container_name: syncthing
-    hostname: syncthing
-    restart: unless-stopped
+    container_name: "syncthing"
+    hostname: "syncthing"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
+      - "traefik"

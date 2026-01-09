@@ -1,0 +1,10 @@
+---
+- name: network | Deploy Netplan config
+  ansible.builtin.template:
+    src: netplan.yml.j2
+    dest: /etc/netplan/01-static.yaml
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Apply Netplan config
+  tags: [essential, network]

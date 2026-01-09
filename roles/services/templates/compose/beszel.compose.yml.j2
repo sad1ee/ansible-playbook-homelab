@@ -1,19 +1,24 @@
 services:
   beszel:
-    image: henrygd/beszel:latest
+    image: "henrygd/beszel:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.beszel.rule: Host(`beszel.{{ services_domain_base }}`)
       traefik.http.services.beszel.loadbalancer.server.port: "{{ services_webui_port.beszel }}"
+      traefik.http.routers.beszel.middlewares: "authelia@docker"
+
+    environment:
+      USER_EMAIL: "{{ services_beszel_user }}"
+      USER_PASSWORD: "{{ services_beszel_pass }}"
 
     volumes:
       - "{{ services_path.beszel.data }}:/beszel_data"
-      - /etc/localtime:/etc/localtime:ro
+      - "/etc/localtime:/etc/localtime:ro"
 
-    container_name: beszel
-    hostname: beszel
-    restart: unless-stopped
+    container_name: "beszel"
+    hostname: "beszel"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
+      - "traefik"

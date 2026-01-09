@@ -1,6 +1,6 @@
 services:
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: "lscr.io/linuxserver/qbittorrent:latest"
 
     environment:
       PUID: "{{ services_puid }}"
@@ -14,10 +14,10 @@ services:
 
     depends_on:
       gluetun:
-        condition: service_healthy
+        condition: "service_healthy"
         restart: true
 
-    container_name: qbittorrent
-    restart: unless-stopped
+    container_name: "qbittorrent"
+    restart: "unless-stopped"
 
     network_mode: "service:gluetun"

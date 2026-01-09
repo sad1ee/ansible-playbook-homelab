@@ -1,12 +1,12 @@
 services:
   samba:
-    image: dockurr/samba:latest
+    image: "dockurr/samba:latest"
 
     environment:
       UID: "{{ services_puid }}"
       GID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      NAME: Share
+      NAME: "Share"
       USER: "{{ services_samba_user }}"
       PASS: "{{ services_samba_password }}"
 
@@ -14,14 +14,14 @@ services:
       - "{{ services_path.samba }}:/storage"
 
     ports:
-      - 445:445
+      - "445:445"
 
     healthcheck:
       disable: true
 
-    container_name: samba
-    hostname: samba
-    restart: unless-stopped
+    container_name: "samba"
+    hostname: "samba"
+    restart: "unless-stopped"
 
     networks:
-      - samba
+      - "samba"

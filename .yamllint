@@ -1,11 +1,14 @@
 ---
 rules:
-  document-start: enable
+  document-start: false
   line-length:
-    max: 88
+    max: 100
+    level: warning
   quoted-strings:
     quote-type: double
-    required: only-when-needed
+    required: false
+  comments:
+    min-spaces-from-content: 1
 yaml-files:
   - "*.yaml"
   - "*.yml"

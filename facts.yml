@@ -7,6 +7,12 @@
     - group_vars/become.yml
 
   tasks:
+    - name: Gather minimal facts
+      ansible.builtin.setup:
+        gather_subset:
+          - "!all"
+      tags: [always]
+
     - name: Gather facts from remote hosts
       ansible.builtin.setup:
         gather_subset:
@@ -23,6 +29,7 @@
           # - interfaces # enp0s31f6
           - env
           - selinux
+      when: false
 
     - name: Ensure local .ansible/facts_cache dir exists
       ansible.builtin.file:

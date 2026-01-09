@@ -1,14 +1,14 @@
 services:
   flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    image: "ghcr.io/flaresolverr/flaresolverr:latest"
 
     environment:
       TZ: "{{ services_timezone }}"
-      LOG_LEVEL: info # debug, info
+      LOG_LEVEL: "info" # debug, info
 
-    container_name: flaresolverr
-    hostname: flaresolverr
-    restart: unless-stopped
+    container_name: "flaresolverr"
+    hostname: "flaresolverr"
+    restart: "unless-stopped"
 
     networks:
-      - flaresolverr
+      - "flaresolverr"

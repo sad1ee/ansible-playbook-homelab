@@ -1,0 +1,24 @@
+---
+- name: configs | Render jinja config templates locally
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item.file }}.j2"
+    dest: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    mode: "0640"
+    owner: user
+    group: user
+  loop:
+    - file: radvd.conf
+  delegate_to: localhost
+  tags: [netserver]
+
+- name: configs | Copy locally rendered compose templates to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    dest: "{{ item.dest }}/{{ item.file }}"
+    mode: "0640"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  loop:
+    - file: radvd.conf
+      dest: /etc
+  tags: [netserver]

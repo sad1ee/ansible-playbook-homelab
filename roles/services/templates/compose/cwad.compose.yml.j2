@@ -1,15 +1,15 @@
 services:
   cwad:
-    image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+    image: "ghcr.io/calibrain/calibre-web-automated-book-downloader:latest"
 
     environment:
       UID: "{{ services_puid }}"
       GID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      LOGLEVEL: info # debug, info, warning, error, critical
+      LOGLEVEL: "info" # debug, info, warning, error, critical
       FLASK_PORT: "{{ services_webui_port.cwad }}"
-      BOOK_LANGUAGE: de,en
-      USE_BOOK_TITLE: true
+      BOOK_LANGUAGE: "de,en"
+      USE_BOOK_TITLE: "true"
       CALIBRE_WEB_URL: "cwa.{{ services_domain_base }}"
 
     volumes:
@@ -17,13 +17,13 @@ services:
 
     depends_on:
       gluetun:
-        condition: service_healthy
+        condition: "service_healthy"
         restart: true
 
     healthcheck:
       disable: true
 
-    container_name: cwad
-    restart: unless-stopped
+    container_name: "cwad"
+    restart: "unless-stopped"
 
     network_mode: "service:gluetun"

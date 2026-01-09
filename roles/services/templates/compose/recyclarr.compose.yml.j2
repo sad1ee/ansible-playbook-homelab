@@ -1,6 +1,6 @@
 services:
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:latest
+    image: "ghcr.io/recyclarr/recyclarr:latest"
 
     environment:
       TZ: "{{ services_timezone }}"
@@ -11,9 +11,9 @@ services:
     security_opt: ["no-new-privileges:true"]
     user: "{{ services_puid }}:{{ services_pgid }}"
 
-    container_name: recyclarr
-    hostname: recyclarr
-    restart: unless-stopped
+    container_name: "recyclarr"
+    hostname: "recyclarr"
+    restart: "unless-stopped"
 
     networks:
-      - recyclarr
+      - "recyclarr"

@@ -25,14 +25,12 @@
       file: services.yaml
     - service: homepage
       file: settings.yaml
-    - service: pihole
-      file: netplan.yml
-    - service: pihole
-      file: radvd.conf
     - service: recyclarr
       file: recyclarr.yml
     - service: traefik
       file: traefik.yml
+    - service: authelia
+      file: configuration.yml
   delegate_to: localhost
   tags: [services, configs]
 
@@ -55,21 +53,6 @@
       file: recyclarr.yml
     - service: traefik
       file: traefik.yml
-  tags: [services, configs]
-
-- name: configs | Copy locally rendered compose templates to remote
-  ansible.builtin.copy:
-    src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
-    dest: "{{ services_path[item.service][item.sub] }}/{{ item.file }}"
-    mode: "0640"
-    owner: "{{ services_username }}"
-    group: "{{ services_username }}"
-  when: item.service in services_list
-  loop:
-    - service: pihole
-      file: netplan.yml
-      sub: pihole
-    - service: pihole
-      file: radvd.conf
-      sub: pihole
+    - service: authelia
+      file: configuration.yml
   tags: [services, configs]

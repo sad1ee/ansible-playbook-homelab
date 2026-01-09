@@ -1,7 +1,10 @@
 ---
-
 # *********************************************************************************** #
 # ************************ Override in group_vars/secret.yml ************************ #
 # *********************************************************************************** #
-# vault_become_pass: OverrideMeInSecrets
+# ansible_become_pass: OverrideMeInSecrets
+# services_domain_base: OverrideMeInSecrets
+# services_domain_base_seperate:
+#   tld: OverrideMeInSecrets
+#   sld: OverrideMeInSecrets
 # *********************************************************************************** #

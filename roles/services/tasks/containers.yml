@@ -4,8 +4,8 @@
     name: traefik
     driver: bridge
     ipam_config:
-      - subnet: 172.25.0.0/16
-        gateway: 172.25.0.1
+      - subnet: "{{ services_traefik_network.subnet }}"
+        gateway: "{{ services_traefik_network.gateway }}"
     state: present
   when: "'traefik' in services_list or 'npm' in services_list"
   tags: [services, containers]
@@ -29,21 +29,32 @@
   loop: "{{ services_internal_networks }}"
   tags: [services, containers]
 
-- name: containers | Render jinja compose templates locally
+# - name: containers | Render jinja compose templates locally
+#   ansible.builtin.template:
+#     src: "{{ role_path }}/templates/compose/{{ item }}.compose.yml.j2"
+#     dest: "{{ playbook_dir }}/.ansible/templates/{{ item }}.compose.yml"
+#     mode: "0640"
+#     owner: user
+#     group: user
+#   when: item in services_list
+#   loop: "{{ services_list }}"
+#   delegate_to: localhost
+#   tags: [services, containers, compose]
+#
+# - name: containers | Copy locally rendered compose templates to remote
+#   ansible.builtin.copy:
+#     src: "{{ playbook_dir }}/.ansible/templates/{{ item }}.compose.yml"
+#     dest: "{{ services_path.compose }}/{{ item }}.compose.yml"
+#     mode: "0600"
+#     owner: "{{ services_username }}"
+#     group: "{{ services_username }}"
+#   when: item in services_list
+#   loop: "{{ services_list }}"
+#   tags: [services, containers, compose]
+
+- name: containers | Copy and render compose templates to remote
   ansible.builtin.template:
     src: "{{ role_path }}/templates/compose/{{ item }}.compose.yml.j2"
-    dest: "{{ playbook_dir }}/.ansible/templates/{{ item }}.compose.yml"
-    mode: "0640"
-    owner: user
-    group: user
-  when: item in services_list
-  loop: "{{ services_list }}"
-  delegate_to: localhost
-  tags: [services, containers, compose]
-
-- name: containers | Copy locally rendered compose templates to remote
-  ansible.builtin.copy:
-    src: "{{ playbook_dir }}/.ansible/templates/{{ item }}.compose.yml"
     dest: "{{ services_path.compose }}/{{ item }}.compose.yml"
     mode: "0600"
     owner: "{{ services_username }}"
@@ -52,29 +63,39 @@
   loop: "{{ services_list }}"
   tags: [services, containers, compose]
 
+- name: containers | Render jinja compose includes locally
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/compose/{{ item }}.include.yml.j2"
+    dest: "{{ playbook_dir }}/.ansible/templates/{{ item }}.include.yml"
+    mode: "0640"
+    owner: user
+    group: user
+  loop: "{{ services_compose_includes }}"
+  delegate_to: localhost
+  tags: [services, containers, compose]
+
 - name: containers | Copy compose includes to remote
   ansible.builtin.copy:
-    src: "{{ role_path }}/templates/compose/{{ item }}.include.yml"
+    src: "{{ playbook_dir }}/.ansible/templates/{{ item }}.include.yml"
     dest: "{{ services_path.compose }}/{{ item }}.include.yml"
     mode: "0600"
     owner: "{{ services_username }}"
     group: "{{ services_username }}"
   loop: "{{ services_compose_includes }}"
-  tags: [services, containers, compose]
+  tags: [services, containers, compose, includes]
 
 - name: containers | Select compose files
   ansible.builtin.set_fact:
     services_list_compose_files:
-      "{{ services_list_compose_files | default([]) + [item | string + '.compose.yml']
-      }}"
+      "{{ services_list_compose_files | default([]) + [item | string + '.compose.yml'] }}"
   loop: "{{ services_list }}"
   tags: [services, containers, compose]
 
 - name: containers | Select include files
   ansible.builtin.set_fact:
     services_compose_includes_files:
-      "{{ services_compose_includes_files | default([]) + [item | string +
-      '.include.yml'] }}"
+      "{{ services_compose_includes_files | default([]) + [item | string + '.include.yml']
+      }}"
   loop: "{{ services_compose_includes }}"
   tags: [services, containers, compose]
 

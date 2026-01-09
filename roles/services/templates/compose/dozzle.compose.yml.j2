@@ -1,11 +1,12 @@
 services:
   dozzle:
-    image: amir20/dozzle:latest
+    image: "amir20/dozzle:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.dozzle.rule: Host(`dozzle.{{ services_domain_base }}`)
       traefik.http.services.dozzle.loadbalancer.server.port: "{{ services_webui_port.dozzle }}"
+      traefik.http.routers.dozzle.middlewares: authelia@docker
 
     environment:
       DOZZLE_ENABLE_ACTIONS: true
@@ -14,12 +15,12 @@ services:
       DOCKER_HOST: "{{ services_docker_proxy_host }}"
 
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - "/etc/localtime:/etc/localtime:ro"
 
-    container_name: dozzle
-    hostname: dozzle
-    restart: unless-stopped
+    container_name: "dozzle"
+    hostname: "dozzle"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
-      - docker-proxy
+      - "traefik"
+      - "docker-proxy"

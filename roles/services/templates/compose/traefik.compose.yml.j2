@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.6
+    image: "traefik:v3.6"
 
     environment:
       TZ: "{{ services_timezone }}"
@@ -14,20 +14,18 @@ services:
       traefik.http.routers.traefik.rule: Host(`traefik.{{ services_domain_base }}`) && PathPrefix(`/dashboard`) || Host(`traefik.{{ services_domain_base }}`) && PathPrefix(`/api`) || Host(`traefik.{{ services_domain_base }}`) && Path(`/`)
       traefik.http.routers.traefik.entrypoints: websecure
       traefik.http.routers.traefik.service: api@internal
-      traefik.http.routers.traefik.middlewares: dashboard-redirect
-
-      # External route redirect base path to dashboard
-      traefik.http.middlewares.dashboard-redirect.redirectregex.regex: ^/$
-      traefik.http.middlewares.dashboard-redirect.redirectregex.replacement: /dashboard/
+      traefik.http.routers.traefik.middlewares: authelia@docker,traefik-dashboard-redirect
+      traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.regex: "^/$"
+      traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.replacement: "/dashboard/"
 
       # Wildcard cert configuration via external route
       traefik.http.routers.traefik.tls: true
-      traefik.http.routers.traefik.tls.certresolver: cloudflare
+      traefik.http.routers.traefik.tls.certresolver: "cloudflare"
       traefik.http.routers.traefik.tls.domains[0].main: "{{ services_domain_base }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ services_domain_base }}"
 
       # Internal route api web
-      traefik.http.routers.traefik-internal.rule: ClientIP(`172.25.0.0/16`) && PathPrefix(`/api`)
+      traefik.http.routers.traefik-internal.rule: ClientIP(`{{ services_traefik_network.subnet }}`) && PathPrefix(`/api`)
       traefik.http.routers.traefik-internal.entrypoints: web-internal
       traefik.http.routers.traefik-internal.service: api@internal
 
@@ -42,21 +40,27 @@ services:
     security_opt: ["no-new-privileges:true"]
     user: "{{ services_puid }}:{{ services_pgid }}"
 
+    depends_on:
+      authelia:
+        condition: "service_started"
+
     healthcheck:
       test: ["CMD", "traefik", "healthcheck"]
-      interval: 60s
-      timeout: 30s
-      retries: 3
-      start_period: 60s
-      start_interval: 5s
+      interval: "60s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "5s"
 
-    container_name: traefik
-    hostname: traefik
-    restart: unless-stopped
+    container_name: "traefik"
+    hostname: "traefik"
+    restart: "unless-stopped"
 
     extra_hosts:
-      - host.docker.internal:172.25.0.1
+      - "host.docker.internal:{{ services_traefik_network.gateway }}"
 
     networks:
-      - traefik
-      - docker-proxy
+      traefik:
+        ipv4_address: "{{ services_traefik_network.traefik }}"
+      docker-proxy:
+      lldap:

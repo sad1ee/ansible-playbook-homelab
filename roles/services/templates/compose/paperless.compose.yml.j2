@@ -1,11 +1,13 @@
 services:
   paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    image: "ghcr.io/paperless-ngx/paperless-ngx:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.paperless.rule: Host(`paperless.{{ services_domain_base }}`)
+      traefik.http.routers.paperless.service: paperless
       traefik.http.services.paperless.loadbalancer.server.port: "{{ services_webui_port.paperless }}"
+      traefik.http.routers.paperless.middlewares: authelia@docker
 
     environment:
       USERMAP_UID: "{{ services_puid }}"
@@ -13,19 +15,23 @@ services:
       PAPERLESS_URL: "https://paperless.{{ services_domain_base }}"
       PAPERLESS_PORT: "{{ services_webui_port.paperless }}"
       PAPERLESS_TIME_ZONE: "{{ services_timezone }}"
-      PAPERLESS_OCR_LANGUAGE: deu
-      PAPERLESS_OCR_LANGUAGES: eng
-      PAPERLESS_REDIS: redis://redis:6379/0
-      PAPERLESS_REDIS_PREFIX: paperless
-      PAPERLESS_DBHOST: postgres
-      PAPERLESS_DBPORT: 5432
-      PAPERLESS_DBNAME: paperless
-      PAPERLESS_DBUSER: paperless
+      PAPERLESS_OCR_LANGUAGE: "deu"
+      PAPERLESS_OCR_LANGUAGES: "eng"
+      PAPERLESS_REDIS: "redis://redis:6379/0"
+      PAPERLESS_REDIS_PREFIX: "paperless"
+      PAPERLESS_DBHOST: "postgres"
+      PAPERLESS_DBPORT: "5432"
+      PAPERLESS_DBNAME: "paperless"
+      PAPERLESS_DBUSER: "paperless"
       PAPERLESS_DBPASS: "{{ services_paperless_db_pass }}"
-      PAPERLESS_TIKA_ENABLED: 1
-      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
-      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
-      PAPERLESS_CONSUMER_DISABLE: 1
+      PAPERLESS_TIKA_ENABLED: "1"
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: "http://gotenberg:3000"
+      PAPERLESS_TIKA_ENDPOINT: "http://tika:9998"
+      PAPERLESS_CONSUMER_DISABLE: "1"
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER_API: "true"
+      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: "HTTP_REMOTE_USER"
+      PAPERLESS_LOGOUT_REDIRECT_URL: "https://authelia.{{ services_domain_base }}/logout"
 
     volumes:
       - "{{ services_path.paperless.data}}/data:/usr/src/paperless/data"
@@ -34,24 +40,24 @@ services:
 
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: "service_healthy"
       redis:
-        condition: service_healthy
+        condition: "service_healthy"
       gotenberg:
-        condition: service_started
+        condition: "service_started"
       tika:
-        condition: service_started
+        condition: "service_started"
 
     healthcheck:
       disable: true
 
-    container_name: paperless
-    hostname: paperless
-    restart: unless-stopped
+    container_name: "paperless"
+    hostname: "paperless"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
-      - postgres
-      - redis
-      - gotenberg
-      - tika
+      - "traefik"
+      - "postgres"
+      - "redis"
+      - "gotenberg"
+      - "tika"

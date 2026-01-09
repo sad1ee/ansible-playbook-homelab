@@ -1,6 +1,6 @@
 services:
   gluetun:
-    image: ghcr.io/qdm12/gluetun:latest
+    image: "ghcr.io/qdm12/gluetun:latest"
 
     labels:
       traefik.enable: true
@@ -8,25 +8,27 @@ services:
       traefik.http.routers.cwad.rule: Host(`cwad.{{ services_domain_base }}`)
       traefik.http.routers.cwad.service: cwad
       traefik.http.services.cwad.loadbalancer.server.port: "{{ services_webui_port.cwad }}"
+      traefik.http.routers.cwad.middlewares: authelia@docker
 
       traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.{{ services_domain_base }}`)
       traefik.http.routers.qbittorrent.service: qbittorrent
       traefik.http.services.qbittorrent.loadbalancer.server.port: "{{ services_webui_port.qbittorrent }}"
+      traefik.http.routers.qbittorrent.middlewares: authelia@docker
 
     environment:
       PUID: "{{ services_puid }}"
       PGID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      LOGLEVEL: info # debug, info, warning, error
-      VPN_SERVICE_PROVIDER: protonvpn
-      VPN_TYPE: openvpn
+      LOGLEVEL: "info" # debug, info, warning, error
+      VPN_SERVICE_PROVIDER: "protonvpn"
+      VPN_TYPE: "openvpn"
       OPENVPN_USER: "{{ services_gluetun_openvpn_user }}+pmp"
       OPENVPN_PASSWORD: "{{ services_gluetun_openvpn_password }}"
-      SERVER_COUNTRIES: Germany
-      PORT_FORWARD_ONLY: on
-      VPN_PORT_FORWARDING: on
-      VPN_PORT_FORWARDING_PROVIDER: protonvpn
-      UPDATER_PERIOD: 24h
+      SERVER_COUNTRIES: "Germany"
+      PORT_FORWARD_ONLY: "on"
+      VPN_PORT_FORWARDING: "on"
+      VPN_PORT_FORWARDING_PROVIDER: "protonvpn"
+      UPDATER_PERIOD: "24h"
       UPDATER_PROTONVPN_EMAIL: "{{ services_gluetun_protonvpn_email }}"
       UPDATER_PROTONVPN_PASSWORD: "{{ services_gluetun_protonvpn_password }}"
       VPN_PORT_FORWARDING_UP_COMMAND: |
@@ -53,14 +55,14 @@ services:
         /api/v2/app/setPreferences 2>&1'
 
     devices:
-      - /dev/net/tun:/dev/net/tun
+      - "/dev/net/tun:/dev/net/tun"
 
     cap_add:
-      - NET_ADMIN
+      - "NET_ADMIN"
 
-    container_name: gluetun
-    hostname: gluetun
-    restart: unless-stopped
+    container_name: "gluetun"
+    hostname: "gluetun"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
+      - "traefik"

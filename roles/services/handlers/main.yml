@@ -13,18 +13,6 @@
     enabled: true
   tags: [services, pihole]
 
-# - name: Restart isc-dhcp-relay
-#   ansible.builtin.systemd:
-#     name: isc-dhcp-relay
-#     state: restarted
-#     enabled: true
-#   tags: [services, pihole]
-
-- name: Apply Netplan config
-  ansible.builtin.command: netplan apply
-  changed_when: true
-  tags: [services, pihole]
-
 - name: Start and enable radvd
   ansible.builtin.systemd:
     name: radvd

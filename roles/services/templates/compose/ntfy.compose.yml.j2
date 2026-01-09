@@ -1,11 +1,12 @@
 services:
   ntfy:
-    image: binwiederhier/ntfy:latest
+    image: "binwiederhier/ntfy:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.ntfy.rule: Host(`ntfy.{{ services_domain_base }}`)
       traefik.http.services.ntfy.loadbalancer.server.port: "{{ services_webui_port.ntfy }}"
+      traefik.http.routers.ntfy.middlewares: authelia@docker
 
     environment:
       TZ: "{{ services_timezone }}"
@@ -20,11 +21,11 @@ services:
     user: "{{ services_puid }}:{{ services_pgid }}"
 
     command:
-      - serve
+      - "serve"
 
-    container_name: ntfy
-    hostname: ntfy
-    restart: unless-stopped
+    container_name: "ntfy"
+    hostname: "ntfy"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
+      - "traefik"

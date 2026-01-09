@@ -1,0 +1,59 @@
+---
+essential_packages:
+  - ufw
+  - fwupd # for firmware updates
+  - radvd # for netowork RDNSS override # HACK: Temporary fix for ISP router
+
+beszel_agent_image: "henrygd/beszel-agent"
+
+essential_network_lan:
+  interface: eth0
+  ipv4:
+    addr: 192.168.0.99
+    cidr: /24
+    router: 192.168.0.1
+    dns: 127.0.0.1
+  ipv6:
+    addr: fd42:1234:5678::1
+    dns: fd42:1234:5678::1
+    cidr: /64
+
+essential_firewall_allowed_tcp_udp_ports:
+  - port: 22
+    proto: tcp
+    comment: "SSH"
+  - port: 53
+    proto: tcp
+    comment: "Pihole DNS"
+  - port: 53
+    proto: udp
+    comment: "Pihole DNS"
+  - port: 67
+    proto: udp
+    comment: "Pihole DHCP"
+  - port: 123
+    proto: udp
+    comment: "Pihole NTP"
+  - port: 80
+    proto: tcp
+    comment: "Pihole Webui"
+
+# essential_firewall_iptables_commands:
+#   - "ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -j ACCEPT"
+#   - "ip6tables -A INPUT -p icmpv6 --icmpv6-type router-solicitation -j ACCEPT"
+#   - "ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-solicitation -j ACCEPT"
+#   - "ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-advertisement -j ACCEPT"
+
+services_list:
+  - pihole
+  - beszel-agent
+  - docker-proxy
+
+services_path:
+  compose: "/opt/docker"
+  docker: "/opt/docker"
+  pihole:
+    pihole: "{{ services_path.docker }}/pihole/pihole"
+    dnsmasq: "{{ services_path.docker }}/pihole/dnsmasq"
+  beszel:
+    agent: "{{ services_path.docker }}/beszel/agent"

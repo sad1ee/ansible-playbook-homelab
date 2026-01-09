@@ -1,16 +1,11 @@
 ---
-# TODO: Find solution for parsing status output and comparing it to allowed ports
-# IDEA: when: motd_contents.stdout.find('hi') != -1
-# - name: firewall | Get UFW status
-#   ansible.builtin.command: ufw status
-#   register: essential_ufw_status
-#   changed_when: false
-#   tags: [essential, general]
-# - name: firewall | Verify only allowed ports are opened in UFW status
-#   ansible.builtin.debug:
-#     msg: {{ essential_ufw_status.stdout }}
+- name: firewall | Reset and disable UFW
+  community.general.ufw:
+    state: reset
+  # when: essential_firewall_reset
+  tags: [never, firewall_reset]
 
-- name: firewall | Enable on boot and reload
+- name: firewall | Enable and start UFW
   community.general.ufw:
     state: enabled
   tags: [essential, firewall]
@@ -18,8 +13,8 @@
 - name: firewall | Set default logging level
   community.general.ufw:
     logging: low
-  tags: [essential, firewall]
   notify: Reload UFW
+  tags: [essential, firewall]
 
 - name: firewall | Set default policy for in/out/routed
   community.general.ufw:
@@ -38,6 +33,7 @@
     direction: in
     proto: "{{ item.proto }}"
     port: "{{ item.port }}"
+    comment: "{{ item.comment }}"
   loop: "{{ essential_firewall_allowed_tcp_udp_ports }}"
   tags: [essential, firewall]
   notify: Reload UFW
@@ -46,7 +42,35 @@
   community.general.ufw:
     rule: allow
     direction: in
-    src: "{{ item.ip }}"
-  loop: "{{ essential_firewall_allowed_ips }}"
-  tags: [essential, firewall]
+    # NOTE: Alternate solution perhaps?
+    # proto: ipv6
+    # port: 53
+    src: "fd42:1234:5678::/64"
+    comment: "Radvd and DNS"
+  when: "'Debian' == ansible_facts['distribution']"
   notify: Reload UFW
+  tags: [essential, firewall]
+#
+# - name: firewall | Configure UFW IPV6 rules
+#   ansible.builtin.lineinfile:
+#     path: /etc/ufw/keyboard
+#     regexp: "{{ item.regex }}"
+#     line: "{{ item.value }}"
+#     state: present
+#     owner: root
+#     group: root
+#     mode: "0644"
+#     create: true
+#   loop:
+#     - path: "/etc/ufw/sysctl.conf"
+#       regex: "^#?net/ipv4/ip_forward="
+#       value: "net/ipv4/ip_forward=1"
+#     - path: "/etc/ufw/sysctl.conf"
+#       regex: "^#?net/ipv6/conf/default/forwarding="
+#       value: "net/ipv6/conf/default/forwarding=1"
+#     - path: "/etc/ufw/sysctl.conf"
+#       regex: "^#?net/ipv6/conf/all/forwarding="
+#       value: "net/ipv6/conf/all/forwarding=1"
+#   when: "'Debian' == ansible_facts['distribution']"
+#   notify: Reload UFW
+#   tags: [essential, firewall, ipv6]

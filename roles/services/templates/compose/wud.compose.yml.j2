@@ -1,16 +1,17 @@
 services:
   wud:
-    image: ghcr.io/getwud/wud:latest
+    image: "ghcr.io/getwud/wud:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.wud.rule: Host(`wud.{{ services_domain_base }}`)
       traefik.http.services.wud.loadbalancer.server.port: "{{ services_webui_port.wud }}"
+      traefik.http.routers.wud.middlewares: authelia@docker
 
     environment:
       TZ: "{{ services_timezone }}"
-      WUD_LOG_LEVEL: info # error info debug trace
-      WUD_REGISTRY_LSCR_PRIVATE_USERNAME: sad1ee
+      WUD_LOG_LEVEL: "info" # error info debug trace
+      WUD_REGISTRY_LSCR_PRIVATE_USERNAME: "sad1ee"
       WUD_REGISTRY_LSCR_PRIVATE_TOKEN: "{{ services_wud_github_token }}"
       WUD_WATCHER_LOCAL_CRON: "0 3 * * *"
       DOCKER_HOST: "{{ services_docker_proxy_host }}"
@@ -21,10 +22,10 @@ services:
     healthcheck:
       disable: true
 
-    container_name: wud
-    hostname: wud
-    restart: unless-stopped
+    container_name: "wud"
+    hostname: "wud"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
-      - docker-proxy
+      - "traefik"
+      - "docker-proxy"

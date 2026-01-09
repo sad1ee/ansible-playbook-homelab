@@ -1,0 +1,40 @@
+services:
+  lldap:
+    image: lldap/lldap:stable
+    # image: lldap/latest-debian-rootless
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.lldap.rule: Host(`lldap.{{ services_domain_base }}`)
+      traefik.http.services.lldap.loadbalancer.server.port: "{{ services_webui_port.lldap }}"
+      traefik.http.routers.lldap.middlewares: authelia@docker
+
+    environment:
+      UID: "{{ services_puid }}"
+      GID: "{{ services_pgid }}"
+      TZ: "{{ services_timezone }}"
+      LLDAP_HTTP_PORT: "{{ services_webui_port.lldap }}"
+      LLDAP_JWT_SECRET: "{{ services_lldap_jwt_secret }}"
+      LLDAP_KEY_SEED: "{{ services_lldap_key_seed }}"
+      LLDAP_LDAP_BASE_DN: dc={{ services_domain_base_seperate.sld }},dc={{ services_domain_base_seperate.tld }}
+      LLDAP_LDAP_USER_DN: "{{ services_lldap_admin_user }}"
+      LLDAP_LDAP_USER_PASS: "{{ services_lldap_admin_pass }}"
+      LLDAP_DATABASE_URL: "postgres://lldap:{{ services_lldap_db_pass }}@postgres/lldap"
+
+    # user: "{{ services_puid }}:{{ services_pgid }}"
+    # port: 3890
+
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+
+    volumes:
+      - "{{ services_path.lldap }}:/data"
+
+    container_name: "lldap"
+    hostname: "lldap"
+    restart: "unless-stopped"
+
+    networks:
+      - lldap
+      - postgres

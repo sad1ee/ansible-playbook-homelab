@@ -1,31 +1,39 @@
 services:
   authelia:
-    image: docker.io/authelia/authelia:latest
+    image: "docker.io/authelia/authelia:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.authelia.rule: Host(`authelia.{{ services_domain_base }}`)
       traefik.http.services.authelia.loadbalancer.server.port: "{{ services_webui_port.authelia }}"
 
+      traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:{{ services_webui_port.authelia }}/api/authz/forward-auth"
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
+      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User" # ,Remote-Groups,Remote-Email,Remote-Name"
+
     environment:
-      PUID: "{{ services_puid }}"
-      PGID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
+      # PUID: "{{ services_puid }}"
+      # PGID: "{{ services_pgid }}"
 
     volumes:
       - "{{ services_path.authelia }}:/config"
 
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: "service_healthy"
       redis:
-        condition: service_healthy
+        condition: "service_healthy"
 
-    container_name: authelia
-    hostname: authelia
-    restart: unless-stopped
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ services_puid }}:{{ services_pgid }}"
+
+    container_name: "authelia"
+    hostname: "authelia"
+    restart: "unless-stopped"
 
     networks:
-      - traefik
-      - postgres
-      - redis
+      - "traefik"
+      - "postgres"
+      - "redis"
+      - "lldap"
