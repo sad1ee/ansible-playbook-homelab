@@ -4,7 +4,7 @@ services:
 
     environment:
       TZ: "{{ services_timezone }}"
-      CF_DNS_API_TOKEN: "{{ services_cf_dns_api_token }}"
+      CF_DNS_API_TOKEN: "{{ services_cf_dns_api_token }}" # NOTE: Use secrets
       DOCKER_HOST: "{{ services_docker_proxy_host }}"
 
     labels:
@@ -29,6 +29,9 @@ services:
       traefik.http.middlewares.sablier.plugin.sablier.group: "default"
       traefik.http.middlewares.sablier.plugin.sablier.dynamic.displayName: "..."
 
+      # App Labels
+      dev.dozzle.group: "Admin"
+
     volumes:
       - "{{ services_path.traefik }}/acme.json:/certs/acme.json:rw"
       - "{{ services_path.traefik }}/traefik.yml:/etc/traefik/traefik.yml:ro"
@@ -42,7 +45,12 @@ services:
     user: "{{ services_puid }}:{{ services_pgid }}"
 
     depends_on:
-      authelia:
+      # NOTE: Fix deps
+      # authelia:
+      #   condition: "service_started"
+      # sablier:
+      #   condition: "service_started"
+      docker-proxy:
         condition: "service_started"
 
     healthcheck:

@@ -15,6 +15,8 @@ services:
       traefik.http.services.qbittorrent.loadbalancer.server.port: "{{ services_webui_port.qbittorrent }}"
       traefik.http.routers.qbittorrent.middlewares: authelia@docker
 
+      dev.dozzle.group: "Backend"
+
     environment:
       PUID: "{{ services_puid }}"
       PGID: "{{ services_pgid }}"

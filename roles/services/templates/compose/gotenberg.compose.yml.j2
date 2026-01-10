@@ -2,6 +2,9 @@ services:
   gotenberg:
     image: "docker.io/gotenberg/gotenberg:8.25"
 
+    labels:
+      dev.dozzle.group: "Backend"
+
     command:
       - "gotenberg"
       - "--chromium-disable-javascript=true"

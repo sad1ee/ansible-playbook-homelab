@@ -30,6 +30,10 @@ access_control:
       policy: "bypass"
       resources:
       - "^/api([/?].*)?$"
+    - domain: "ntfy.{{ services_domain_base }}"
+      policy: "bypass"
+      resources:
+      - "^/beszel([/?].*)?$"
     - domain:
         - "jellyfin.{{ services_domain_base }}"
         - "jellyseer.{{ services_domain_base }}"

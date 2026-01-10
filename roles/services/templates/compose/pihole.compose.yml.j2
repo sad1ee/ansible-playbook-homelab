@@ -10,6 +10,8 @@ services:
       traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.regex: "^/$"
       traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.replacement: "/admin"
 
+      dev.dozzle.group: "Admin"
+
     environment:
       PIHOLE_UID: "{{ services_puid }}"
       PIHOLE_GID: "{{ services_pgid }}"

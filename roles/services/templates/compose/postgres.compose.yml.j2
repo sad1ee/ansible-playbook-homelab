@@ -2,6 +2,9 @@ services:
   postgres:
     image: "docker.io/library/postgres:18"
 
+    labels:
+      dev.dozzle.group: "Backend"
+
     environment:
       POSTGRES_DB: "postgres"
       POSTGRES_USER: "postgres"

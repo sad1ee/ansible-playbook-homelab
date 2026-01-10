@@ -2,6 +2,9 @@ services:
   cwad:
     image: "ghcr.io/calibrain/calibre-web-automated-book-downloader:latest"
 
+    labels:
+      dev.dozzle.group: "Frontend"
+
     environment:
       UID: "{{ services_puid }}"
       GID: "{{ services_pgid }}"

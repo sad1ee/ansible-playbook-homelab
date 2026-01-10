@@ -12,6 +12,8 @@ services:
       sablier.group: "default"
       traefik.docker.allownonrunning: true
 
+      dev.dozzle.group: "Frontend"
+
     environment:
       TZ: "{{ services_timezone }}"
       LOG_LEVEL: "info # info, debug"
@@ -37,7 +39,7 @@ services:
           "--spider",
           "http://localhost:5055/api/v1/status",
         ]
-      interval: "60s"
+      interval: "300s"
       timeout: "30s"
       retries: "3"
       start_period: "60s"

@@ -2,6 +2,9 @@ services:
   redis:
     image: "docker.io/library/redis:8"
 
+    labels:
+      dev.dozzle.group: "Backend"
+
     volumes:
       - "{{ services_path.redis }}:/data"
       - "/etc/localtime:/etc/localtime:ro"

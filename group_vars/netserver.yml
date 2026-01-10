@@ -4,7 +4,7 @@ essential_packages:
   - fwupd # for firmware updates
   - radvd # for netowork RDNSS override # HACK: Temporary fix for ISP router
 
-beszel_agent_image: "henrygd/beszel-agent"
+beszel_agent_image: "henrygd/beszel-agent:latest"
 
 essential_network_lan:
   interface: eth0
@@ -47,7 +47,7 @@ essential_firewall_allowed_tcp_udp_ports:
 services_list:
   - pihole
   - beszel-agent
-  - docker-proxy
+  - dozzle-agent
 
 services_path:
   compose: "/opt/docker"

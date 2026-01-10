@@ -2,6 +2,9 @@ services:
   tika:
     image: "docker.io/apache/tika:latest"
 
+    labels:
+      dev.dozzle.group: "Backend"
+
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
 

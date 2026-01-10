@@ -10,7 +10,7 @@ essential_packages:
   - intel-gpu-tools # for intel_gpu_top to see gpu transcoding activity
   - smartmontools # for disk health reports
 
-beszel_agent_image: "henrygd/beszel-agent-intel"
+beszel_agent_image: "henrygd/beszel-agent-intel:latest"
 
 essential_firewall_allowed_tcp_udp_ports:
   - port: 22

@@ -2,6 +2,9 @@ services:
   samba:
     image: "dockurr/samba:latest"
 
+    labels:
+      dev.dozzle.group: "Frontend"
+
     environment:
       UID: "{{ services_puid }}"
       GID: "{{ services_pgid }}"

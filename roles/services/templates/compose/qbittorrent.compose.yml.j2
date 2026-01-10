@@ -2,6 +2,9 @@ services:
   qbittorrent:
     image: "lscr.io/linuxserver/qbittorrent:latest"
 
+    labels:
+      dev.dozzle.group: "Media"
+
     environment:
       PUID: "{{ services_puid }}"
       PGID: "{{ services_pgid }}"

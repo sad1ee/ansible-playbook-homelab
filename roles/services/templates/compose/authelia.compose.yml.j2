@@ -9,7 +9,8 @@ services:
 
       traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:{{ services_webui_port.authelia }}/api/authz/forward-auth"
       traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
-      # traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User" # ,Remote-Groups,Remote-Email,Remote-Name"
+
+      dev.dozzle.group: "Admin"
 
     environment:
       TZ: "{{ services_timezone }}"
@@ -25,7 +26,7 @@ services:
       redis:
         condition: "service_healthy"
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: ["no-new-privileges:true"]
     user: "{{ services_puid }}:{{ services_pgid }}"
 
     container_name: "authelia"

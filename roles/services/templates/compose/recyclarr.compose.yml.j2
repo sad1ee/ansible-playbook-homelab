@@ -2,6 +2,9 @@ services:
   recyclarr:
     image: "ghcr.io/recyclarr/recyclarr:latest"
 
+    labels:
+      dev.dozzle.group: "Backend"
+
     environment:
       TZ: "{{ services_timezone }}"
 
