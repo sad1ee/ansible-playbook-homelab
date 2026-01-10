@@ -24,14 +24,15 @@ services:
       traefik.http.routers.traefik.tls.domains[0].main: "{{ services_domain_base }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ services_domain_base }}"
 
-      # Internal route api web
-      traefik.http.routers.traefik-internal.rule: ClientIP(`{{ services_traefik_network.subnet }}`) && PathPrefix(`/api`)
-      traefik.http.routers.traefik-internal.entrypoints: web-internal
-      traefik.http.routers.traefik-internal.service: api@internal
+      # Sablier middleware
+      traefik.http.middlewares.sablier.plugin.sablier.sablierUrl: "http://sablier:10000"
+      traefik.http.middlewares.sablier.plugin.sablier.group: "default"
+      traefik.http.middlewares.sablier.plugin.sablier.dynamic.displayName: "..."
 
     volumes:
       - "{{ services_path.traefik }}/acme.json:/certs/acme.json:rw"
       - "{{ services_path.traefik }}/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ services_path.traefik }}/plugins:/plugins-storage"
 
     ports:
       - "80:80"
@@ -64,3 +65,4 @@ services:
         ipv4_address: "{{ services_traefik_network.traefik }}"
       docker-proxy:
       lldap:
+      sablier:

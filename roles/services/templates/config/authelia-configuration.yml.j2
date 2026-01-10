@@ -30,19 +30,17 @@ access_control:
       policy: "bypass"
       resources:
       - "^/api([/?].*)?$"
+    - domain:
+        - "jellyfin.{{ services_domain_base }}"
+        - "jellyseer.{{ services_domain_base }}"
+        - "cwa.{{ services_domain_base }}"
+        - "cwad.{{ services_domain_base }}"
+        - "paperless.{{ services_domain_base }}"
+      policy: "one_factor"
+      subject: ["group:application_user"]
     - domain: "*.{{ services_domain_base }}"
       policy: "one_factor"
-#      subject: ["group:admin"]
-#      # networks: "{{ services_lan.network }}{{ services_lan.cidr }}"
-#    - domain:
-#        - "jellyfin.{{ services_domain_base }}"
-#        - "jellyseer.{{ services_domain_base }}"
-#        - "cwa.{{ services_domain_base }}"
-#        - "cwad.{{ services_domain_base }}"
-#        - "paperless.{{ services_domain_base }}"
-#      policy: one_factor
-#      subject: ["group:user"]
-#      # networks: "{{ services_lan.network }}{{ services_lan.cidr }}"
+      subject: ["group:application_admin"]
 
 session:
   secret: "{{ services_authelia_session_secret }}"
@@ -90,24 +88,35 @@ identity_providers:
         key: |
           {{ services_authelia_jwks_rs256 | trim | indent(10) }}
     authorization_policies:
-      default:
+      allow-all:
         default_policy: "deny"
         rules:
           - policy: "one_factor"
-            subject: "group:admin"
+            subject: "group:application_user"
           - policy: "one_factor"
-            subject: "group:user"
+            subject: "group:application_admin"
+      allow-admin:
+        default_policy: "deny"
+        rules:
+          - policy: "one_factor"
+            subject: "group:application_admin"
     clients:
       - client_id : "beszel"
         client_name: "Beszel"
         client_secret: "{{ services_authelia_client_secret_beszel }}"
-        authorization_policy: one_factor
+        authorization_policy: "allow-admin"
         redirect_uris:
           - "https://beszel.{{ services_domain_base }}/api/oauth2-redirect"
+        pre_configured_consent_duration: 3M
         require_pkce: true
         pkce_challenge_method: "S256"
-        scopes:
-          - "openid"
-          - "email"
-          - "profile"
 
+      - client_id : "paperless"
+        client_name: "Paperless"
+        client_secret: "{{ services_authelia_client_secret_paperless }}"
+        authorization_policy: "allow-all"
+        redirect_uris:
+          - "https://paperless.{{ services_domain_base }}/accounts/oidc/authelia/login/callback/"
+        pre_configured_consent_duration: 3M
+        require_pkce: true
+        pkce_challenge_method: "S256"

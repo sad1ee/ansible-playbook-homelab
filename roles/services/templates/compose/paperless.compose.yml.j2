@@ -28,10 +28,8 @@ services:
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: "http://gotenberg:3000"
       PAPERLESS_TIKA_ENDPOINT: "http://tika:9998"
       PAPERLESS_CONSUMER_DISABLE: "1"
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER_API: "true"
-      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: "HTTP_REMOTE_USER"
-      PAPERLESS_LOGOUT_REDIRECT_URL: "https://authelia.{{ services_domain_base }}/logout"
+      PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"SCOPE":["openid","profile","email"],"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"authelia","name":"Authelia","client_id":"paperless","secret":"{{ services_authelia_client_secret_paperless_plain }}","settings":{"server_url":"https://authelia.{{ services_domain_base }}","token_auth_method":"client_secret_basic"}}]}}'
 
     volumes:
       - "{{ services_path.paperless.data}}/data:/usr/src/paperless/data"

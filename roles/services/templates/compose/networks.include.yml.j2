@@ -45,6 +45,11 @@ networks:
     external: true
     name: "redis"
 {% endif %}
+{% if 'sablier' in services_list %}
+  sablier:
+    external: true
+    name: "sablier"
+{% endif %}
 {% if 'tika' in services_list %}
   tika:
     external: true

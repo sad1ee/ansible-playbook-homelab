@@ -5,8 +5,9 @@ services:
     environment:
       TZ: "{{ services_timezone }}"
       LOG_LEVEL: "info" # info, debug
-      ALLOW_START: 0
-      ALLOW_STOP: 0
+      DISABLE_IPV6: 0
+      ALLOW_START: 1
+      ALLOW_STOP: 1
       ALLOW_RESTARTS: 1
       AUTH: 0
       BUILD: 0

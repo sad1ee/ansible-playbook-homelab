@@ -31,6 +31,7 @@ services_list:
   - radarr
   - recyclarr
   - redis
+  - sablier
   - samba
   - sonarr
   - syncthing
@@ -53,6 +54,7 @@ services_internal_networks:
   - lldap
   - postgres
   - redis
+  - sablier
   - tika
 
 services_lan:

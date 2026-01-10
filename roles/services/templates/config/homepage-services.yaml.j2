@@ -40,8 +40,8 @@
     - Pihole:
         icon: pi-hole-unbound
         href: "http://netserver.lan/admin/"
-        server: local-docker
-        container: pihole
+        # server: local-docker
+        # container: pihole
         # widget:
         #   type: pihole
         #   url: "http://host.docker.internal:{{ services_webui_port.pihole }}"
@@ -63,6 +63,12 @@
         href: "https://lldap.{{ services_domain_base }}"
         server: local-docker
         container: lldap
+
+    - Authelia:
+        icon: authelia
+        href: "https://authelia.{{ services_domain_base }}"
+        server: local-docker
+        container: authelia
 
 - Services:
     - Paperless:

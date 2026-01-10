@@ -41,6 +41,7 @@ services_list:
   - radarr
   - recyclarr
   - redis
+  - sablier
   - samba
   - sonarr
   - syncthing

@@ -11,6 +11,7 @@ services:
     environment:
       USER_EMAIL: "{{ services_beszel_user }}"
       USER_PASSWORD: "{{ services_beszel_pass }}"
+      # DISABLE_PASSWORD_AUTH: true
 
     volumes:
       - "{{ services_path.beszel.data }}:/beszel_data"

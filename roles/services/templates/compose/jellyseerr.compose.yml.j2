@@ -6,7 +6,11 @@ services:
       traefik.enable: true
       traefik.http.routers.jellyseerr.rule: Host(`jellyseerr.{{ services_domain_base }}`)
       traefik.http.services.jellyseerr.loadbalancer.server.port: "{{ services_webui_port.jellyseerr }}"
-      traefik.http.routers.jellyseerr.middlewares: authelia@docker
+      traefik.http.routers.jellyseerr.middlewares: authelia@docker, sablier@docker
+
+      sablier.enable: true
+      sablier.group: "default"
+      traefik.docker.allownonrunning: true
 
     environment:
       TZ: "{{ services_timezone }}"
@@ -22,6 +26,22 @@ services:
       - "{{ services_path.jellyseerr }}:/app/config"
 
     user: "{{ services_puid }}:{{ services_pgid }}"
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:5055/api/v1/status",
+        ]
+      interval: "60s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "2s"
 
     init: true
 

@@ -21,8 +21,6 @@ providers:
     network: traefik
 
 entryPoints:
-  web-internal:
-    address: ":{{ services_webui_port.traefik_webinternal }}"
   web:
     address: ":80"
     http:
@@ -31,21 +29,12 @@ entryPoints:
           to: websecure
           scheme: https
           permanent: true
-    # NOTE: wrong
-    # forwardedHeaders:
-    #   trustedIPs: "{{ services_traefik_network.traefik }}" # "{{ services_lan.network }}{{ services_lan.cidr }}"
-    # proxyProtocol:
-    #   trustedIPs: "{{ services_traefik_network.traefik }}" # "{{ services_lan.network }}{{ services_lan.cidr }}"
   websecure:
     address: ":443"
     http:
       tls:
         certResolver: cloudflare
     asDefault: true
-    # forwardedHeaders:
-    #   trustedIPs: "{{ services_traefik_network.traefik }}" # "{{ services_lan.network }}{{ services_lan.cidr }}"
-    # proxyProtocol:
-    #   trustedIPs: "{{ services_traefik_network.traefik }}" # "{{ services_lan.network }}{{ services_lan.cidr }}"
 
 certificatesResolvers:
   cloudflare:
@@ -55,3 +44,9 @@ certificatesResolvers:
       dnsChallenge:
         provider: cloudflare
         resolvers: ["1.1.1.1:53", "8.8.8.8:53"]
+
+experimental:
+  plugins:
+    sablier:
+      moduleName: "github.com/sablierapp/sablier-traefik-plugin"
+      version: "v1.1.0"
