@@ -22,7 +22,7 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
 
     healthcheck:
-      test: ["CMD", "/beszel", "health", "--url", "http://localhost:8090"]
+      test: [ "CMD", "/beszel", "health", "--url", "http://localhost:8090" ]
       interval: "300s"
       timeout: "30s"
       retries: "3"
@@ -35,3 +35,4 @@ services:
 
     networks:
       - "traefik"
+      - "ntfy"

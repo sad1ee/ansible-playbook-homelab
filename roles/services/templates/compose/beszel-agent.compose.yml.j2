@@ -6,7 +6,7 @@ services:
       dev.dozzle.group: "Backend"
 
     environment:
-      LOG_LEVEL: "debug" # debug, info, warn, error
+      LOG_LEVEL: "info" # debug, info, warn, error
 {% if inventory_hostname == "homeserver_main" %}
       DOCKER_HOST: "tcp://localhost:2375"
 {% endif %}

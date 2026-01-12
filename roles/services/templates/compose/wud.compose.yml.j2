@@ -13,16 +13,60 @@ services:
     environment:
       TZ: "{{ services_timezone }}"
       WUD_LOG_LEVEL: "info" # error info debug trace
+      DOCKER_HOST: "{{ services_docker_proxy_host }}"
+      # WUD_SERVER_PORT: "{{ services_webui_port.wud }}"
+      WUD_PUBLIC_URL: "https://wud.{{ services_domain_base }}"
+
+      # NOTE: Does not work, keeps timouting when registering component oidc
+      # WUD_AUTH_OIDC_AUTHELIA_CLIENTID: "wud"
+      # WUD_AUTH_OIDC_AUTHELIA_DISCOVERY: "https://authelia.{{ services_domain_base }}/.well-known/openid-configuration"
+      # WUD_AUTH_OIDC_AUTHELIA_CLIENTSECRET: "{{ services_authelia_client_secret_wud_plain }}"
+      # WUD_AUTH_OIDC_AUTHELIA_TIMEOUT: "50000"
+      # WUD_AUTH_OIDC_AUTHELIA_REDIRECT: true
+
+      WUD_REGISTRY_GHCR_PRIVATE_USERNAME: "sad1ee"
+      WUD_REGISTRY_GHCR_PRIVATE_TOKEN: "{{ services_wud_github_token }}"
       WUD_REGISTRY_LSCR_PRIVATE_USERNAME: "sad1ee"
       WUD_REGISTRY_LSCR_PRIVATE_TOKEN: "{{ services_wud_github_token }}"
+      WUD_REGISTRY_HUB_PUBLIC_LOGIN: "sad1ee"
+      WUD_REGISTRY_HUB_PUBLIC_TOKEN: "{{ services_wud_docker_hud_token }}"
+
+      WUD_TRIGGER_NTFY_PRIVATE_URL: "http://ntfy:{{ services_webui_port.ntfy }}"
+      WUD_TRIGGER_NTFY_PRIVATE_TOPIC: "wud"
+      WUD_TRIGGER_NTFY_PRIVATE_AUTH_TOKEN: "{{ services_wud_ntfy_token }}"
+      WUD_TRIGGER_NTFY_PRIVATE_PRIORITY: "2"
+      WUD_TRIGGER_NTFY_PRIVATE_AUTO: "true"
+      WUD_TRIGGER_NTFY_PRIVATE_MODE: "batch"
+      WUD_TRIGGER_NTFY_PRIVATE_BATCHTITLE: "$${containers.length} updates available"
+      WUD_TRIGGER_NTFY_PRIVATE_ONCE: "true"
+      WUD_TRIGGER_NTFY_PRIVATE_THRESHOLD: "all"
+
+      WUD_TRIGGER_DOCKER_PATCH_PRUNE: "true"
+      WUD_TRIGGER_DOCKER_PATCH_AUTO: "true"
+      WUD_TRIGGER_DOCKER_PATCH_THRESHOLD: "patch"
+
+      WUD_TRIGGER_DOCKER_ALL_PRUNE: "true"
+      WUD_TRIGGER_DOCKER_ALL_AUTO: "false"
+      WUD_TRIGGER_DOCKER_ALL_THRESHOLD: "all"
+
+      WUD_WATCHER_LOCAL_WATCHALL: true
       WUD_WATCHER_LOCAL_CRON: "0 3 * * *"
-      DOCKER_HOST: "{{ services_docker_proxy_host }}"
+      # NOTE: Add netserver
 
     volumes:
       - "{{ services_path.homepage }}:/config"
 
     healthcheck:
-      disable: true
+      test: [ "CMD", "curl", "--fail", "http://localhost:{{ services_webui_port.wud }}/health" ]
+      interval: "300s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "2s"
+
+    # depends_on:
+    #   authelia:
+    #     condition: "service_healthy"
 
     container_name: "wud"
     hostname: "wud"
@@ -30,4 +74,5 @@ services:
 
     networks:
       - "traefik"
+      - "ntfy"
       - "docker-proxy"

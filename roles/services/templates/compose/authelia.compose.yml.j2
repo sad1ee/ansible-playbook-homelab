@@ -1,6 +1,6 @@
 services:
   authelia:
-    image: "docker.io/authelia/authelia:latest"
+    image: "docker.io/authelia/authelia:4"
 
     labels:
       traefik.enable: true
@@ -9,6 +9,10 @@ services:
 
       traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:{{ services_webui_port.authelia }}/api/authz/forward-auth"
       traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
+
+      traefik.http.middlewares.authelia-basic.forwardauth.address: "http://authelia:{{ services_webui_port.authelia }}/api/verify?rd=https://authelia.{{ services_domain_base }}"
+      traefik.http.middlewares.authelia-basic.forwardauth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia-basic.forwardauth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Name,Remote-Email"
 
       dev.dozzle.group: "Admin"
 
@@ -26,7 +30,7 @@ services:
       redis:
         condition: "service_healthy"
 
-    security_opt: ["no-new-privileges:true"]
+    security_opt: [ "no-new-privileges:true" ]
     user: "{{ services_puid }}:{{ services_pgid }}"
 
     container_name: "authelia"

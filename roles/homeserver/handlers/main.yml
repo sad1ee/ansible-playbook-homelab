@@ -1,0 +1,6 @@
+- name: Start and enable radvd
+  ansible.builtin.systemd:
+    name: radvd
+    state: started
+    enabled: true
+  tags: [homeserver, radvd]

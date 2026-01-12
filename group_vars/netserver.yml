@@ -2,7 +2,6 @@
 essential_packages:
   - ufw
   - fwupd # for firmware updates
-  - radvd # for netowork RDNSS override # HACK: Temporary fix for ISP router
 
 beszel_agent_image: "henrygd/beszel-agent:latest"
 
@@ -34,7 +33,7 @@ essential_firewall_allowed_tcp_udp_ports:
   - port: 123
     proto: udp
     comment: "Pihole NTP"
-  - port: 80
+  - port: 443
     proto: tcp
     comment: "Pihole Webui"
 

@@ -10,24 +10,20 @@ services:
     labels:
       traefik.enable: true
 
-      # External route
+      # Dashboard
       traefik.http.routers.traefik.rule: Host(`traefik.{{ services_domain_base }}`) && PathPrefix(`/dashboard`) || Host(`traefik.{{ services_domain_base }}`) && PathPrefix(`/api`) || Host(`traefik.{{ services_domain_base }}`) && Path(`/`)
       traefik.http.routers.traefik.entrypoints: websecure
       traefik.http.routers.traefik.service: api@internal
       traefik.http.routers.traefik.middlewares: authelia@docker,traefik-dashboard-redirect
       traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.regex: "^/$"
       traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.replacement: "/dashboard/"
+      traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.permanent: "true"
 
-      # Wildcard cert configuration via external route
+      # Wildcard cert configuration
       traefik.http.routers.traefik.tls: true
       traefik.http.routers.traefik.tls.certresolver: "cloudflare"
       traefik.http.routers.traefik.tls.domains[0].main: "{{ services_domain_base }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ services_domain_base }}"
-
-      # Sablier middleware
-      traefik.http.middlewares.sablier.plugin.sablier.sablierUrl: "http://sablier:10000"
-      traefik.http.middlewares.sablier.plugin.sablier.group: "default"
-      traefik.http.middlewares.sablier.plugin.sablier.dynamic.displayName: "..."
 
       # App Labels
       dev.dozzle.group: "Admin"
@@ -35,26 +31,27 @@ services:
     volumes:
       - "{{ services_path.traefik }}/acme.json:/certs/acme.json:rw"
       - "{{ services_path.traefik }}/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ services_path.traefik }}/dynamic:/etc/traefik/dynamic:rw"
       - "{{ services_path.traefik }}/plugins:/plugins-storage"
 
     ports:
       - "80:80"
       - "443:443"
 
-    security_opt: ["no-new-privileges:true"]
+    security_opt: [ "no-new-privileges:true" ]
     user: "{{ services_puid }}:{{ services_pgid }}"
 
     depends_on:
-      # NOTE: Fix deps
-      # authelia:
-      #   condition: "service_started"
-      # sablier:
-      #   condition: "service_started"
       docker-proxy:
+        condition: "service_healthy"
+      # Middleware dependencies
+      authelia:
+        condition: "service_started"
+      sablier:
         condition: "service_started"
 
     healthcheck:
-      test: ["CMD", "traefik", "healthcheck"]
+      test: [ "CMD", "traefik", "healthcheck" ]
       interval: "60s"
       timeout: "30s"
       retries: "3"

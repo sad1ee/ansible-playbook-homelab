@@ -6,13 +6,13 @@ services:
       dev.dozzle.group: "Backend"
 
     environment:
-      DOZZLE_LEVEL: debug
-      # DOZZLE_HOSTNAME: netserver
+      DOZZLE_LEVEL: info
+      DOZZLE_HOSTNAME: netserver
 
     command: agent
 
     healthcheck:
-      test: ["CMD", "/dozzle", "healthcheck"]
+      test: [ "CMD", "/dozzle", "healthcheck" ]
       interval: "300s"
       timeout: "30s"
       retries: "3"
@@ -21,10 +21,14 @@ services:
 
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
     group_add:
       - 985
+
+    read_only: true
+    tmpfs:
+      - "/tmp"
 
     ports:
       - 7007:7007

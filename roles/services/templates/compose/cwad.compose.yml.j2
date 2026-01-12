@@ -21,7 +21,6 @@ services:
     depends_on:
       gluetun:
         condition: "service_healthy"
-        restart: true
 
     healthcheck:
       disable: true

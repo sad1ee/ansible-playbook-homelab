@@ -4,7 +4,7 @@
 ping: {}
 
 log:
-  level: DEBUG # DEBUG, INFO, WARN, ERROR
+  level: INFO # DEBUG, INFO, WARN, ERROR
 
 global:
   checkNewVersion: false
@@ -19,6 +19,8 @@ providers:
     endpoint: "{{ services_docker_proxy_host }}"
     exposedByDefault: false
     network: traefik
+  file:
+    directory: "/etc/traefik/dynamic"
 
 entryPoints:
   web:

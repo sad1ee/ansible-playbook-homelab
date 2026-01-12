@@ -9,6 +9,7 @@ essential_packages:
   - powertop # for c-states checking
   - intel-gpu-tools # for intel_gpu_top to see gpu transcoding activity
   - smartmontools # for disk health reports
+  # - radvd # for netowork RDNSS override # HACK: Temporary fix for ISP router
 
 beszel_agent_image: "henrygd/beszel-agent-intel:latest"
 
@@ -47,4 +48,5 @@ services_list:
   - syncthing
   - tika
   - traefik
-  - wud
+  # - wud
+  - diun

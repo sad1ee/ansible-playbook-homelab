@@ -29,15 +29,19 @@
       file: recyclarr.yml
     - service: traefik
       file: traefik.yml
+    - service: traefik
+      file: dynamic.yml
     - service: authelia
       file: configuration.yml
+    - service: diun
+      file: external.yml
   delegate_to: localhost
   tags: [services, configs]
 
 - name: configs | Copy locally rendered compose templates to remote
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
-    dest: "{{ services_path[item.service] }}/{{ item.file }}"
+    dest: "{{ services_path[item.service] }}/{{ item.path }}"
     mode: "0640"
     owner: "{{ services_username }}"
     group: "{{ services_username }}"
@@ -45,14 +49,52 @@
   loop:
     - service: homepage
       file: docker.yaml
+      path: docker.yaml
     - service: homepage
       file: services.yaml
+      path: services.yaml
     - service: homepage
       file: settings.yaml
+      path: settings.yaml
     - service: recyclarr
       file: recyclarr.yml
+      path: recyclarr.yml
     - service: traefik
       file: traefik.yml
+      path: traefik.yml
     - service: authelia
       file: configuration.yml
+      path: configuration.yml
+    - service: diun
+      file: external.yml
+      path: external.yml
+  tags: [services, configs]
+
+- name: configs | Copy locally rendered traefik templates to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    dest: "/tmp/{{ item.service }}-{{ item.file }}"
+    mode: "0644"
+    owner: "{{ services_username }}"
+    group: "{{ services_username }}"
+  when: item.service in services_list
+  register: services_traefik_changed
+  loop:
+    - service: traefik
+      file: dynamic.yml
+  tags: [services, configs]
+
+- name: configs | Atomically move traefik configs into traefiks dynamic directory
+  ansible.builtin.command:
+    "cp /tmp/{{ item.service }}-{{ item.file }} {{ services_path.traefik }}/{{ item.path }}/{{
+    item.file }}"
+  when:
+    - services_traefik_changed is defined
+    - services_traefik_changed.changed
+    - item.service in services_list
+  changed_when: true
+  loop:
+    - service: traefik
+      file: dynamic.yml
+      path: dynamic
   tags: [services, configs]

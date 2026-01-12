@@ -1,4 +1,4 @@
-interface {{ netserver_lan.interface }}
+interface {{ homeserver_lan.interface }}
 {
   AdvSendAdvert on;
   IgnoreIfMissing on;
@@ -7,7 +7,7 @@ interface {{ netserver_lan.interface }}
   MinRtrAdvInterval 3;
   MaxRtrAdvInterval 10;
 
-  prefix {{ netserver_lan.ipv6.prefix }}{{ netserver_lan.ipv6.cidr }}
+  prefix {{ homeserver_lan.ipv6.prefix }}{{ homeserver_lan.ipv6.cidr }}
   {
     AdvOnLink on;
     AdvAutonomous on;
@@ -15,7 +15,7 @@ interface {{ netserver_lan.interface }}
     AdvValidLifetime 7200;
   };
 
-  RDNSS {{ netserver_lan.ipv6.addr }}
+  RDNSS {{ homeserver_lan.ipv6.addr }}
   {
     AdvRDNSSLifetime 7200;
   };

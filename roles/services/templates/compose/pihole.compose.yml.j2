@@ -3,12 +3,13 @@ services:
     image: "mpgirro/pihole-unbound:latest"
 
     labels:
-      traefik.enable: true
-      traefik.http.routers.pihole.rule: Host(`pihole.{{ services_domain_base }}`)
-      traefik.http.services.pihole.loadbalancer.server.port: "{{ services_webui_port.pihole }}"
-      traefik.http.routers.pihole.middlewares: authelia@docker,pihole-dashboard-redirect
-      traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.regex: "^/$"
-      traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.replacement: "/admin"
+      # traefik.enable: true
+      # traefik.http.routers.pihole.rule: Host(`pihole.{{ services_domain_base }}`)
+      # traefik.http.services.pihole.loadbalancer.server.port: "{{ services_webui_port.pihole }}"
+      # traefik.http.routers.pihole.middlewares: authelia@docker,pihole-dashboard-redirect
+      # traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.regex: "^/$"
+      # traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.replacement: "/admin"
+      # traefik.http.middlewares.pihole-dashboard-redirect.redirectregex.permanent: "true"
 
       dev.dozzle.group: "Admin"
 
@@ -16,13 +17,13 @@ services:
       PIHOLE_UID: "{{ services_puid }}"
       PIHOLE_GID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      FTLCONF_webserver_port: "{{ services_webui_port.pihole }}"
+      FTLCONF_webserver_port: "{{ services_webui_port.pihole }}s"
       FTLCONF_webserver_api_password: "{{ services_pihole_pass }}"
       FTLCONF_webserver_domain: pihole.lan # "pihole.{{ services_domain_base }}"
       FTLCONF_dns_upstreams: "127.0.0.1#5335"
       FTLCONF_dns_piholePTR: "NONE"
       FTLCONF_dns_domainNeeded: "true"
-      FTLCONF_dns_dnssec: "false"
+      FTLCONF_dns_dnssec: "true"
       FTLCONF_dns_listeningMode: "LOCAL"
       FTLCONF_dns_domain_name: "lan"
       FTLCONF_dns_rateLimit_count: "1500"

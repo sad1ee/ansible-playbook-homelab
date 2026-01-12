@@ -37,7 +37,8 @@ services_list:
   - syncthing
   - tika
   - traefik
-  - wud
+  # - wud
+  - diun
 
 services_compose_includes:
   - networks
@@ -48,10 +49,12 @@ services_bridge_networks:
   - samba
   - traefik
   - docker-proxy
+  - diun
 
 services_internal_networks:
   - gotenberg
   - lldap
+  - ntfy
   - postgres
   - redis
   - sablier
@@ -63,6 +66,7 @@ services_lan:
   netmask: 255.255.255.0
   router: 192.168.0.1
   homeserver: 192.168.0.100
+  dns: 192.168.0.99
   dhcp_start: 192.168.0.150
   dhcp_end: 192.168.0.247
 
@@ -132,6 +136,10 @@ services_path:
 
   lldap: "{{ services_path.docker }}/lldap"
 
+  dozzle: "{{ services_path.docker }}/dozzle"
+
+  diun: "{{ services_path.docker }}/diun"
+
 services_webui_port:
   qbittorrent: 8112
   cwad: 8084
@@ -150,7 +158,7 @@ services_webui_port:
   npm: 81
   ntfy: 2586
   paperless: 8000
-  pihole: 80
+  pihole: 443 # 80
   pyload: 8000
   syncthing: 8384
   traefik_webinternal: 8081

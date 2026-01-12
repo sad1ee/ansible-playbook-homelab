@@ -20,6 +20,16 @@ networks:
     external: true
     name: "traefik"
 {% endif %}
+{% if 'diun' in services_list %}
+  diun:
+    external: true
+    name: "diun"
+{% endif %}
+{% if 'ntfy' in services_list %}
+  ntfy:
+    external: true
+    name: "ntfy"
+{% endif %}
 {% if 'docker-proxy' in services_list %}
   docker-proxy:
     external: true
