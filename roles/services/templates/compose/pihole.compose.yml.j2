@@ -20,6 +20,7 @@ services:
       FTLCONF_webserver_port: "{{ services_webui_port.pihole }}s"
       FTLCONF_webserver_api_password: "{{ services_pihole_pass }}"
       FTLCONF_webserver_domain: pihole.lan # "pihole.{{ services_domain_base }}"
+      FTLCONF_webserver_session_timeout: "2592000"
       FTLCONF_dns_upstreams: "127.0.0.1#5335"
       FTLCONF_dns_piholePTR: "NONE"
       FTLCONF_dns_domainNeeded: "true"

@@ -30,6 +30,8 @@ access_control:
       policy: "bypass"
       resources:
       - "^/api([/?].*)?$"
+    - domain: "jellyfin.{{ services_domain_base }}"
+      policy: "bypass"
     # - domain: "ntfy.{{ services_domain_base }}"
     #   policy: "bypass"
     #   resources:
@@ -39,9 +41,9 @@ access_control:
     - domain:
         - "jellyfin.{{ services_domain_base }}"
         - "jellyseer.{{ services_domain_base }}"
-        - "cwa.{{ services_domain_base }}"
-        - "cwad.{{ services_domain_base }}"
-        - "paperless.{{ services_domain_base }}"
+        # - "cwa.{{ services_domain_base }}"
+        - "shelfmark.{{ services_domain_base }}"
+        # - "paperless.{{ services_domain_base }}"
       policy: "one_factor"
       subject: ["group:application_user"]
     - domain: "*.{{ services_domain_base }}"
@@ -128,6 +130,16 @@ identity_providers:
         pre_configured_consent_duration: 3M
         require_pkce: true
         pkce_challenge_method: "S256"
+
+      - client_id: "cwa"
+        client_name: "CWA"
+        client_secret: "{{ services_authelia_client_secret_cwa }}"
+        authorization_policy: "allow-all"
+        redirect_uris:
+          - "https://cwa.{{ services_domain_base }}/login/generic/authorized"
+        pre_configured_consent_duration: "3M"
+        require_pkce: false
+        pkce_challenge_method: ""
 
       # NOTE: Does not work, keeps timouting when registering component oidc
       # - client_id: "wud"

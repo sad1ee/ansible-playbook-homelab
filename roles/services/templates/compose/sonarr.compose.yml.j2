@@ -14,8 +14,8 @@ services:
       PUID: "{{ services_puid }}"
       PGID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
-      DOCKER_MODS: "linuxserver/mods:radarr-striptracks"
-      STRIPTRACKS_ARGS: "--audio :eng:deu:und --subs :eng:deu"
+      # DOCKER_MODS: "linuxserver/mods:radarr-striptracks"
+      # STRIPTRACKS_ARGS: "--audio :eng:deu:und --subs :eng:deu"
 
     volumes:
       - "{{ services_path.sonarr }}:/config"

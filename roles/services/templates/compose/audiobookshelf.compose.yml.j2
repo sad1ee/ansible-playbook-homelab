@@ -1,0 +1,26 @@
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.audiobookshelf.rule: Host(`audiobookshelf.{{ services_domain_base }}`)
+      traefik.http.services.audiobookshelf.loadbalancer.server.port: "80"
+      # traefik.http.routers.audiobookshelf.middlewares: authelia@docker
+
+      dev.dozzle.group: "Media"
+
+    environment:
+      TZ: "{{ services_timezone }}"
+
+    volumes:
+      - "{{ services_path.audiobookshelf.config }}:/config"
+      - "{{ services_path.audiobookshelf.metadata }}:/metadata"
+      - "{{ services_path.media }}/torrents/audiobooks:/audiobooks"
+
+    container_name: "audiobookshelf"
+    hostname: "audiobookshelf"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"

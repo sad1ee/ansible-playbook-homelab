@@ -1,9 +1,4 @@
 ---
-- name: Ensure config files are present
-  ansible.builtin.include_tasks: configs.yml
-  when: "'pihole' in services_list"
-  tags: [netserver]
-
 - name: Configure system configuration for pihole
   ansible.builtin.include_tasks: pihole.yml
   when: "'pihole' in services_list"

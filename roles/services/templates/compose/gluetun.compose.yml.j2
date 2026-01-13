@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
 
-      traefik.http.routers.cwad.rule: Host(`cwad.{{ services_domain_base }}`)
-      traefik.http.routers.cwad.service: cwad
-      traefik.http.services.cwad.loadbalancer.server.port: "{{ services_webui_port.cwad }}"
-      traefik.http.routers.cwad.middlewares: authelia@docker
+      traefik.http.routers.shelfmark.rule: Host(`shelfmark.{{ services_domain_base }}`)
+      traefik.http.routers.shelfmark.service: shelfmark
+      traefik.http.services.shelfmark.loadbalancer.server.port: "{{ services_webui_port.shelfmark }}"
+      traefik.http.routers.shelfmark.middlewares: authelia@docker
 
       traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.{{ services_domain_base }}`)
       traefik.http.routers.qbittorrent.service: qbittorrent

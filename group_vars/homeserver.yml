@@ -20,11 +20,12 @@ essential_firewall_allowed_tcp_udp_ports:
 
 services_list:
   - authelia
+  - audiobookshelf
   - bazarr
   - beszel-agent
   - beszel
   - cwa
-  - cwad
+  - shelfmark
   - docker-proxy
   - dozzle
   - flaresolverr

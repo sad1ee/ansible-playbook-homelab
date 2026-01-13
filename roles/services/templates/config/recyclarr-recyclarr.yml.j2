@@ -1,6 +1,6 @@
 radarr:
   radarr-main:
-    base_url: http://radarr:{{ services_webui_port.radarr }}"
+    base_url: "http://radarr:{{ services_webui_port.radarr }}"
     api_key: "{{ services_radarr_key }}"
 
     delete_old_custom_formats: true
@@ -8,23 +8,21 @@ radarr:
 
     include:
       - template: radarr-quality-definition-movie
-      - template: radarr-custom-formats-uhd-bluray-web-german
-      - template: radarr-quality-profile-uhd-bluray-web-german
       - template: radarr-custom-formats-anime
       - template: radarr-quality-profile-anime
-
-    quality_profiles:
-      - name: UHD Bluray + WEB (GER)
-      # min_format_score: 10000 # Uncomment this line to skip English Releases
+      - config: radarr-custom-formats-uhd-bluray-web-german.yml
+      - config: radarr-quality-profile-uhd-bluray-web-german.yml
+  
     custom_formats:
       - trash_ids:
           - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
         assign_scores_to:
-          - name: UHD Bluray + WEB (GER)
+          - name: German (UHD Bluray + WEB)
+          - name: German or English (UHD Bluray + WEB)
 
 sonarr:
   sonarr-main:
-    base_url: http://sonarr:{{ services_webui_port.sonarr }}"
+    base_url: "http://sonarr:{{ services_webui_port.sonarr }}"
     api_key: "{{ services_sonarr_key }}"
 
     delete_old_custom_formats: true
@@ -32,15 +30,14 @@ sonarr:
 
     include:
       - template: sonarr-quality-definition-series
-      - template: sonarr-v4-custom-formats-uhd-bluray-web-german
-      - template: sonarr-v4-quality-profile-uhd-bluray-web-german
       - template: sonarr-v4-custom-formats-anime
       - template: sonarr-v4-quality-profile-anime
+      - config: sonarr-v4-custom-formats-uhd-bluray-web-german.yml
+      - config: sonarr-v4-quality-profile-uhd-bluray-web-german.yml
 
-    quality_profiles:
-      - name: UHD Bluray + WEB (GER)
-        # min_format_score: 10000 # Uncomment this line to skip English Releases
+    custom_formats:
       - trash_ids:
           - 9b27ab6498ec0f31a3353992e19434ca # DV (w/o HDR fallback)
         assign_scores_to:
-          - name: UHD Bluray + WEB (GER)
+          - name: German (UHD Bluray + WEB)
+          - name: German or English (UHD Bluray + WEB)

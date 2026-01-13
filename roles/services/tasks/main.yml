@@ -7,6 +7,10 @@
   ansible.builtin.include_tasks: configs.yml
   tags: [services, configs]
 
+- name: Build and copy recyclarr configuration
+  ansible.builtin.include_tasks: recyclarr.yml
+  tags: [services, configs, recyclarr, recyclarr_noget]
+
 - name: Run containers tasks
   ansible.builtin.include_tasks: containers.yml
   tags: [services, containers, compose]

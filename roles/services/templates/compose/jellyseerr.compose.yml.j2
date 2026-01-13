@@ -6,11 +6,11 @@ services:
       traefik.enable: true
       traefik.http.routers.jellyseerr.rule: Host(`jellyseerr.{{ services_domain_base }}`)
       traefik.http.services.jellyseerr.loadbalancer.server.port: "{{ services_webui_port.jellyseerr }}"
-      traefik.http.routers.jellyseerr.middlewares: authelia@docker, sablier@file
+      traefik.http.routers.jellyseerr.middlewares: authelia@docker # , sablier@file
 
-      sablier.enable: true
-      sablier.group: "default"
-      traefik.docker.allownonrunning: true
+      # sablier.enable: true
+      # sablier.group: "default"
+      # traefik.docker.allownonrunning: true
 
       dev.dozzle.group: "Frontend"
 
@@ -50,3 +50,4 @@ services:
     networks:
       - "traefik"
       - "postgres"
+      - "ntfy"

@@ -1,6 +1,6 @@
 services:
   cwa:
-    image: "crocodilestick/calibre-web-automated:latest"
+    image: "crocodilestick/calibre-web-automated:dev" # :latest"
 
     labels:
       traefik.enable: true
@@ -15,6 +15,7 @@ services:
       PGID: "{{ services_pgid }}"
       TZ: "{{ services_timezone }}"
       CWA_PORT_OVERRIDE: "{{ services_webui_port.cwa }}"
+      HARDCOVER_TOKEN: "{{ services_cwa_hardcover_token }}"
 
     volumes:
       - "{{ services_path.calibre.config }}:/config"

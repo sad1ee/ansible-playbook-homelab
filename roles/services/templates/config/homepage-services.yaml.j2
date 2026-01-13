@@ -81,11 +81,17 @@
         server: local-docker
         container: cwa
 
-    - CWAD:
+    - Shelfmark:
         icon: calibre-web-automated-book-downloader
-        href: "https://cwad.{{ services_domain_base }}"
+        href: "https://shelfmark.{{ services_domain_base }}"
         server: local-docker
-        container: cwad
+        container: shelfmark
+
+    - Audiobookshelf:
+        icon: audiobookshelf
+        href: "https://audiobookshelf.{{ services_domain_base }}"
+        server: local-docker
+        container: audiobookshelf
 
   - MediaBackend:
     - Radarr:

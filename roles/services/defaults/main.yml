@@ -6,11 +6,12 @@ services_timezone: Europe/Berlin
 
 services_list:
   - authelia
+  - audiobookshelf
   - bazarr
   - beszel-agent
   - beszel
   - cwa
-  - cwad
+  - shelfmark
   - docker-proxy
   - dozzle
   - flaresolverr
@@ -140,9 +141,15 @@ services_path:
 
   diun: "{{ services_path.docker }}/diun"
 
+  shelfmark: "{{ services_path.docker }}/shelfmark"
+
+  audiobookshelf:
+    config: "{{ services_path.docker }}/audiobookshelf/config"
+    metadata: "{{ services_path.docker }}/audiobookshelf/metadata"
+
 services_webui_port:
   qbittorrent: 8112
-  cwad: 8084
+  shelfmark: 8084
   radarr: 7878
   sonarr: 8989
   prowlarr: 9696
@@ -163,6 +170,7 @@ services_webui_port:
   syncthing: 8384
   traefik_webinternal: 8081
   wud: 3000
+  audiobookshelf: 13378
 
 services_docker_proxy_host: tcp://docker-proxy:2375
 
