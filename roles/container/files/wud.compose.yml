@@ -1,0 +1,78 @@
+services:
+  wud:
+    image: "ghcr.io/getwud/wud:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.wud.rule: Host(`wud.{{ container_domain_base }}`)
+      traefik.http.services.wud.loadbalancer.server.port: "{{ container_webui_port.wud }}"
+      traefik.http.routers.wud.middlewares: authelia@docker
+
+      dev.dozzle.group: "Admin"
+
+    environment:
+      TZ: "{{ container_timezone }}"
+      WUD_LOG_LEVEL: "info" # error info debug trace
+      DOCKER_HOST: "{{ container_docker_proxy_host }}"
+      # WUD_SERVER_PORT: "{{ container_webui_port.wud }}"
+      WUD_PUBLIC_URL: "https://wud.{{ container_domain_base }}"
+
+      # NOTE: Does not work, keeps timouting when registering component oidc
+      # WUD_AUTH_OIDC_AUTHELIA_CLIENTID: "wud"
+      # WUD_AUTH_OIDC_AUTHELIA_DISCOVERY: "https://authelia.{{ container_domain_base }}/.well-known/openid-configuration"
+      # WUD_AUTH_OIDC_AUTHELIA_CLIENTSECRET: "{{ container_authelia_client_secret_wud_plain }}"
+      # WUD_AUTH_OIDC_AUTHELIA_TIMEOUT: "50000"
+      # WUD_AUTH_OIDC_AUTHELIA_REDIRECT: true
+
+      WUD_REGISTRY_GHCR_PRIVATE_USERNAME: "sad1ee"
+      WUD_REGISTRY_GHCR_PRIVATE_TOKEN: "{{ container_wud_github_token }}"
+      WUD_REGISTRY_LSCR_PRIVATE_USERNAME: "sad1ee"
+      WUD_REGISTRY_LSCR_PRIVATE_TOKEN: "{{ container_wud_github_token }}"
+      WUD_REGISTRY_HUB_PUBLIC_LOGIN: "sad1ee"
+      WUD_REGISTRY_HUB_PUBLIC_TOKEN: "{{ container_wud_docker_hud_token }}"
+
+      WUD_TRIGGER_NTFY_PRIVATE_URL: "http://ntfy:{{ container_webui_port.ntfy }}"
+      WUD_TRIGGER_NTFY_PRIVATE_TOPIC: "wud"
+      WUD_TRIGGER_NTFY_PRIVATE_AUTH_TOKEN: "{{ container_wud_ntfy_token }}"
+      WUD_TRIGGER_NTFY_PRIVATE_PRIORITY: "2"
+      WUD_TRIGGER_NTFY_PRIVATE_AUTO: "true"
+      WUD_TRIGGER_NTFY_PRIVATE_MODE: "batch"
+      WUD_TRIGGER_NTFY_PRIVATE_BATCHTITLE: "$${containers.length} updates available"
+      WUD_TRIGGER_NTFY_PRIVATE_ONCE: "true"
+      WUD_TRIGGER_NTFY_PRIVATE_THRESHOLD: "all"
+
+      WUD_TRIGGER_DOCKER_PATCH_PRUNE: "true"
+      WUD_TRIGGER_DOCKER_PATCH_AUTO: "true"
+      WUD_TRIGGER_DOCKER_PATCH_THRESHOLD: "patch"
+
+      WUD_TRIGGER_DOCKER_ALL_PRUNE: "true"
+      WUD_TRIGGER_DOCKER_ALL_AUTO: "false"
+      WUD_TRIGGER_DOCKER_ALL_THRESHOLD: "all"
+
+      WUD_WATCHER_LOCAL_WATCHALL: true
+      WUD_WATCHER_LOCAL_CRON: "0 3 * * *"
+      # NOTE: Add netserver
+
+    volumes:
+      - "{{ container_path.homepage }}:/config"
+
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:{{ container_webui_port.wud }}/health" ]
+      interval: "300s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "2s"
+
+    # depends_on:
+    #   authelia:
+    #     condition: "service_healthy"
+
+    container_name: "wud"
+    hostname: "wud"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "ntfy"
+      - "docker-proxy"

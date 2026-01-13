@@ -1,0 +1,54 @@
+services:
+  ntfy:
+    image: "binwiederhier/ntfy:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ntfy.rule: Host(`ntfy.{{ container_domain_base }}`)
+      traefik.http.services.ntfy.loadbalancer.server.port: "{{ container_webui_port.ntfy }}"
+      traefik.http.routers.ntfy.middlewares: authelia@docker
+
+      dev.dozzle.group: "Admin"
+
+    environment:
+      TZ: "{{ container_timezone }}"
+      NTFY_LOG-LEVEL: "info" # info, debug
+      NTFY_BASE_URL: "https://ntfy.{{ container_domain_base }}"
+      NTFY_LISTEN_HTTP: ":{{ container_webui_port.ntfy }}"
+      NTFY_BEHIND_PROXY: "true"
+      NTFY_ENABLE_LOGIN: "true"
+      NTFY_CACHE_FILE: "/var/lib/ntfy/cache.db"
+      NTFY_CACHE_DURATION: "24h"
+      NTFY_ATTACHMENT_CACHE_DIR: "/var/lib/ntfy/attachments"
+      NTFY_ATTACHMENT_EXPIRY_DURATION: "24h"
+      NTFY_ATTACHMENT_TOTAL_SIZE_LIMIT: "5G"
+      NTFY_ATTACHMENT_FILE_SIZE_LIMIT: "15M"
+      NTFY_AUTH_FILE: "/var/lib/ntfy/auth.db"
+      NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
+      NTFY_AUTH_USERS: "{{ container_ntfy_auth_users }}"
+    volumes:
+      - "{{ container_path.ntfy }}:/var/lib/ntfy"
+
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    command:
+      - "serve"
+
+    init: true
+
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "--tries=1", "--spider", "http://localhost:{{ container_webui_port.ntfy }}/v1/health" ]
+      interval: "300s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "2s"
+
+    container_name: "ntfy"
+    hostname: "ntfy"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "ntfy"

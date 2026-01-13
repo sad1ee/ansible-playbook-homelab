@@ -1,0 +1,68 @@
+{% if container_list | select('in', container_bridge_networks + container_internal_networks) | length > 0 %}
+networks:
+{% if 'flaresolverr' in container_list %}
+  flaresolverr:
+    external: true
+    name: "flaresolverr"
+{% endif %}
+{% if 'recyclarr' in container_list %}
+  recyclarr:
+    external: true
+    name: "recyclarr"
+{% endif %}
+{% if 'samba' in container_list %}
+  samba:
+    external: true
+    name: "samba"
+{% endif %}
+{% if 'traefik' in container_list %}
+  traefik:
+    external: true
+    name: "traefik"
+{% endif %}
+{% if 'diun' in container_list %}
+  diun:
+    external: true
+    name: "diun"
+{% endif %}
+{% if 'ntfy' in container_list %}
+  ntfy:
+    external: true
+    name: "ntfy"
+{% endif %}
+{% if 'docker-proxy' in container_list %}
+  docker-proxy:
+    external: true
+    name: "docker-proxy"
+{% endif %}
+{% if 'gotenberg' in container_list %}
+  gotenberg:
+    external: true
+    name: "gotenberg"
+{% endif %}
+{% if 'lldap' in container_list %}
+  lldap:
+    external: true
+    name: "lldap"
+{% endif %}
+{% if 'postgres' in container_list %}
+  postgres:
+    external: true
+    name: "postgres"
+{% endif %}
+{% if 'redis' in container_list %}
+  redis:
+    external: true
+    name: "redis"
+{% endif %}
+{% if 'sablier' in container_list %}
+  sablier:
+    external: true
+    name: "sablier"
+{% endif %}
+{% if 'tika' in container_list %}
+  tika:
+    external: true
+    name: "tika"
+{% endif %}
+{% endif %}

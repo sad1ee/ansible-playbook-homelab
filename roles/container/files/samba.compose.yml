@@ -1,0 +1,30 @@
+services:
+  samba:
+    image: "dockurr/samba:latest"
+
+    labels:
+      dev.dozzle.group: "Frontend"
+
+    environment:
+      UID: "{{ container_puid }}"
+      GID: "{{ container_pgid }}"
+      TZ: "{{ container_timezone }}"
+      NAME: "Share"
+      USER: "{{ container_samba_user }}"
+      PASS: "{{ container_samba_password }}"
+
+    volumes:
+      - "{{ container_path.samba }}:/storage"
+
+    ports:
+      - "445:445"
+
+    healthcheck:
+      disable: true
+
+    container_name: "samba"
+    hostname: "samba"
+    restart: "unless-stopped"
+
+    networks:
+      - "samba"

@@ -1,0 +1,47 @@
+services:
+  authelia:
+    image: "docker.io/authelia/authelia:4"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.authelia.rule: Host(`authelia.{{ container_domain_base }}`)
+      traefik.http.services.authelia.loadbalancer.server.port: "{{ container_webui_port.authelia }}"
+
+      traefik.http.middlewares.authelia.forwardAuth.address:
+        "http://authelia:{{ container_webui_port.authelia }}/api/authz/forward-auth"
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
+
+      traefik.http.middlewares.authelia-basic.forwardauth.address:
+        "http://authelia:{{ container_webui_port.authelia }}/api/verify?rd=https://authelia.{{
+        container_domain_base }}"
+      traefik.http.middlewares.authelia-basic.forwardauth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia-basic.forwardauth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+
+      dev.dozzle.group: "Admin"
+
+    environment:
+      TZ: "{{ container_timezone }}"
+      # PUID: "{{ container_puid }}"
+      # PGID: "{{ container_pgid }}"
+
+    volumes:
+      - "{{ container_path.authelia }}:/config"
+
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+      redis:
+        condition: "service_healthy"
+
+    security_opt: ["no-new-privileges:true"]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    container_name: "authelia"
+    hostname: "authelia"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "postgres"
+      - "redis"
+      - "lldap"

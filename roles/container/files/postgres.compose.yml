@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: "docker.io/library/postgres:18"
+
+    labels:
+      dev.dozzle.group: "Backend"
+
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "{{ container_postgres_db_pass }}"
+
+    volumes:
+      - "{{ container_path.postgres }}:/var/lib/postgresql"
+      - "/etc/localtime:/etc/localtime:ro"
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
+      interval: "60s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "5s"
+
+    container_name: "postgres"
+    hostname: "postgres"
+    restart: "unless-stopped"
+
+    networks:
+      - "postgres"

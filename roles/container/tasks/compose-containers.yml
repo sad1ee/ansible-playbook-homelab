@@ -1,0 +1,22 @@
+---
+- name: containers | Select compose files
+  ansible.builtin.set_fact:
+    container_list_compose_files:
+      "{{ container_list_compose_files | default([]) + [item | string + '.compose.yml'] }}"
+  loop: "{{ container_list }}"
+  tags: [services, containers, compose]
+
+- name: containers | Select include files
+  ansible.builtin.set_fact:
+    container_compose_includes_files:
+      "{{ container_compose_includes_files | default([]) + [item | string + '.include.yml'] }}"
+  loop: "{{ container_compose_includes }}"
+  tags: [services, containers, compose]
+
+- name: containers | Run docker compose with all found compose files
+  community.docker.docker_compose_v2:
+    project_src: "{{ container_path.compose }}"
+    files: "{{ container_list_compose_files + container_compose_includes_files }}"
+    project_name: services
+    state: present
+  tags: [services, containers, compose]

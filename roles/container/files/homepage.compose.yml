@@ -1,0 +1,35 @@
+services:
+  homepage:
+    image: "ghcr.io/gethomepage/homepage:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.homepage.rule: Host(`homepage.{{ container_domain_base }}`)
+      traefik.http.services.homepage.loadbalancer.server.port: "{{ container_webui_port.homepage }}"
+      traefik.http.routers.homepage.middlewares: authelia@docker
+
+      dev.dozzle.group: "Frontend"
+
+    environment:
+      PUID: "{{ container_puid }}"
+      PGID: "{{ container_pgid }}"
+      TZ: "{{ container_timezone }}"
+      LOG_LEVEL: "info" # info, debug
+      HOMEPAGE_ALLOWED_HOSTS: "homepage.{{ container_domain_base }}"
+
+    volumes:
+      - "{{ container_path.homepage }}:/app/config"
+
+    healthcheck:
+      disable: true
+
+    extra_hosts:
+      - "host.docker.internal:{{ container_traefik_network.gateway }}"
+
+    container_name: "homepage"
+    hostname: "homepage"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "docker-proxy"

@@ -1,0 +1,27 @@
+services:
+  prowlarr:
+    image: "lscr.io/linuxserver/prowlarr:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.prowlarr.rule: Host(`prowlarr.{{ container_domain_base }}`)
+      traefik.http.services.prowlarr.loadbalancer.server.port: "{{ container_webui_port.prowlarr }}"
+      traefik.http.routers.prowlarr.middlewares: authelia@docker
+
+      dev.dozzle.group: "Media"
+
+    environment:
+      PUID: "{{ container_puid }}"
+      PGID: "{{ container_pgid }}"
+      TZ: "{{ container_timezone }}"
+
+    volumes:
+      - "{{ container_path.prowlarr }}:/config"
+
+    container_name: "prowlarr"
+    hostname: "prowlarr"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "flaresolverr"

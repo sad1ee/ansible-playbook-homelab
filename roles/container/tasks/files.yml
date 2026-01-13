@@ -1,0 +1,55 @@
+---
+# - name: containers | Render jinja compose templates locally
+#   ansible.builtin.template:
+#     src: "{{ role_path }}/templates/compose/{{ item }}.compose.yml.j2"
+#     dest: "{{ playbook_dir }}/.ansible/templates/{{ item }}.compose.yml"
+#     mode: "0640"
+#     owner: user
+#     group: user
+#   when: item in container_list
+#   loop: "{{ container_list }}"
+#   delegate_to: localhost
+#   tags: [services, containers, compose]
+#
+# - name: containers | Copy locally rendered compose templates to remote
+#   ansible.builtin.copy:
+#     src: "{{ playbook_dir }}/.ansible/templates/{{ item }}.compose.yml"
+#     dest: "{{ container_path.compose }}/{{ item }}.compose.yml"
+#     mode: "0600"
+#     owner: "{{ container_username }}"
+#     group: "{{ container_username }}"
+#   when: item in container_list
+#   loop: "{{ container_list }}"
+#   tags: [services, containers, compose]
+
+- name: containers | Copy and render compose templates to remote
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/compose/{{ item }}.compose.yml.j2"
+    dest: "{{ container_path.compose }}/{{ item }}.compose.yml"
+    mode: "0600"
+    owner: "{{ container_username }}"
+    group: "{{ container_username }}"
+  when: item in container_list
+  loop: "{{ container_list }}"
+  tags: [services, containers, compose]
+
+- name: containers | Render jinja compose includes locally
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/compose/{{ item }}.include.yml.j2"
+    dest: "{{ playbook_dir }}/.ansible/templates/{{ item }}.include.yml"
+    mode: "0640"
+    owner: user
+    group: user
+  loop: "{{ container_compose_includes }}"
+  delegate_to: localhost
+  tags: [services, containers, compose]
+
+- name: containers | Copy compose includes to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/.ansible/templates/{{ item }}.include.yml"
+    dest: "{{ container_path.compose }}/{{ item }}.include.yml"
+    mode: "0600"
+    owner: "{{ container_username }}"
+    group: "{{ container_username }}"
+  loop: "{{ container_compose_includes }}"
+  tags: [services, containers, compose, includes]

@@ -1,0 +1,27 @@
+services:
+  bazarr:
+    image: "lscr.io/linuxserver/bazarr:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.bazarr.rule: Host(`bazarr.{{ container_domain_base }}`)
+      traefik.http.services.bazarr.loadbalancer.server.port: "{{ container_webui_port.bazarr }}"
+      traefik.http.routers.bazarr.middlewares: authelia@docker
+
+      dev.dozzle.group: "Media"
+
+    environment:
+      PUID: "{{ container_puid }}"
+      PGID: "{{ container_pgid }}"
+      TZ: "{{ container_timezone }}"
+
+    volumes:
+      - "{{ container_path.bazarr }}:/config"
+      - "{{ container_path.media }}/library:/media/library"
+
+    container_name: "bazarr"
+    hostname: "bazarr"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
