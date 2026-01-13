@@ -14,4 +14,3 @@ yaml-files:
   - "*.yml"
   - "*.yml.j2"
   - "*.yaml.j2"
-  - "roles/services/tasks/recyclarr.yml"

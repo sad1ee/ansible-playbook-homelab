@@ -141,6 +141,30 @@ identity_providers:
         require_pkce: false
         pkce_challenge_method: ""
 
+      - client_id: "audiobookshelf"
+        client_name: "Audiobookshelf"
+        client_secret: "{{ services_authelia_client_secret_audiobookshelf }}"
+        authorization_policy: "allow-all"
+        redirect_uris:
+          - "https://audiobookshelf.{{ services_domain_base }}/auth/openid/callback"
+          - "https://audiobookshelf.{{ services_domain_base }}/auth/openid/mobile-redirect"
+          - "audiobookshelf://oauth"
+        pre_configured_consent_duration: "3M"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+
+      # NOTE: Postponed until jellyseer implements oidc
+      # - client_id: "jellyfin"
+      #   client_name: "Jellyfin"
+      #   client_secret: "{{ services_authelia_client_secret_jellyfin }}"
+      #   authorization_policy: "allow-all"
+      #   pre_configured_consent_duration: "3M"
+      #   require_pkce: true
+      #   pkce_challenge_method: "S256"
+      #   redirect_uris:
+      #     - "https://jellyfin.{{ services_domain_base }}/sso/OID/redirect/authelia"
+      #   token_endpoint_auth_method: "client_secret_post"
+
       # NOTE: Does not work, keeps timouting when registering component oidc
       # - client_id: "wud"
       #   client_name: "WUD"

@@ -6,6 +6,7 @@
     mode: "0640"
     owner: user
     group: user
+  when: "'recyclarr' in services_list"
   loop:
     - url: "https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/radarr/includes/custom-formats/radarr-custom-formats-uhd-bluray-web-german.yml"
       dest: "/tmp/radarr-custom-formats-uhd-bluray-web-german.yml"
@@ -18,6 +19,7 @@
     path: "{{ item.path }}"
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
+  when: "'recyclarr' in services_list"
   loop:
     - path: "/tmp/radarr-custom-formats-uhd-bluray-web-german.yml"
       regexp: '(?ms)^(\s*assign_scores_to:\s*\n\s*- name:\s*)UHD Bluray \+ WEB \(GER\)\s*$'
@@ -35,6 +37,7 @@
     mode: "0640"
     owner: user
     group: user
+  when: "'recyclarr' in services_list"
   loop:
     - "radarr-custom-formats-uhd-bluray-web-german.yml"
     - "sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
