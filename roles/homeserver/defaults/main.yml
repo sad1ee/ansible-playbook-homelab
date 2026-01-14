@@ -1,5 +1,5 @@
 ---
-homeserver_username: user
+homeserver_user: user
 homeserver_uid: 1000
 homeserver_gid: 1000
 
@@ -47,11 +47,12 @@ homeserver_mergerfs_cache_mover:
     hour: 4
     minute: 0
   trigger:
-    threshold: 75
-    target: 35
+    threshold: 80
+    target: 40
   excluded:
     - lost+found
     - docker
+    - media/torrents/audiobooks
 
 homeserver_disabled_services: []
 
@@ -65,3 +66,12 @@ homeserver_rsnapshot:
   paths:
     - src: /mnt/{{ homeserver_mount_dirs.ssd1 }}/docker/
       dest: homeserver/
+
+# *********************************************************************************** #
+# ******************************* Override in secrets ******************************* #
+# *********************************************************************************** #
+homeserver_domain_base: OverrideMeInSecrets
+
+# Ntfy
+homeserver_ntfy_cache_mover_token: OverrideMeInSecrets
+# *********************************************************************************** #

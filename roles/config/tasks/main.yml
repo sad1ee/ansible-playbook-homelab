@@ -1,12 +1,12 @@
 ---
 - name: Ensure dirs on boot drive exist
   ansible.builtin.include_tasks: dirs.yml
-  tags: [services, dirs]
+  tags: [config, dirs]
 
 - name: Copy configuration files
   ansible.builtin.include_tasks: configs.yml
-  tags: [services, configs]
+  tags: [config, configs]
 
 - name: Build and copy recyclarr configuration
   ansible.builtin.include_tasks: recyclarr.yml
-  tags: [services, configs, recyclarr, recyclarr_noget]
+  tags: [config, recyclarr, recyclarr_noget]

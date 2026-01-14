@@ -1,0 +1,74 @@
+---
+container_path_compose: "/opt/docker/compose"
+container_path_tmp: "/opt/docker/tmp"
+container_path_data: "/mnt/ssd1/docker"
+
+container_path:
+  media: "/mnt/storage/media"
+
+  audiobookshelf:
+    config: "{{ container_path_data }}/audiobookshelf/config"
+    metadata: "{{ container_path_data }}/audiobookshelf/metadata"
+
+  authelia: "{{ container_path_data }}/authelia"
+
+  bazarr: "{{ container_path_data }}/bazarr"
+
+  beszel:
+    data: "{{ container_path_data }}/beszel/data"
+    agent: "{{ container_path_data }}/beszel/agent"
+
+  calibre:
+    config: "{{ container_path_data }}/cwa/config"
+    ingest: "{{ container_path_data }}/cwa/ingest"
+    library: "{{ container_path_data }}/cwa/library"
+
+  diun: "{{ container_path_data }}/diun"
+
+  dozzle: "{{ container_path_data }}/dozzle"
+
+  homepage: "{{ container_path_data }}/homepage"
+
+  jellyfin: "{{ container_path_data }}/jellyfin"
+
+  jellyseerr: "{{ container_path_data }}/jellyseerr"
+
+  lldap: "{{ container_path_data }}/lldap"
+
+  ntfy: "{{ container_path_data }}/ntfy"
+
+  paperless:
+    data: "{{ container_path_data }}/paperless/data"
+    export: "{{ container_path_data }}/paperless/export"
+
+  pihole:
+    pihole: "{{ container_path_data }}/pihole/pihole"
+    dnsmasq: "{{ container_path_data }}/pihole/dnsmasq"
+
+  postgres: "{{ container_path_data }}/postgres/data"
+
+  prowlarr: "{{ container_path_data }}/prowlarr"
+
+  pyload:
+    config: "{{ container_path_data }}/pyload/config"
+    downloads: "{{ container_path_data }}/pyload/downloads"
+
+  qbittorrent: "{{ container_path_data }}/qbittorrent"
+
+  radarr: "{{ container_path_data }}/radarr"
+
+  recyclarr: "{{ container_path_data }}/recyclarr"
+
+  redis: "{{ container_path_data }}/redis"
+
+  samba: "/mnt/storage"
+
+  shelfmark: "{{ container_path_data }}/shelfmark"
+
+  sonarr: "{{ container_path_data }}/sonarr"
+
+  syncthing:
+    config: "{{ container_path_data }}/syncthing/config"
+    data: "{{ container_path_data }}/syncthing/data"
+
+  traefik: "{{ container_path_data }}/traefik"

@@ -4,7 +4,7 @@
   become: true
   gather_facts: false
   vars_files:
-    - group_vars/all-secret.yml
+    - group_vars/all/secret.yml
 
   pre_tasks:
     - name: Gather minimal facts
@@ -16,31 +16,33 @@
     - name: Show available facts
       ansible.builtin.debug:
         var: ansible_facts
-      when: false
+      tags: [never, debug]
 
   roles:
-    - role: essential
+    - role: common
 
 - name: Run homelab playbook (homeserver)
   hosts: homeserver
   become: true
   gather_facts: false
   vars_files:
-    - group_vars/all-secret.yml
-    - group_vars/homeserver-secret.yml
+    - group_vars/all/secret.yml
+    - host_vars/homeserver/secret.yml
 
   roles:
     - role: homeserver
-    - role: services
+    - role: config
+    - role: container
 
 - name: Run homelab playbook (netserver)
   hosts: netserver
   become: true
   gather_facts: false
   vars_files:
-    - group_vars/all-secret.yml
-    - group_vars/netserver-secret.yml
+    - group_vars/all/secret.yml
+    - host_vars/netserver/secret.yml
 
   roles:
     - role: netserver
-    - role: services
+    - role: config
+    - role: container

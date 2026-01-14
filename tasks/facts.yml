@@ -1,0 +1,41 @@
+---
+# NOTE: Unused as of now
+# --------------------- #
+- name: facts | Gather facts from remote hosts
+  ansible.builtin.setup:
+  # NOTE: Might have to clean fact cache or something before?
+    gather_subset:
+      - apparmor
+      - architecture
+      - default_ipv4
+      - default_ipv6
+      - devices
+      - distribution
+      - distribution_major_version
+      - distribution_release
+      - distribution_version
+      - dns
+      - interfaces
+      - env
+      - selinux
+  tags: [never, facts]
+
+- name: facts | Ensure local .ansible/facts_cache dir exists
+  ansible.builtin.file:
+    path: "{{ playbook_dir }}/.ansible"
+    state: directory
+    mode: "0755"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  delegate_to: localhost
+  tags: [never, facts]
+
+- name: facts | Save facts to local JSON file
+  ansible.builtin.copy:
+    content: "{{ ansible_facts | to_nice_json }}"
+    dest: "{{ playbook_dir }}/.ansible/facts-{{ inventory_hostname }}.json"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  delegate_to: localhost
+  tags: [never, facts]

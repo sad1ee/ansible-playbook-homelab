@@ -1,0 +1,48 @@
+services:
+  dozzle:
+    image: "amir20/dozzle:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.dozzle.rule: Host(`dozzle.{{ container_domain_base }}`)
+      traefik.http.services.dozzle.loadbalancer.server.port: "{{ container_webui_port.dozzle }}"
+      traefik.http.routers.dozzle.middlewares: authelia-basic@docker
+
+      dev.dozzle.group: "Admin"
+
+    environment:
+      DOZZLE_LEVEL: info
+      DOCKER_HOST: "{{ container_docker_proxy_host }}"
+      DOZZLE_HOSTNAME: homeserver
+      DOZZLE_ENABLE_ACTIONS: true
+      DOZZLE_NO_ANALYTICS: true
+      DOZZLE_REMOTE_AGENT: "{{ container_dozzle_remote_agent }}"
+      DOZZLE_AUTH_PROVIDER: "forward-proxy"
+
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ container_path.dozzle }}:/data"
+
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: "300s"
+      timeout: "30s"
+      retries: "3"
+      start_period: "60s"
+      start_interval: "2s"
+
+    container_name: "dozzle"
+    hostname: "dozzle"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "docker-proxy"
+
+networks:
+  traefik:
+    external: true
+    name: "traefik"
+  docker-proxy:
+    external: true
+    name: "docker-proxy"

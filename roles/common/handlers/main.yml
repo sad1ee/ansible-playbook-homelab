@@ -3,19 +3,19 @@
   ansible.builtin.systemd:
     name: cron
     state: restarted
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: Set LANG
   ansible.builtin.command: localectl set-locale LANG=en_US.UTF-8
   changed_when: true
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: Apply Netplan config
   ansible.builtin.command: netplan apply
   changed_when: true
-  tags: [services, pihole]
+  tags: [common, pihole]
 
 - name: Reload UFW
   community.general.ufw:
     state: reloaded
-  tags: [essential, firewall, ipv6]
+  tags: [common, firewall]

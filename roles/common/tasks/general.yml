@@ -3,36 +3,36 @@
   community.general.alternatives:
     name: editor
     path: "/usr/bin/vim.tiny"
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: general | Ensure timezone is Europe/Berlin
   community.general.timezone:
     name: Europe/Berlin
   notify: Restart cron
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: general | Ensure en_US.UTF-8 locale exists
   community.general.locale_gen:
     name: en_US.UTF-8
     state: present
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: general | Get localectl status
   ansible.builtin.command: localectl status
-  register: essential_localectl_status
+  register: common_localectl_status
   when: "'Debian' != ansible_facts['distribution']"
   changed_when: false
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: general | Verify LANG is en_US.UTF-8
   ansible.builtin.debug:
     msg: LANG is not en_US.UTF-8
   when:
-    - "essential_localectl_status.stdout is defined"
-    - "'System Locale: LANG=en_US.UTF-8' not in essential_localectl_status.stdout_lines"
+    - "common_localectl_status.stdout is defined"
+    - "'System Locale: LANG=en_US.UTF-8' not in common_localectl_status.stdout_lines"
   changed_when: true
   notify: Set LANG
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: general | Set XKG
   ansible.builtin.lineinfile:
@@ -51,4 +51,4 @@
       value: XKBLAYOUT=de
     - regex: ^#?XKBVARIANT=
       value: XKBVARIANT=nodeadkeys
-  tags: [essential, general]
+  tags: [common, general]

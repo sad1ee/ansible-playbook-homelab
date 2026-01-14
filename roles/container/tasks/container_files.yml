@@ -1,0 +1,23 @@
+---
+- name: container_files | Copy and render compose templates to remote
+  ansible.builtin.copy:
+    src: "{{ role_path }}/templates/{{ item }}.compose.yml.j2"
+    dest: "{{ container_path_data }}/{{ item }}.compose.yml"
+    mode: "0600"
+    owner: "{{ container_user }}"
+    group: "{{ container_user }}"
+  when: item in container_list
+  loop: "{{ container_list }}"
+  tags: [container, container_files, container_files_and_compose]
+
+# - name: container_files | Copy and render compose related templates to remote
+#   ansible.builtin.template:
+#     src: "{{ role_path }}/templates/{{ item }}.j2"
+#     dest: "{{ container_path_data }}/{{ item }}"
+#     mode: "0600"
+#     owner: "{{ container_user }}"
+#     group: "{{ container_user }}"
+#   loop:
+#     - "docker-env"
+#     - "authelia-secrets"
+#   tags: [container, container_files, container_files_and_compose]

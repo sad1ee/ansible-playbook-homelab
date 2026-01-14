@@ -1,12 +1,12 @@
 ---
 - name: Ensure container networks exist
-  ansible.builtin.include_tasks: networks.yml
+  ansible.builtin.include_tasks: container_networks.yml
   tags: [container, container_network]
 
 - name: Ensure compose and env files exist
-  ansible.builtin.include_tasks: files.yml
-  tags: [container, container_files]
+  ansible.builtin.include_tasks: container_files.yml
+  tags: [container, container_files, container_files_and_compose]
 
 - name: Ensuer containers are running
-  ansible.builtin.include_tasks: compose-containers.yml
-  tags: [container, container_compose]
+  ansible.builtin.include_tasks: container_compose.yml
+  tags: [container, container_compose, container_files_and_compose]

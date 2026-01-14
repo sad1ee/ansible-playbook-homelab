@@ -1,0 +1,42 @@
+---
+config_user: OverrideMeInGroupVars
+
+config_domain_base_seperated: "{{ config_domain_base | split('.') }}"
+
+config_list: [OverrideMeInGroupVars]
+
+config_path_compose: OverrideMeInGroupVars
+config_path_tmp: OverrideMeInGroupVars
+config_path: [OverrideMeInGroupVars]
+config_webui_port: [OverrideMeInGroupVars]
+
+config_netserver_domain: OverrideMeInGroupVars
+
+config_docker_proxy_host: OverrideMeInGroupVars
+
+# *********************************************************************************** #
+# ******************************* Override in secrets ******************************* #
+# *********************************************************************************** #
+config_domain_base: OverrideMeInSecrets
+
+# Authelia
+config_authelia_lldap_pass: OverrideMeInSecrets
+config_authelia_session_secret: OverrideMeInSecrets
+config_authelia_storage_key: OverrideMeInSecrets
+config_authelia_db_pass: OverrideMeInSecrets
+config_authelia_hmac_secret: OverrideMeInSecrets
+config_authelia_jwks_rs256: OverrideMeInSecrets
+
+# Authelia oidc clients
+config_authelia_client_secret_beszel: OverrideMeInSecrets
+config_authelia_client_secret_paperless: OverrideMeInSecrets
+config_authelia_client_secret_cwa: OverrideMeInSecrets
+config_authelia_client_secret_audiobookshelf: OverrideMeInSecrets
+
+# Recyclarr
+config_recyclarr_radarr_key: OverrideMeInSecrets
+config_recyclarr_sonarr_key: OverrideMeInSecrets
+
+# Traefik
+config_traefik_acme_email: OverrideMeInSecrets
+# *********************************************************************************** #

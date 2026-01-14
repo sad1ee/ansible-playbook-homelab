@@ -1,0 +1,36 @@
+services:
+  pyload:
+    image: "lscr.io/linuxserver/pyload-ng:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.pyload.rule: Host(`pyload.{{ container_domain_base }}`)
+      traefik.http.services.pyload.loadbalancer.server.port: "{{ container_webui_port.pyload }}"
+      traefik.http.routers.pyload.middlewares: authelia@docker, sablier@file
+
+      sablier.enable: true
+      sablier.group: "default"
+      traefik.docker.allownonrunning: true
+
+      dev.dozzle.group: "Frontend"
+
+    environment:
+      PUID: "{{ container_puid }}"
+      PGID: "{{ container_pgid }}"
+      TZ: "{{ container_tz }}"
+
+    volumes:
+      - "{{ container_path.pyload.config }}:/config"
+      - "{{ container_path.pyload.downloads }}:/downloads"
+
+    container_name: "pyload"
+    hostname: "pyload"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+
+networks:
+  traefik:
+    external: true
+    name: "traefik"

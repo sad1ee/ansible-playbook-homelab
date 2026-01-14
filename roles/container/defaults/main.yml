@@ -1,232 +1,68 @@
 ---
-container_username: user
-container_puid: 1000
-container_pgid: 1000
-container_timezone: Europe/Berlin
+container_domain_base_seperated: "{{ container_domain_base | split('.') }}"
 
-container_list:
-  - authelia
-  - audiobookshelf
-  - bazarr
-  - beszel-agent
-  - beszel
-  - cwa
-  - shelfmark
-  - docker-proxy
-  - dozzle
-  - flaresolverr
-  - gluetun
-  - gotenberg
-  - homepage
-  - jellyfin
-  - jellyseerr
-  - lldap
-  # - npm
-  - ntfy
-  - paperless
-  - pihole
-  - postgres
-  - prowlarr
-  # - pyload
-  - qbittorrent
-  - radarr
-  - recyclarr
-  - redis
-  - sablier
-  - samba
-  - sonarr
-  - syncthing
-  - tika
-  - traefik
-  # - wud
-  - diun
+container_docker_proxy_host: "tcp://docker-proxy:2375"
 
-container_compose_includes:
-  - networks
+container_netserver_domain: "netserver.lan"
 
-container_bridge_networks:
-  - flaresolverr
-  - recyclarr
-  - samba
-  - traefik
-  - docker-proxy
-  - diun
+container_user: OverrideMeInGroupVars
+container_puid: OverrideMeInGroupVars
+container_pgid: OverrideMeInGroupVars
+container_tz: OverrideMeInGroupVars
 
-container_internal_networks:
-  - gotenberg
-  - lldap
-  - ntfy
-  - postgres
-  - redis
-  - sablier
-  - tika
+container_list: OverrideMeInGroupVars
 
-container_lan:
-  cidr: /24
-  network: 192.168.0.0
-  netmask: 255.255.255.0
-  router: 192.168.0.1
-  homeserver: 192.168.0.100
-  dns: 192.168.0.99
-  dhcp_start: 192.168.0.150
-  dhcp_end: 192.168.0.247
+container_beszel_agent_image: OverrideMeInGroupVars
 
-container_traefik_network:
-  subnet: 172.25.0.0/16
-  gateway: 172.25.0.1
-  traefik: 172.25.255.254
-
-container_path:
-  cacheMount: /mnt/ssd1
-  storageMount: /mnt/storage
-  compose: /opt/docker
-  docker: "{{ container_path.cacheMount }}/docker"
-  media: "{{ container_path.storageMount }}/media"
-
-  qbittorrent: "{{ container_path.docker }}/qbittorrent"
-  radarr: "{{ container_path.docker }}/radarr"
-  sonarr: "{{ container_path.docker }}/sonarr"
-  prowlarr: "{{ container_path.docker }}/prowlarr"
-  bazarr: "{{ container_path.docker }}/bazarr"
-  recyclarr: "{{ container_path.docker }}/recyclarr"
-  jellyseerr: "{{ container_path.docker }}/jellyseerr"
-  jellyfin: "{{ container_path.docker }}/jellyfin"
-  calibre:
-    config: "{{ container_path.docker }}/cwa/config"
-    ingest: "{{ container_path.docker }}/cwa/ingest"
-    library: "{{ container_path.docker }}/cwa/library"
-
-  authelia: "{{ container_path.docker }}/authelia"
-
-  beszel:
-    data: "{{ container_path.docker }}/beszel/data"
-    agent: "{{ container_path.docker }}/beszel/agent"
-
-  homepage: "{{ container_path.docker }}/homepage"
-
-  npm:
-    data: "{{ container_path.docker }}/npm/data"
-    letsencrypt: "{{ container_path.docker }}/npm/letsencrypt"
-    snippets: "{{ container_path.docker }}/npm/snippets"
-
-  ntfy: "{{ container_path.docker }}/ntfy"
-
-  paperless:
-    data: "{{ container_path.docker }}/paperless/data"
-    export: "{{ container_path.docker }}/paperless/export"
-
-  pihole:
-    pihole: "{{ container_path.docker }}/pihole/pihole"
-    dnsmasq: "{{ container_path.docker }}/pihole/dnsmasq"
-
-  postgres: "{{ container_path.docker }}/postgres/data"
-
-  pyload:
-    config: "{{ container_path.docker }}/pyload/config"
-    downloads: "{{ container_path.docker }}/pyload/downloads"
-
-  redis: "{{ container_path.docker }}/redis"
-
-  samba: "{{ container_path.storageMount }}"
-
-  syncthing:
-    config: "{{ container_path.docker }}/syncthing/config"
-    data: "{{ container_path.docker }}/syncthing/data"
-
-  traefik: "{{ container_path.docker }}/traefik"
-
-  lldap: "{{ container_path.docker }}/lldap"
-
-  dozzle: "{{ container_path.docker }}/dozzle"
-
-  diun: "{{ container_path.docker }}/diun"
-
-  shelfmark: "{{ container_path.docker }}/shelfmark"
-
-  audiobookshelf:
-    config: "{{ container_path.docker }}/audiobookshelf/config"
-    metadata: "{{ container_path.docker }}/audiobookshelf/metadata"
-
-container_webui_port:
-  qbittorrent: 8112
-  shelfmark: 8084
-  radarr: 7878
-  sonarr: 8989
-  prowlarr: 9696
-  bazarr: 6767
-  jellyseerr: 5055
-  jellyfin: 8096
-  lldap: 17170
-  cwa: 8083
-  authelia: 9091
-  beszel: 8090
-  dozzle: 8080
-  homepage: 3000
-  npm: 81
-  ntfy: 2586
-  paperless: 8000
-  pihole: 443 # 80
-  pyload: 8000
-  syncthing: 8384
-  traefik_webinternal: 8081
-  wud: 3000
-  audiobookshelf: 13378
-
-container_docker_proxy_host: tcp://docker-proxy:2375
+container_dozzle_hostname: OverrideMeInGroupVars
+container_dozzle_remote_agent: OverrideMeInGroupVars
 
 # *********************************************************************************** #
-# ************************ Override in group_vars/secret.yml ************************ #
+# ******************************* Override in secrets ******************************* #
 # *********************************************************************************** #
+container_domain_base: OverrideMeInSecrets
+
+# Beszel-agent
+container_beszel_key: OverrideMeInSecrets
+container_beszel_token: OverrideMeInSecrets
+
+# CWA
+container_cwa_hardcover_token: OverrideMeInSecrets
+
+# Gluetun
 container_gluetun_openvpn_user: OverrideMeInSecrets
 container_gluetun_openvpn_password: OverrideMeInSecrets
 container_gluetun_protonvpn_email: OverrideMeInSecrets
 container_gluetun_protonvpn_password: OverrideMeInSecrets
-container_jellyseerr_db_pass: OverrideMeInSecrets
-container_authelia_db_pass: OverrideMeInSecrets
-container_npm_db_pass: OverrideMeInSecrets
-container_paperless_db_pass: OverrideMeInSecrets
-container_postgres_db_pass: OverrideMeInSecrets
-container_beszel_user: OverrideMeInSecrets
-container_beszel_pass: OverrideMeInSecrets
-container_beszel_key: OverrideMeInSecrets
-container_beszel_token: OverrideMeInSecrets
-container_jellyfin_key: OverrideMeInSecrets
-container_jellyseerr_key: OverrideMeInSecrets
-container_calibre_user: OverrideMeInSecrets
-container_calibre_pass: OverrideMeInSecrets
-container_radarr_key: OverrideMeInSecrets
-container_sonarr_key: OverrideMeInSecrets
-container_prowlarr_key: OverrideMeInSecrets
-container_bazarr_key: OverrideMeInSecrets
-container_qbittorrent_user: OverrideMeInSecrets
-container_qbittorrent_pass: OverrideMeInSecrets
-container_paperless_user: OverrideMeInSecrets
-container_paperless_pass: OverrideMeInSecrets
-container_pyload_user: OverrideMeInSecrets
-container_pyload_pass: OverrideMeInSecrets
-container_npm_user: OverrideMeInSecrets
-container_npm_pass: OverrideMeInSecrets
+
+# LLDAP
+container_lldap_jwt_secret: OverrideMeInSecrets
+container_lldap_key_seed: OverrideMeInSecrets
+# container_lldap_admin_user: OverrideMeInSecrets
+# container_lldap_admin_pass: OverrideMeInSecrets
+
+# NTFY
+container_ntfy_auth_users: OverrideMeInSecrets
+
+# Pihole
 container_pihole_pass: OverrideMeInSecrets
-container_samba_user: OverrideMeInSecrets
-container_samba_password: OverrideMeInSecrets
-container_traefik_user: OverrideMeInSecrets
-container_traefik_pass: OverrideMeInSecrets
-container_wud_github_token: OverrideMeInSecrets
-container_duckdns_token: OverrideMeInSecrets
-container_domain_base: OverrideMeInSecrets
 container_pihole_dhcp_hosts: [OverrideMeInSecrets]
 container_pihole_dns_hosts: [OverrideMeInSecrets]
 container_pihole_cname_records: [OverrideMeInSecrets]
-container_authelia_user:
-  1:
-    id: OverrideMeInSecrets
-    pretty: OverrideMeInSecrets
-    pass: OverrideMeInSecrets
-    email: OverrideMeInSecrets
-  2:
-    id: OverrideMeInSecrets
-    pretty: OverrideMeInSecrets
-    pass: OverrideMeInSecrets
-    email: OverrideMeInSecrets
-container_authelia_storage_key: OverrideMeInSecrets
+
+# Postgres
+container_jellyseerr_db_pass: OverrideMeInSecrets
+container_lldap_db_pass: OverrideMeInSecrets
+container_paperless_db_pass: OverrideMeInSecrets
+container_postgres_db_pass: OverrideMeInSecrets
+
+# Samba
+container_samba_user: OverrideMeInSecrets
+container_samba_pass: OverrideMeInSecrets
+
+# Traefik
+container_cf_dns_api_token: OverrideMeInSecrets
+
+# Authelia oidc clients
+container_authelia_client_secret_paperless_plain: OverrideMeInSecrets
 # *********************************************************************************** #

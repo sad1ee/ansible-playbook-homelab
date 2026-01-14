@@ -1,30 +1,30 @@
 ---
 - name: mount_disks | Create mnt directories
   ansible.builtin.file:
-    path: /mnt/{{ item }}
-    state: directory
-    owner: "{{ homeserver_username }}"
-    group: "{{ homeserver_username }}"
+    path: "/mnt/{{ item }}"
+    state: "directory"
+    owner: "{{ homeserver_user }}"
+    group: "{{ homeserver_user }}"
     mode: "0755"
   loop: "{{ homeserver_mount_dirs.values() }}"
-  tags: [homeserver]
+  tags: [homeserver, mount_disks]
 
 - name: mount_disks | Mount physical drives
   ansible.posix.mount:
-    path: /mnt/{{ item.mnt }}
-    src: UUID={{ item.uuid }}
+    path: "/mnt/{{ item.mnt }}"
+    src: "UUID={{ item.uuid }}"
     fstype: "{{ item.type }}"
     opts: "{{ item.opts }}"
-    state: mounted
+    state: "mounted"
   loop: "{{ homeserver_physical_drives }}"
-  tags: [homeserver]
+  tags: [homeserver, mount_disks]
 
 - name: mount_disks | Mount mergerfs pools
   ansible.posix.mount:
-    path: /mnt/{{ item.mnt }}
+    path: "/mnt/{{ item.mnt }}"
     src: "{{ item.src }}"
-    fstype: mergerfs
+    fstype: "mergerfs"
     opts: "{{ item.opts }}"
-    state: mounted
+    state: "mounted"
   loop: "{{ homeserver_mergerfs_pools }}"
-  tags: [homeserver]
+  tags: [homeserver, mount_disks]

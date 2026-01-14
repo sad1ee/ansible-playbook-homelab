@@ -4,15 +4,32 @@
     url: "{{ item.url }}"
     dest: "{{ item.dest }}"
     mode: "0640"
-    owner: user
-    group: user
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   when: "'recyclarr' in config_list"
+  register: config_recyclarr_download_changed
   loop:
     - url: "https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/radarr/includes/custom-formats/radarr-custom-formats-uhd-bluray-web-german.yml"
-      dest: "/tmp/radarr-custom-formats-uhd-bluray-web-german.yml"
+      dest: "{{ container_path_tmp }}/radarr-custom-formats-uhd-bluray-web-german.original.yml"
     - url: "https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/sonarr/includes/custom-formats/sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
-      dest: "/tmp/sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
-  tags: [services, configs, recyclarr]
+      dest: "{{ container_path_tmp }}/sonarr-v4-custom-formats-uhd-bluray-web-german.original.yml"
+  tags: [config, recyclarr]
+
+- name: recyclarr | Copy recyclarr custom format templates for replacement
+  ansible.builtin.copy:
+    src: "{{ container_path_tmp }}/{{ item }}.original.yml"
+    remote_src: true
+    dest: "{{ container_path_tmp }}/{{ item }}.yml"
+    mode: "0640"
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
+  when:
+    - "'recyclarr' in config_list"
+    - config_recyclarr_download_changed.changed
+  loop:
+    - "radarr-custom-formats-uhd-bluray-web-german"
+    - "sonarr-v4-custom-formats-uhd-bluray-web-german"
+  tags: [config, recyclarr]
 
 - name: recyclarr | Replace the assign_scores_to entries
   ansible.builtin.replace:
@@ -21,24 +38,24 @@
     replace: "{{ item.replace }}"
   when: "'recyclarr' in config_list"
   loop:
-    - path: "/tmp/radarr-custom-formats-uhd-bluray-web-german.yml"
+    - path: "{{ container_path_tmp }}/radarr-custom-formats-uhd-bluray-web-german.yml"
       regexp: '(?ms)^(\s*assign_scores_to:\s*\n\s*- name:\s*)UHD Bluray \+ WEB \(GER\)\s*$'
       replace: '\1German (UHD Bluray + WEB)\n      - name: German or English (UHD Bluray + WEB)'
-    - path: "/tmp/sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
+    - path: "{{ container_path_tmp }}/sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
       regexp: '(?ms)^(\s*assign_scores_to:\s*\n\s*- name:\s*)UHD Bluray \+ WEB \(GER\)\s*$'
       replace: '\1German (UHD Bluray + WEB)\n      - name: German or English (UHD Bluray + WEB)'
-  tags: [services, configs, recyclarr, recyclarr_noget]
+  tags: [config, recyclarr]
 
 - name: recyclarr | Copy customized configs to recyclarr includes dir
   ansible.builtin.copy:
-    src: "/tmp/{{ item }}"
+    src: "{{ container_path_tmp }}/{{ item }}"
     remote_src: true
     dest: "{{ config_path.recyclarr }}/includes/{{ item }}"
     mode: "0640"
-    owner: user
-    group: user
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   when: "'recyclarr' in config_list"
   loop:
     - "radarr-custom-formats-uhd-bluray-web-german.yml"
     - "sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
-  tags: [services, configs, recyclarr, recyclarr_noget]
+  tags: [config, recyclarr]

@@ -4,11 +4,11 @@
     name: systemd-resolved
     state: restarted
     enabled: true
-  tags: [services, pihole]
+  tags: [netserver, pihole]
 
 - name: Restart systemd-timesyncd
   ansible.builtin.systemd:
     name: systemd-timesyncd
     state: restarted
     enabled: true
-  tags: [services, pihole]
+  tags: [netserver, pihole]

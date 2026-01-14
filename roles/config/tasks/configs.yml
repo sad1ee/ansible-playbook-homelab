@@ -1,22 +1,11 @@
 ---
-- name: configs | Ensure traefik acme.json exists
-  ansible.builtin.copy:
-    content: ""
-    dest: "{{ config_path.traefik }}/acme.json"
-    force: false
-    owner: user
-    group: user
-    mode: "0600"
-  when: "'traefik' in config_list"
-  tags: [services, configs]
-
 - name: configs | Render jinja config templates locally
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/config/{{ item.service }}-{{ item.file }}.j2"
+    src: "{{ role_path }}/templates/{{ item.service }}-{{ item.file }}.j2"
     dest: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
     mode: "0640"
-    owner: user
-    group: user
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   when: item.service in config_list
   loop:
     - service: homepage
@@ -40,15 +29,15 @@
     - service: diun
       file: external.yml
   delegate_to: localhost
-  tags: [services, configs]
+  tags: [config, configs]
 
 - name: configs | Copy locally rendered compose templates to remote
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
     dest: "{{ config_path[item.service] }}/{{ item.path }}"
     mode: "0640"
-    owner: "{{ config_username }}"
-    group: "{{ config_username }}"
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   when: item.service in config_list
   loop:
     - service: homepage
@@ -78,25 +67,25 @@
     - service: diun
       file: external.yml
       path: external.yml
-  tags: [services, configs]
+  tags: [config, configs]
 
 - name: configs | Copy locally rendered traefik templates to remote
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
     dest: "/tmp/{{ item.service }}-{{ item.file }}"
     mode: "0644"
-    owner: "{{ config_username }}"
-    group: "{{ config_username }}"
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   when: item.service in config_list
   register: config_traefik_changed
   loop:
     - service: traefik
       file: dynamic.yml
-  tags: [services, configs]
+  tags: [config, configs]
 
 - name: configs | Atomically move traefik configs into traefiks dynamic directory
   ansible.builtin.command:
-    "cp /tmp/{{ item.service }}-{{ item.file }} {{ config_path.traefik }}/{{ item.path }}/{{
+    "cp /tmp/{{ item.service }}-{{ item.file }} {{ config_path_traefik }}/{{ item.path }}/{{
     item.file }}"
   when:
     - config_traefik_changed is defined
@@ -107,4 +96,4 @@
     - service: traefik
       file: dynamic.yml
       path: dynamic
-  tags: [services, configs]
+  tags: [config, configs]

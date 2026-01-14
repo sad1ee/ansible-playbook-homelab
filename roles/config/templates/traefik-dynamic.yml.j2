@@ -27,7 +27,7 @@ http:
     pihole:
       loadBalancer:
         servers:
-          - url: "https://netserver.lan"
+          - url: "https://{{ config_netserver_domain }}"
         serversTransport: "pihole-insecure-ssl@file"
 
   serversTransports:

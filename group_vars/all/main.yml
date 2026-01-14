@@ -1,0 +1,34 @@
+---
+user: "user"
+
+# Common defaults override
+common_user: "{{ user }}"
+common_ssh_port: 22
+
+# Config defaults override
+config_user: "{{ user }}"
+config_domain_base: "{{ domain_base }}"
+config_list: "{{ container_list }}"
+config_path_compose: "{{ container_path_compose }}"
+config_path_tmp: "{{ container_path_tmp }}"
+config_path: "{{ container_path }}"
+config_webui_port: "{{ container_webui_port }}"
+config_docker_proxy_host: "{{ container_docker_proxy_host }}"
+config_netserver_domain: "{{ container_netserver_domain }}"
+
+# Container defaults override
+container_domain_base: "{{ domain_base }}"
+container_user: "{{ user }}"
+container_puid: 1000
+container_pgid: 1000
+container_tz: "Europe/Berlin"
+
+# Container defaults override
+homeserver_domain_base: "{{ domain_base }}"
+
+# *********************************************************************************** #
+# ******************************* Override in secrets ******************************* #
+# *********************************************************************************** #
+# ansible_become_pass: OverrideMeInSecrets
+# domain_base: OverrideMeInSecrets
+# *********************************************************************************** #

@@ -2,26 +2,26 @@
 dependencies:
   - role: geerlingguy.security
     vars:
-      security_ssh_port: "{{ essential_security_ssh_port }}"
+      security_ssh_port: "{{ common_security_ssh_port }}"
       security_ssh_password_authentication:
-        "{{ essential_security_ssh_password_authentication }}"
+        "{{ common_security_ssh_password_authentication }}"
       security_ssh_allowed_users:
-        - "{{ essential_security_ssh_allowed_user }}"
+        - "{{ common_security_ssh_allowed_user }}"
       security_ssh_restart_handler_state: started
-      security_sudoers_passwordless: "{{ essential_security_sudoer_passwordless }}"
-      security_autoupdate_reboot: "{{ essential_security_autoupdate_reboot }}"
-      security_autoupdate_reboot_time: "{{ essential_security_autoupdate_reboot_time }}"
+      security_sudoers_passwordless: "{{ common_security_sudoer_passwordless }}"
+      security_autoupdate_reboot: "{{ common_security_autoupdate_reboot }}"
+      security_autoupdate_reboot_time: "{{ common_security_autoupdate_reboot_time }}"
       security_fail2ban_enabled: false
     tags: [external]
 
   - name: geerlingguy.pip
     vars:
-      pip_install_packages: "{{ essential_pip_install_packages }}"
+      pip_install_packages: "{{ common_pip_install_packages }}"
     tags: [external]
 
   - name: geerlingguy.docker
     vars:
       docker_users:
-        - "{{ essential_docker_user }}"
-      docker_daemon_options: "{{ essential_docker_daemon_options }}"
+        - "{{ common_docker_user }}"
+      docker_daemon_options: "{{ common_docker_daemon_options }}"
     tags: [external]

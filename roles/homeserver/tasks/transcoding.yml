@@ -1,23 +1,23 @@
 ---
 - name: transcoding | Add i915 module guc option
   ansible.builtin.lineinfile:
-    path: /etc/modprobe.d/i915.conf
-    line: options i915 enable_guc=2
-    owner: root
-    group: root
+    path: "/etc/modprobe.d/i915.conf"
+    line: "options i915 enable_guc=2"
+    owner: "root"
+    group: "root"
     mode: "0644"
-    create: true
+    create: "true"
   register: homeserver_i915_changed
-  tags: [homeserver]
+  tags: [homeserver, transcoding]
 
 - name: transcoding | Update initramfs
-  ansible.builtin.command: update-initramfs -u
+  ansible.builtin.command: "update-initramfs -u"
   when: i915_changed is defined and i915_changed.changed
   changed_when: homeserver_i915_changed.changed
-  tags: [homeserver]
+  tags: [homeserver, transcoding]
 
 - name: transcoding | Update grub
-  ansible.builtin.command: update-grub
+  ansible.builtin.command: "update-grub"
   when: i915_changed is defined and i915_changed.changed
   changed_when: homeserver_i915_changed.changed
-  tags: [homeserver]
+  tags: [homeserver, transcoding]

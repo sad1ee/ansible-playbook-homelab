@@ -4,21 +4,22 @@
     path: "{{ item }}"
     state: directory
     mode: "0755"
-    owner: "{{ config_username }}"
-    group: "{{ config_username }}"
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   loop:
     - "{{ playbook_dir }}/.ansible/templates"
     - "{{ playbook_dir }}/.ansible/configs"
   delegate_to: localhost
-  tags: [services, dirs]
+  tags: [config, dirs]
 
 - name: dirs | Create docker compose dir
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: "0750"
-    owner: "{{ config_username }}"
-    group: "{{ config_username }}"
+    owner: "{{ config_user }}"
+    group: "{{ config_user }}"
   loop:
-    - "{{ config_path.compose }}"
-  tags: [services, dirs]
+    - "{{ config_path_compose }}"
+    - "{{ container_path_tmp }}"
+  tags: [config, dirs]

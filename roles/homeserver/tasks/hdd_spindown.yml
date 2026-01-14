@@ -1,48 +1,48 @@
 ---
 - name: hdd_spindown | Configure hd-idle configuration
   ansible.builtin.lineinfile:
-    path: /etc/defaults/hd-idle
-    regexp: ^#?HD_IDLE_OPTS=
-    line: HD_IDLE_OPTS=-i 600 -l /var/log/hd-idle.log
-    state: present
-    owner: root
-    group: root
+    path: "/etc/defaults/hd-idle"
+    regexp: "^#?HD_IDLE_OPTS="
+    line: "HD_IDLE_OPTS=-i 600 -l /var/log/hd-idle.log"
+    state: "present"
+    owner: "root"
+    group: "root"
     mode: "0644"
-    create: true
+    create: "true"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Stop and disable services
   ansible.builtin.systemd:
     name: "{{ item }}"
-    state: stopped
-    enabled: false
+    state: "stopped"
+    enabled: "false"
   loop: "{{ homeserver_disabled_services }}"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Ensure systemd override directory exists for fwupd-refresh.timer
   ansible.builtin.file:
-    path: /etc/systemd/system/fwupd-refresh.timer.d
-    state: directory
+    path: "/etc/systemd/system/fwupd-refresh.timer.d"
+    state: "directory"
     mode: "0755"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Configure smartd (smartmontools) configuration
   ansible.builtin.lineinfile:
-    path: /etc/smartd.conf
-    regexp: ^DEVICESCAN
-    line:
+    path: "/etc/smartd.conf"
+    regexp: "^DEVICESCAN"
+    line: >
       DEVICESCAN -d removable -n standby,120 -o off -S off -m root -M exec
       /usr/share/smartmontools/smartd-runner
-    state: present
-    owner: root
-    group: root
+    state: "present"
+    owner: "root"
+    group: "root"
     mode: "0644"
-    create: true
+    create: "true"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Configure fwupd-refresh.timer to run weekly on Sunday at 05:00
   ansible.builtin.copy:
-    dest: /etc/systemd/system/fwupd-refresh.timer.d/override.conf
+    dest: "/etc/systemd/system/fwupd-refresh.timer.d/override.conf"
     content: |
       [Timer]
       OnCalendar=Sun {{ homeserver_fwupd_get_update_time }}
@@ -52,23 +52,23 @@
 
 - name: hdd_spindown | Reload systemd to pick up timer changes
   ansible.builtin.systemd:
-    daemon_reload: true
+    daemon_reload: "true"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Enable and start fwupd-refresh.timer
   ansible.builtin.systemd:
-    name: fwupd-refresh.timer
-    enabled: true
-    state: started
+    name: "fwupd-refresh.timer"
+    enabled: "true"
+    state: "started"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Disable disk plugin of landscape-sysinfo (ssh login)
   ansible.builtin.lineinfile:
-    path: /etc/update-motd.d/50-landscape-sysinfo
-    regexp: ^\$\(/usr/bin/landscape-sysinfo\)\)$
-    line: $(/usr/bin/landscape-sysinfo --exclude-sysinfo-plugins=Disk)
-    state: present
-    owner: root
-    group: root
+    path: "/etc/update-motd.d/50-landscape-sysinfo"
+    regexp: '^\$\(/usr/bin/landscape-sysinfo\)\)$'
+    line: "$(/usr/bin/landscape-sysinfo --exclude-sysinfo-plugins=Disk)"
+    state: "present"
+    owner: "root"
+    group: "root"
     mode: "0755"
   tags: [homeserver, spindown]

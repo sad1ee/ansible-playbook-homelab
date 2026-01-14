@@ -1,20 +1,20 @@
 ---
 - name: Ensure basic system configuration
   ansible.builtin.include_tasks: general.yml
-  tags: [essential, general]
+  tags: [common, general]
 
 - name: Install apt packages
   ansible.builtin.include_tasks: packages.yml
-  tags: [essential, packages]
+  tags: [common, packages]
 
 - name: Install chezmoi dotfiles
   ansible.builtin.include_tasks: dotfiles.yml
-  tags: [essential, dotfiles]
+  tags: [common, dotfiles]
 
 - name: Configure network
   ansible.builtin.include_tasks: network.yml
-  tags: [essential, network]
+  tags: [common, network]
 
 - name: Configure UFW firewall
   ansible.builtin.include_tasks: firewall.yml
-  tags: [essential, firewall, ipv6]
+  tags: [common, firewall, ipv6]

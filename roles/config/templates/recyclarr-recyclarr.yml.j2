@@ -1,7 +1,7 @@
 radarr:
   radarr-main:
     base_url: "http://radarr:{{ config_webui_port.radarr }}"
-    api_key: "{{ config_radarr_key }}"
+    api_key: "{{ config_recyclarr_radarr_key  }}"
 
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
@@ -23,7 +23,7 @@ radarr:
 sonarr:
   sonarr-main:
     base_url: "http://sonarr:{{ config_webui_port.sonarr }}"
-    api_key: "{{ config_sonarr_key }}"
+    api_key: "{{ config_recyclarr_sonarr_key }}"
 
     delete_old_custom_formats: true
     replace_existing_custom_formats: true

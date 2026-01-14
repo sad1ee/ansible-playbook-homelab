@@ -3,14 +3,14 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
-  tags: [essential, packages]
+  tags: [common, packages]
 
 - name: packages | Upgrade packages
   ansible.builtin.apt:
     upgrade: dist
-  tags: [essential, packages]
+  tags: [common, packages]
 
 - name: packages | Install packages
   ansible.builtin.apt:
-    name: "{{ essential_packages }}"
-  tags: [essential, packages]
+    name: "{{ common_packages }}"
+  tags: [common, packages]

@@ -1,0 +1,29 @@
+---
+# NOTE: Unused as of now
+# --------------------- #
+- name: maintainance | Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  tags: [never, maintainance]
+
+- name: maintainance | Upgrade packages
+  ansible.builtin.apt:
+    upgrade: dist
+  tags: [never, maintainance]
+
+- name: maintainance | Prune containers, images, networks, volumes and builder_cache
+  community.docker.docker_prune:
+    containers: true
+    containers_filters:
+      until: 15m
+    images: true
+    images_filters:
+      util: 168h
+      dangling: true
+    networks: true
+    networks_filter:
+      until: 15m
+    volumes: true
+    builder_cache: true
+  tags: [never, maintainance]

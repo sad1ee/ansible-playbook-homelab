@@ -1,34 +1,34 @@
 ---
 - name: dotfiles | Check if chezmoi is already installed
   ansible.builtin.stat:
-    path: /home/{{ essential_username }}/.local/bin/chezmoi
-  register: essential_chezmoi_bin
-  tags: [essential, dotfiles]
+    path: /home/{{ common_user }}/.local/bin/chezmoi
+  register: common_chezmoi_bin
+  tags: [common, dotfiles]
 
 - name: dotfiles | Get chezmoi installer script
   ansible.builtin.get_url:
     url: https://get.chezmoi.io
     dest: /tmp/chezmoi.sh
-    owner: "{{ essential_username }}"
-    group: "{{ essential_username }}"
+    owner: "{{ common_user }}"
+    group: "{{ common_user }}"
     mode: "0755"
-  when: not essential_chezmoi_bin.stat.exists
-  tags: [essential, dotfiles]
+  when: not common_chezmoi_bin.stat.exists
+  tags: [common, dotfiles]
 
 - name: dotfiles | Run chezmoi install script
   ansible.builtin.command: >
-    sh /tmp/chezmoi.sh -b /home/{{ essential_username }}/.local/bin
+    sh /tmp/chezmoi.sh -b /home/{{ common_user }}/.local/bin
   args:
-    creates: /home/{{ essential_username }}/.local/bin/chezmoi
-  when: not essential_chezmoi_bin.stat.exists
-  tags: [essential, dotfiles]
+    creates: /home/{{ common_user }}/.local/bin/chezmoi
+  when: not common_chezmoi_bin.stat.exists
+  tags: [common, dotfiles]
 
 - name: dotfiles | Set ownership for chezmoi bin
   ansible.builtin.file:
-    path: /home/{{ essential_username }}/.local/bin/chezmoi
-    owner: "{{ essential_username }}"
-    group: "{{ essential_username }}"
-  tags: [essential, dotfiles]
+    path: /home/{{ common_user }}/.local/bin/chezmoi
+    owner: "{{ common_user }}"
+    group: "{{ common_user }}"
+  tags: [common, dotfiles]
 #
 # TODO: Requires input for rbw (mail, password, 2fa)
 # Normal command: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply sad1ee
@@ -38,5 +38,5 @@
 #   args:
 #     chdir: "{{ ansible_env.HOME }}"
 #     creates: "{{ ansible_env.HOME }}/.config/chezmoi"
-#   when: not essential_chezmoi_bin.stat.exists
-#   tags: [essential, dotfiles]
+#   when: not common_chezmoi_bin.stat.exists
+#   tags: [common, dotfiles]
