@@ -16,7 +16,10 @@ services:
     volumes:
       - "{{ container_path.audiobookshelf.config }}:/config"
       - "{{ container_path.audiobookshelf.metadata }}:/metadata"
-      - "{{ container_path.media }}/torrents/audiobooks:/audiobooks"
+      - "{{ container_path.media }}/library/audiobooks:/audiobooks"
+
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
 
     container_name: "audiobookshelf"
     hostname: "audiobookshelf"

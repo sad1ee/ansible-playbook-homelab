@@ -55,6 +55,7 @@ container_list:
   - paperless
   - postgres
   - prowlarr
+  - pyload
   - qbittorrent
   - radarr
   - recyclarr

@@ -15,7 +15,7 @@
 
 - name: container_compose | Run docker compose with all found compose files
   community.docker.docker_compose_v2:
-    project_src: "{{ container_path_data }}"
+    project_src: "{{ container_path_compose }}"
     files: "{{ container_list_compose_files }}"
     # files: "{{ container_list_compose_files + container_compose_includes_files }}"
     project_name: services

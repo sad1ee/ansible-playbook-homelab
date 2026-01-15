@@ -1,13 +1,13 @@
 services:
   beszel-agent:
-    image: "{{ beszel_agent_image }}"
+    image: "{{ container_beszel_agent_image }}"
 
     labels:
       dev.dozzle.group: "Backend"
 
     environment:
       LOG_LEVEL: "info" # debug, info, warn, error
-{% if inventory_hostname == "homeserver_main" %}
+{% if inventory_hostname == "homeserver" %}
       DOCKER_HOST: "tcp://localhost:2375"
 {% endif %}
       LISTEN: "45876"
@@ -15,7 +15,7 @@ services:
       KEY: "{{ container_beszel_key }}"
       TOKEN: "{{ container_beszel_token }}"
       DISK_USAGE_CACHE: "24h"
-{% if inventory_hostname == "netserver_main" %}
+{% if inventory_hostname == "netserver" %}
       SKIP_GPU: ture
 {% endif %}
 
@@ -23,11 +23,11 @@ services:
       - "{{ container_path.beszel.agent }}:/var/lib/beszel-agent"
       - "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro"
       - "/etc/localtime:/etc/localtime:ro"
-{% if inventory_hostname == "netserver_main" %}
+{% if inventory_hostname == "netserver" %}
       - /var/run/docker.sock:/var/run/docker.sock:ro
 {% endif %}
       # NOTE: Use ansible facts for device names
-{% if inventory_hostname == "homeserver_main" %}
+{% if inventory_hostname == "homeserver" %}
       - "/mnt/ssd1/.beszel:/extra-filesystems/sdc1__ssd1:ro"
       - "/mnt/hdd1/.beszel:/extra-filesystems/sda1__hdd1:ro"
       - "/mnt/hdd2/.beszel:/extra-filesystems/sdb1__hdd2:ro"

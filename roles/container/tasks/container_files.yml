@@ -1,8 +1,8 @@
 ---
 - name: container_files | Copy and render compose templates to remote
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.compose.yml.j2"
-    dest: "{{ container_path_data }}/{{ item }}.compose.yml"
+    dest: "{{ container_path_compose }}/{{ item }}.compose.yml"
     mode: "0600"
     owner: "{{ container_user }}"
     group: "{{ container_user }}"
@@ -13,7 +13,7 @@
 # - name: container_files | Copy and render compose related templates to remote
 #   ansible.builtin.template:
 #     src: "{{ role_path }}/templates/{{ item }}.j2"
-#     dest: "{{ container_path_data }}/{{ item }}"
+#     dest: "{{ container_path_compose }}/{{ item }}"
 #     mode: "0600"
 #     owner: "{{ container_user }}"
 #     group: "{{ container_user }}"

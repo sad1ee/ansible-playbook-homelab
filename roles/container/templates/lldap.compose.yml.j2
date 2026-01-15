@@ -1,7 +1,6 @@
 services:
   lldap:
-    image: lldap/lldap:stable
-    # image: lldap/latest-debian-rootless
+    image: lldap/lldap:latest-alpine-rootless
 
     labels:
       traefik.enable: true
@@ -13,19 +12,15 @@ services:
       dev.dozzle.group: "Admin"
 
     environment:
-      UID: "{{ container_puid }}"
-      GID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
       LLDAP_HTTP_PORT: "{{ container_webui_port.lldap }}"
       LLDAP_JWT_SECRET: "{{ container_lldap_jwt_secret }}"
       LLDAP_KEY_SEED: "{{ container_lldap_key_seed }}"
       LLDAP_LDAP_BASE_DN: dc={{ container_domain_base_seperated[0] }},dc={{ container_domain_base_seperated[1] }}
-      LLDAP_LDAP_USER_DN: "{{ container_lldap_admin_user }}"
-      LLDAP_LDAP_USER_PASS: "{{ container_lldap_admin_pass }}"
       LLDAP_DATABASE_URL: "postgres://lldap:{{ container_lldap_db_pass }}@postgres/lldap"
 
-    # user: "{{ container_puid }}:{{ container_pgid }}"
-    # port: 3890
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
 
     depends_on:
       postgres:

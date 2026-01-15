@@ -10,22 +10,18 @@ services:
       GID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
       LOGLEVEL: "info" # debug, info, warning, error, critical
-      FLASK_PORT: "{{ container_webui_port.shelfmark }}"
-      BOOK_LANGUAGE: "de,en"
-      USE_BOOK_TITLE: "true"
-      CALIBRE_WEB_URL: "https://cwa.{{ container_domain_base }}"
-      INGEST_DIR: "/cwa-book-ingest"
 
     volumes:
       - "{{ container_path.shelfmark }}:/config"
       - "{{ container_path.calibre.ingest }}:/cwa-book-ingest"
+      - "{{ container_path.media }}:/media"
 
     depends_on:
       gluetun:
         condition: "service_healthy"
 
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:8084/api/health"]
+      test: [ "CMD", "curl", "-sf", "http://localhost:8084/api/health" ]
       interval: "300s"
       timeout: "30s"
       retries: "3"
