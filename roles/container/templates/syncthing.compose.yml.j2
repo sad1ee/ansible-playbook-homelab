@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.syncthing.rule: Host(`syncthing.{{ container_domain_base }}`)
       traefik.http.services.syncthing.loadbalancer.server.port: "{{ container_webui_port.syncthing }}"
-      traefik.http.routers.syncthing.middlewares: authelia@docker
+      traefik.http.routers.syncthing.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Media"
 

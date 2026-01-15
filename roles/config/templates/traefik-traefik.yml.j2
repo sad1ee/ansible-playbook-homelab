@@ -4,7 +4,7 @@
 ping: {}
 
 log:
-  level: INFO # DEBUG, INFO, WARN, ERROR
+  level: "INFO" # DEBUG, INFO, WARN, ERROR
 
 global:
   checkNewVersion: false
@@ -18,7 +18,7 @@ providers:
   docker:
     endpoint: "{{ config_docker_proxy_host }}"
     exposedByDefault: false
-    network: traefik
+    network: "traefik"
   file:
     directory: "/etc/traefik/dynamic"
 
@@ -28,23 +28,23 @@ entryPoints:
     http:
       redirections:
         entryPoint:
-          to: websecure
-          scheme: https
+          to: "websecure"
+          scheme: "https"
           permanent: true
   websecure:
     address: ":443"
     http:
       tls:
-        certResolver: cloudflare
+        certResolver: "cloudflare"
     asDefault: true
 
 certificatesResolvers:
   cloudflare:
     acme:
       email: "{{ config_traefik_acme_email }}"
-      storage: /certs/acme.json
+      storage: "/certs/acme.json"
       dnsChallenge:
-        provider: cloudflare
+        provider: "cloudflare"
         resolvers: ["1.1.1.1:53", "8.8.8.8:53"]
 
 experimental:

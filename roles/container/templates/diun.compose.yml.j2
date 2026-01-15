@@ -7,7 +7,7 @@ services:
 
     environment:
       TZ: "{{ container_tz }}"
-      LOG_LEVEL: info # info, debug
+      LOG_LEVEL: "info" # info, debug
       DIUN_PROVIDERS_DOCKER_ENDPOINT: "{{ container_docker_proxy_host }}"
       DIUN_PROVIDERS_DOCKER: "true"
       DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT: "true"
@@ -29,7 +29,7 @@ services:
     volumes:
       - "{{ container_path.diun }}:/data"
 
-    command: serve
+    command: "serve"
 
     depends_on:
       docker-proxy:

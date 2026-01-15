@@ -6,14 +6,14 @@ services:
       traefik.enable: true
       traefik.http.routers.dozzle.rule: Host(`dozzle.{{ container_domain_base }}`)
       traefik.http.services.dozzle.loadbalancer.server.port: "{{ container_webui_port.dozzle }}"
-      traefik.http.routers.dozzle.middlewares: authelia-basic@docker
+      traefik.http.routers.dozzle.middlewares: "authelia-basic@docker"
 
       dev.dozzle.group: "Admin"
 
     environment:
-      DOZZLE_LEVEL: info
+      DOZZLE_LEVEL: "info"
       DOCKER_HOST: "{{ container_docker_proxy_host }}"
-      DOZZLE_HOSTNAME: homeserver
+      DOZZLE_HOSTNAME: "homeserver"
       DOZZLE_ENABLE_ACTIONS: true
       DOZZLE_NO_ANALYTICS: true
       DOZZLE_REMOTE_AGENT: "{{ container_dozzle_remote_agent }}"

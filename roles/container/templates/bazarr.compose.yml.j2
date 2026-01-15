@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.bazarr.rule: Host(`bazarr.{{ container_domain_base }}`)
       traefik.http.services.bazarr.loadbalancer.server.port: "{{ container_webui_port.bazarr }}"
-      traefik.http.routers.bazarr.middlewares: authelia@docker
+      traefik.http.routers.bazarr.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Media"
 

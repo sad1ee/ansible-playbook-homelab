@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.sonarr.rule: Host(`sonarr.{{ container_domain_base }}`)
       traefik.http.services.sonarr.loadbalancer.server.port: "{{ container_webui_port.sonarr }}"
-      traefik.http.routers.sonarr.middlewares: authelia@docker
+      traefik.http.routers.sonarr.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Media"
 

@@ -1,119 +1,119 @@
 ---
 - FirstRow:
-  - Monitor:
-    - Beszel:
-        icon: beszel
-        href: "https://beszel.{{ config_domain_base }}"
-        server: local-docker
-        container: beszel
+    - Monitor:
+        - Beszel:
+            icon: "beszel"
+            href: "https://beszel.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "beszel"
 
-    - Dozzle:
-        icon: dozzle
-        href: "https://dozzle.{{ config_domain_base }}"
-        server: local-docker
-        container: dozzle
+        - Dozzle:
+            icon: "dozzle"
+            href: "https://dozzle.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "dozzle"
 
-    - Pihole:
-        icon: pi-hole-unbound
-        href: "https://pihole.{{ config_domain_base }}"
-        ping: netserver.lan
+        - Pihole:
+            icon: "pi-hole-unbound"
+            href: "https://pihole.{{ config_domain_base }}"
+            ping: "netserver.lan"
 
-    - Traefik:
-        icon: traefik
-        href: "https://traefik.{{ config_domain_base }}"
-        server: local-docker
-        container: traefik
+        - Traefik:
+            icon: "traefik"
+            href: "https://traefik.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "traefik"
 
-  - Admin:
-    - Ntfy:
-        icon: ntfy
-        href: "https://ntfy.{{ config_domain_base }}"
-        server: local-docker
-        container: ntfy
+    - Admin:
+        - Ntfy:
+            icon: "ntfy"
+            href: "https://ntfy.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "ntfy"
 
-    - LLDAP:
-        icon: lldap
-        href: "https://lldap.{{ config_domain_base }}"
-        server: local-docker
-        container: lldap
+        - LLDAP:
+            icon: "lldap"
+            href: "https://lldap.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "lldap"
 
-    - Authelia:
-        icon: authelia
-        href: "https://authelia.{{ config_domain_base }}"
-        server: local-docker
-        container: authelia
+        - Authelia:
+            icon: "authelia"
+            href: "https://authelia.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "authelia"
 
-  - Services:
-    - Paperless:
-        icon: paperless
-        href: "https://paperless.{{ config_domain_base }}"
-        server: local-docker
-        container: paperless
+    - Services:
+        - Paperless:
+            icon: "paperless"
+            href: "https://paperless.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "paperless"
 
-    - Syncthing:
-        icon: syncthing
-        href: "https://syncthing.{{ config_domain_base }}"
-        server: local-docker
-        container: syncthing
+        - Syncthing:
+            icon: "syncthing"
+            href: "https://syncthing.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "syncthing"
 
-  - MediaFrontend:
-    - Jellyfin:
-        icon: jellyfin
-        href: "https://jellyfin.{{ config_domain_base }}"
-        server: local-docker
-        container: jellyfin
+    - MediaFrontend:
+        - Jellyfin:
+            icon: "jellyfin"
+            href: "https://jellyfin.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "jellyfin"
 
-    - Jellyseerr:
-        icon: jellyseerr
-        href: "https://jellyseerr.{{ config_domain_base }}"
-        server: local-docker
-        container: jellyseerr
+        - Jellyseerr:
+            icon: "jellyseerr"
+            href: "https://jellyseerr.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "jellyseerr"
 
-    - CWA:
-        icon: calibre-web
-        href: "https://cwa.{{ config_domain_base }}"
-        server: local-docker
-        container: cwa
+        - CWA:
+            icon: "calibre-web"
+            href: "https://cwa.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "cwa"
 
-    - Shelfmark:
-        icon: calibre-web-automated-book-downloader
-        href: "https://shelfmark.{{ config_domain_base }}"
-        server: local-docker
-        container: shelfmark
+        - Shelfmark:
+            icon: "calibre-web-automated-book-downloader"
+            href: "https://shelfmark.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "shelfmark"
 
-    - Audiobookshelf:
-        icon: audiobookshelf
-        href: "https://audiobookshelf.{{ config_domain_base }}"
-        server: local-docker
-        container: audiobookshelf
+        - Audiobookshelf:
+            icon: "audiobookshelf"
+            href: "https://audiobookshelf.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "audiobookshelf"
 
-  - MediaBackend:
-    - Radarr:
-        icon: radarr
-        href: "https://radarr.{{ config_domain_base }}"
-        server: local-docker
-        container: radarr
+    - MediaBackend:
+        - Radarr:
+            icon: "radarr"
+            href: "https://radarr.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "radarr"
 
-    - Sonarr:
-        icon: sonarr
-        href: "https://sonarr.{{ config_domain_base }}"
-        server: local-docker
-        container: sonarr
+        - Sonarr:
+            icon: "sonarr"
+            href: "https://sonarr.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "sonarr"
 
-    - Prowlarr:
-        icon: prowlarr
-        href: "https://prowlarr.{{ config_domain_base }}"
-        server: local-docker
-        container: prowlarr
+        - Prowlarr:
+            icon: "prowlarr"
+            href: "https://prowlarr.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "prowlarr"
 
-    - Bazarr:
-        icon: bazarr
-        href: "https://bazarr.{{ config_domain_base }}"
-        server: local-docker
-        container: bazarr
+        - Bazarr:
+            icon: "bazarr"
+            href: "https://bazarr.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "bazarr"
 
-    - QBittorrent:
-        icon: qbittorrent
-        href: "https://qbittorrent.{{ config_domain_base }}"
-        server: local-docker
-        container: qbittorrent
+        - QBittorrent:
+            icon: "qbittorrent"
+            href: "https://qbittorrent.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "qbittorrent"

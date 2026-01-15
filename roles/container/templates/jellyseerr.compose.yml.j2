@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.jellyseerr.rule: Host(`jellyseerr.{{ container_domain_base }}`)
       traefik.http.services.jellyseerr.loadbalancer.server.port: "{{ container_webui_port.jellyseerr }}"
-      traefik.http.routers.jellyseerr.middlewares: authelia@docker
+      traefik.http.routers.jellyseerr.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Frontend"
 

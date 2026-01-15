@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.paperless.rule: Host(`paperless.{{ container_domain_base }}`)
       traefik.http.services.paperless.loadbalancer.server.port: "{{ container_webui_port.paperless }}"
-      traefik.http.routers.paperless.middlewares: authelia@docker
+      traefik.http.routers.paperless.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Frontend"
 
@@ -30,8 +30,18 @@ services:
       PAPERLESS_TIKA_ENDPOINT: "http://tika:9998"
       PAPERLESS_CONSUMER_DISABLE: "1"
       PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
-      PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"SCOPE":["openid","profile","email"],"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"authelia","name":"Authelia","client_id":"paperless","secret":"{{ container_authelia_client_secret_paperless_plain }}","settings":{"server_url":"https://authelia.{{ container_domain_base }}","token_auth_method":"client_secret_basic"}}]}}'
       PAPERLESS_DISABLE_REGULAR_LOGIN: true
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS:
+        "{\"openid_connect\":{\
+        \"SCOPE\":[\"openid\",\"profile\",\"email\"],\
+        \"OAUTH_PKCE_ENABLED\":true,\
+        \"APPS\":[{\"provider_id\":\"authelia\",\
+        \"name\":\"Authelia\",\
+        \"client_id\":\"paperless\",\
+        \"secret\":\"{{ container_authelia_client_secret_paperless_plain }}\",\
+        \"settings\":{\
+        \"server_url\":\"https://authelia.{{ container_domain_base }}\",\
+        \"token_auth_method\":\"client_secret_basic\"}}]}}"
 
     volumes:
       - "{{ container_path.paperless.data}}/data:/usr/src/paperless/data"

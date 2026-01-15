@@ -17,7 +17,7 @@ access_control:
     # Bypass only locally (no oidc, just trusted header)
     - domain: "ntfy.{{ config_domain_base }}"
       policy: "bypass"
-      networks: localhost
+      networks: "localhost"
 
     # Bypass for paths for api and mobile access (has oidc)
 
@@ -25,29 +25,29 @@ access_control:
       policy: "bypass"
       resources:
         - "^/api([/?].*)?$"
-      networks: localnet
+      networks: "localnet"
 
     - domain: "paperless.{{ config_domain_base }}"
       policy: "bypass"
       resources:
         - "^/api([/?].*)?$"
         - "^/static/frontend/en-US/manifest.webmanifest$"
-      networks: localnet
+      networks: "localnet"
 
     # Bypass completly for mobile access (has oidc)
     - domain: "audiobookshelf.{{ config_domain_base }}"
       policy: "bypass"
-      networks: localnet
+      networks: "localnet"
 
     - domain: "cwa.{{ config_domain_base }}"
       policy: "bypass"
-      networks: localnet
+      networks: "localnet"
 
     # Bypass completly for mobile and tv access (has lldap)
-  
+
     - domain: "jellyfin.{{ config_domain_base }}"
       policy: "bypass"
-      networks: localnet
+      networks: "localnet"
 
     # RBAC for groups
 
@@ -141,7 +141,7 @@ identity_providers:
         authorization_policy: "allow-admin"
         redirect_uris:
           - "https://beszel.{{ config_domain_base }}/api/oauth2-redirect"
-        pre_configured_consent_duration: 3M
+        pre_configured_consent_duration: "3M"
         require_pkce: true
         pkce_challenge_method: "S256"
 
@@ -151,7 +151,7 @@ identity_providers:
         authorization_policy: "allow-all"
         redirect_uris:
           - "https://paperless.{{ config_domain_base }}/accounts/oidc/authelia/login/callback/"
-        pre_configured_consent_duration: 3M
+        pre_configured_consent_duration: "3M"
         require_pkce: true
         pkce_challenge_method: "S256"
 

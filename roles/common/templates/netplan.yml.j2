@@ -2,13 +2,13 @@ network:
   version: 2
   ethernets:
     {{ common_network_lan.interface }}:
-      dhcp4: no
-      dhcp6: no
+      dhcp4: "no"
+      dhcp6: "no"
       addresses:
         - "{{ common_network_lan.ipv4.addr }}{{ common_network_lan.ipv4.cidr }}"
         - "{{ common_network_lan.ipv6.addr }}{{ common_network_lan.ipv6.cidr }}"
       routes:
-        - to: 0.0.0.0/0
+        - to: "0.0.0.0/0"
           via: "{{ common_network_lan.ipv4.router }}"
       nameservers:
         addresses:

@@ -6,8 +6,9 @@ Paths:
 Settings:
   AUTO_UPDATE: "false"
   UPDATE_BRANCH: "main"
-  THRESHOLD_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.threshold }}
-  TARGET_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.target }}
+  THRESHOLD_PERCENTAGE:
+    { { homeserver_mergerfs_cache_mover.trigger.threshold } }
+  TARGET_PERCENTAGE: { { homeserver_mergerfs_cache_mover.trigger.target } }
   MAX_WORKERS: 8
   MAX_LOG_SIZE_MB: 100
   BACKUP_COUNT: 5
@@ -15,8 +16,9 @@ Settings:
   LOG_LEVEL: "INFO" # INFO, DEBUG
   NOTIFICATIONS_ENABLED: "true"
   NOTIFY_THRESHOLD: "false"
-  NOTIFICATION_URLS:
-    [
-      "ntfys://{{ homeserver_ntfy_cache_mover_token }}@ntfy.{{ homeserver_domain_base }}/cache-mover?tags=floppy_disk&priority=2",
+  NOTIFICATION_URLS: [
+      "ntfys://{{ homeserver_ntfy_cache_mover_token }}\
+      @ntfy.{{ homeserver_domain_base }}/cache-mover?\
+      tags=floppy_disk&priority=2",
     ]
-  EXCLUDED_DIRS: {{ homeserver_mergerfs_cache_mover.excluded }}
+  EXCLUDED_DIRS: { { homeserver_mergerfs_cache_mover.excluded } }

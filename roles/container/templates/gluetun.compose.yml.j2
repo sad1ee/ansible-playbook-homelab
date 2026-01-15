@@ -6,14 +6,14 @@ services:
       traefik.enable: true
 
       traefik.http.routers.shelfmark.rule: Host(`shelfmark.{{ container_domain_base }}`)
-      traefik.http.routers.shelfmark.service: shelfmark
+      traefik.http.routers.shelfmark.service: "shelfmark"
       traefik.http.services.shelfmark.loadbalancer.server.port: "{{ container_webui_port.shelfmark }}"
-      traefik.http.routers.shelfmark.middlewares: authelia@docker
+      traefik.http.routers.shelfmark.middlewares: "authelia@docker"
 
       traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.{{ container_domain_base }}`)
-      traefik.http.routers.qbittorrent.service: qbittorrent
+      traefik.http.routers.qbittorrent.service: "qbittorrent"
       traefik.http.services.qbittorrent.loadbalancer.server.port: "{{ container_webui_port.qbittorrent }}"
-      traefik.http.routers.qbittorrent.middlewares: authelia@docker
+      traefik.http.routers.qbittorrent.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Backend"
 
@@ -21,7 +21,7 @@ services:
       PUID: "{{ container_puid }}"
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      LOGLEVEL: "info" # debug, info, warning, error
+      LOGLEVEL: "debug" # debug, info, warning, error
       VPN_SERVICE_PROVIDER: "protonvpn"
       VPN_TYPE: "openvpn"
       OPENVPN_USER: "{{ container_gluetun_openvpn_user }}+pmp"
@@ -33,8 +33,24 @@ services:
       UPDATER_PERIOD: "24h"
       UPDATER_PROTONVPN_EMAIL: "{{ container_gluetun_protonvpn_email }}"
       UPDATER_PROTONVPN_PASSWORD: "{{ container_gluetun_protonvpn_password }}"
-      VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c 'wget -O- --retry-connrefused --post-data {% raw %} "json={ \"listen_port\":{{PORT}}, \"current_network_interface\":\"{{VPN_INTERFACE}}\", \"random_port\":false, \"upnp\":false }" {% endraw %} http://127.0.0.1:{{ container_webui_port.qbittorrent }} /api/v2/app/setPreferences 2>&1'
-      VPN_PORT_FORWARDING_DOWN_COMMAND: /bin/sh -c 'wget -O- --retry-connrefused --post-data {% raw %} "json={ \"listen_port\":0, \"current_network_interface\":\"lo" }" {% endraw %} http://127.0.0.1:{{ container_webui_port.qbittorrent }} /api/v2/app/setPreferences 2>&1'
+      VPN_PORT_FORWARDING_UP_COMMAND:
+        "/bin/sh -c 'wget -O- --retry-connrefused --post-data \
+        {% raw %}\"json={\
+        \"listen_port\":{{PORT}},\
+        \"current_network_interface\":\"{{VPN_INTERFACE}}\",\
+        \"random_port\":false,\
+        \"upnp\":false }\" \
+        {% endraw %} \
+        http://127.0.0.1:{{ container_webui_port.qbittorrent }}\
+        /api/v2/app/setPreferences 2>&1'"
+      VPN_PORT_FORWARDING_DOWN_COMMAND:
+        "/bin/sh -c 'wget -O- --retry-connrefused --post-data \
+        {% raw %}\"json={\
+        \"listen_port\":0,\
+        \"current_network_interface\":\"lo\" }\"\
+        {% endraw %} \
+        http://127.0.0.1:{{ container_webui_port.qbittorrent }}\
+        /api/v2/app/setPreferences 2>&1'"
 
     devices:
       - "/dev/net/tun:/dev/net/tun"

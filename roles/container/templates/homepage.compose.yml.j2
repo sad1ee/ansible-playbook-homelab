@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.homepage.rule: Host(`homepage.{{ container_domain_base }}`)
       traefik.http.services.homepage.loadbalancer.server.port: "{{ container_webui_port.homepage }}"
-      traefik.http.routers.homepage.middlewares: authelia@docker
+      traefik.http.routers.homepage.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Frontend"
 

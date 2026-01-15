@@ -1,15 +1,15 @@
 services:
   dozzle-agent:
-    image: amir20/dozzle:latest
+    image: "amir20/dozzle:latest"
 
     labels:
       dev.dozzle.group: "Backend"
 
     environment:
-      DOZZLE_LEVEL: info
+      DOZZLE_LEVEL: "info"
       DOZZLE_HOSTNAME: "{{ container_dozzle_hostname }}"
 
-    command: agent
+    command: "agent"
 
     healthcheck:
       test: ["CMD", "/dozzle", "healthcheck"]
@@ -31,7 +31,7 @@ services:
       - "/tmp"
 
     ports:
-      - 7007:7007
+      - "7007:7007"
 
     container_name: "dozzle-agent"
     hostname: "dozzle-agent"

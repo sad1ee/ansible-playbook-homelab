@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.ntfy.rule: Host(`ntfy.{{ container_domain_base }}`)
       traefik.http.services.ntfy.loadbalancer.server.port: "{{ container_webui_port.ntfy }}"
-      traefik.http.routers.ntfy.middlewares: authelia@docker
+      traefik.http.routers.ntfy.middlewares: "authelia@docker"
 
       dev.dozzle.group: "Admin"
 
@@ -38,7 +38,14 @@ services:
     init: true
 
     healthcheck:
-      test: [ "CMD", "wget", "-q", "--tries=1", "--spider", "http://localhost:{{ container_webui_port.ntfy }}/v1/health" ]
+      test: [
+        "CMD",
+        "wget",
+        "-q",
+        "--tries=1",
+        "--spider",
+        "http://localhost:{{ container_webui_port.ntfy }}/v1/health"
+      ]
       interval: "300s"
       timeout: "30s"
       retries: "3"

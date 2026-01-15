@@ -11,10 +11,16 @@ services:
       traefik.enable: true
 
       # Dashboard
-      traefik.http.routers.traefik.rule: Host(`traefik.{{ container_domain_base }}`) && PathPrefix(`/dashboard`) || Host(`traefik.{{ container_domain_base }}`) && PathPrefix(`/api`) || Host(`traefik.{{ container_domain_base }}`) && Path(`/`)
-      traefik.http.routers.traefik.entrypoints: websecure
-      traefik.http.routers.traefik.service: api@internal
-      traefik.http.routers.traefik.middlewares: authelia@docker,traefik-dashboard-redirect
+      traefik.http.routers.traefik.rule: >
+        Host(`traefik.{{ container_domain_base }}`) &&
+        PathPrefix(`/dashboard`) ||
+        Host(`traefik.{{ container_domain_base }}`) &&
+        PathPrefix(`/api`) ||
+        Host(`traefik.{{ container_domain_base }}`) &&
+        Path(`/`)
+      traefik.http.routers.traefik.entrypoints: "websecure"
+      traefik.http.routers.traefik.service: "api@internal"
+      traefik.http.routers.traefik.middlewares: "authelia@docker,traefik-dashboard-redirect"
       traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.regex: "^/$"
       traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.replacement: "/dashboard/"
       traefik.http.middlewares.traefik-dashboard-redirect.redirectregex.permanent: "true"

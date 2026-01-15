@@ -1,5 +1,5 @@
 ---
-- name: pihole | Disable systemd-resolved stub listener and set dns servers
+- name: "pihole | Disable systemd-resolved stub listener and set dns servers"
   ansible.builtin.lineinfile:
     path: "/etc/systemd/resolved.conf"
     regexp: "{{ item.regex }}"
@@ -16,11 +16,11 @@
       line: "FallbackDNS=dns.mullvad.net"
     - regex: "^#?DNSStubListener="
       line: "DNSStubListener=no"
-  notify: Restart systemd-resolved
-  tags: [netserver, pihole]
+  notify: "Restart systemd-resolved"
+  tags: ["netserver", "pihole"]
   when: false # NOTE: Not present on raspbian, handled via netplan
 
-- name: pihole | Set NTP to pihole
+- name: "pihole | Set NTP to pihole"
   ansible.builtin.lineinfile:
     path: "/etc/systemd/timesyncd.conf"
     regexp: "{{ item.regex }}"
@@ -35,5 +35,5 @@
       line: "NTP={{ netserver_network_lan.ipv4.dns }}"
     - regex: "^#?FallbackNTP="
       line: "#FallbackNTP="
-  notify: Restart systemd-timesyncd
-  tags: [netserver, pihole]
+  notify: "Restart systemd-timesyncd"
+  tags: ["netserver", "pihole"]
