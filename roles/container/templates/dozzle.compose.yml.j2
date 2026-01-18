@@ -6,7 +6,7 @@ services:
       traefik.enable: true
       traefik.http.routers.dozzle.rule: Host(`dozzle.{{ container_domain_base }}`)
       traefik.http.services.dozzle.loadbalancer.server.port: "{{ container_webui_port.dozzle }}"
-      traefik.http.routers.dozzle.middlewares: "authelia-basic@docker"
+      traefik.http.routers.dozzle.middlewares: "authelia-legacy@docker"
 
       dev.dozzle.group: "Admin"
 

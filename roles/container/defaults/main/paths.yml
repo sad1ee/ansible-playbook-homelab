@@ -35,6 +35,10 @@ container_path:
 
   lldap: "{{ container_path_data }}/lldap"
 
+  metube: "{{ container_path_data }}/metube"
+
+  navidrome: "{{ container_path_data }}/navidrome"
+
   ntfy: "{{ container_path_data }}/ntfy"
 
   paperless:

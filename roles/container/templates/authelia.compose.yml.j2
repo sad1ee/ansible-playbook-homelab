@@ -11,11 +11,17 @@ services:
         "http://authelia:{{ container_webui_port.authelia }}/api/authz/forward-auth"
       traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
 
-      traefik.http.middlewares.authelia-basic.forwardauth.address:
+      traefik.http.middlewares.authelia-legacy.forwardauth.address:
         "http://authelia:{{ container_webui_port.authelia }}/api/verify\
         ?rd=https://authelia.{{ container_domain_base }}"
-      traefik.http.middlewares.authelia-basic.forwardauth.trustForwardHeader: "true"
-      traefik.http.middlewares.authelia-basic.forwardauth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+      traefik.http.middlewares.authelia-legacy.forwardauth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia-legacy.forwardauth.authResponseHeaders: "Remote-User"
+
+      # traefik.http.middlewares.authelia-basic.forwardauth.address:
+      #   "http://authelia:{{ container_webui_port.authelia }}/api/verify?auth=basic"
+      # traefik.http.middlewares.authelia-basic.forwardauth.trustForwardHeader: "true"
+      # traefik.http.middlewares.authelia-basic.forwardauth.authResponseHeaders: "Remote-User"
+
 
       dev.dozzle.group: "Admin"
 

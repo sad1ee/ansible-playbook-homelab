@@ -50,13 +50,16 @@ homeserver_mergerfs_cache_mover:
     threshold: 80
     target: 40
   excluded:
-    - lost+found
-    - docker
-    - media/torrents/audiobooks
+    - "lost+found"
+    - "docker"
+    - "media/torrents/audiobooks"
+    - "media/library/audiobooks"
+    - "media/downloads/music"
+    - "media/library/music"
 
 homeserver_disabled_services: []
 
-homeserver_fwupd_get_update_time: 05:00
+homeserver_fwupd_get_update_time: "05:00"
 
 homeserver_rsnapshot:
   count:
@@ -64,8 +67,8 @@ homeserver_rsnapshot:
     weekly: 4
     monthly: 3
   paths:
-    - src: /mnt/{{ homeserver_mount_dirs.ssd1 }}/docker/
-      dest: homeserver/
+    - src: "/mnt/{{ homeserver_mount_dirs.ssd1 }}/docker/"
+      dest: "homeserver/"
 
 # *********************************************************************************** #
 # ******************************* Override in secrets ******************************* #

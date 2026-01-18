@@ -85,7 +85,7 @@
 
 - name: configs | Atomically move traefik configs into traefiks dynamic directory
   ansible.builtin.command:
-    "cp /tmp/{{ item.service }}-{{ item.file }} {{ config_path_traefik }}/{{ item.path }}/{{
+    "cp /tmp/{{ item.service }}-{{ item.file }} {{ config_path.traefik }}/{{ item.path }}/{{
     item.file }}"
   when:
     - config_traefik_changed is defined

@@ -1,6 +1,6 @@
 ---
 - FirstRow:
-    - Monitor:
+    - Administration:
         - Beszel:
             icon: "beszel"
             href: "https://beszel.{{ config_domain_base }}"
@@ -24,7 +24,6 @@
             server: "local-docker"
             container: "traefik"
 
-    - Admin:
         - Ntfy:
             icon: "ntfy"
             href: "https://ntfy.{{ config_domain_base }}"
@@ -50,24 +49,24 @@
             server: "local-docker"
             container: "paperless"
 
+        - Immich:
+            icon: "immich"
+            href: "https://immich.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "immich"
+
         - Syncthing:
             icon: "syncthing"
             href: "https://syncthing.{{ config_domain_base }}"
             server: "local-docker"
             container: "syncthing"
 
-    - MediaFrontend:
+    - Media:
         - Jellyfin:
             icon: "jellyfin"
             href: "https://jellyfin.{{ config_domain_base }}"
             server: "local-docker"
             container: "jellyfin"
-
-        - Jellyseerr:
-            icon: "jellyseerr"
-            href: "https://jellyseerr.{{ config_domain_base }}"
-            server: "local-docker"
-            container: "jellyseerr"
 
         - CWA:
             icon: "calibre-web"
@@ -75,19 +74,38 @@
             server: "local-docker"
             container: "cwa"
 
-        - Shelfmark:
-            icon: "calibre-web-automated-book-downloader"
-            href: "https://shelfmark.{{ config_domain_base }}"
-            server: "local-docker"
-            container: "shelfmark"
-
         - Audiobookshelf:
             icon: "audiobookshelf"
             href: "https://audiobookshelf.{{ config_domain_base }}"
             server: "local-docker"
             container: "audiobookshelf"
 
-    - MediaBackend:
+        - Navidrome:
+            icon: "navidrome"
+            href: "https://navidrome.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "navidrome"
+
+    - Acquisition:
+        - Jellyseerr:
+            icon: "jellyseerr"
+            href: "https://jellyseerr.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "jellyseerr"
+
+        - Shelfmark:
+            icon: "calibre-web-automated-book-downloader"
+            href: "https://shelfmark.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "shelfmark"
+
+        - Metube:
+            icon: "metube"
+            href: "https://metube.{{ config_domain_base }}"
+            server: "local-docker"
+            container: "metube"
+
+    - Backend:
         - Radarr:
             icon: "radarr"
             href: "https://radarr.{{ config_domain_base }}"

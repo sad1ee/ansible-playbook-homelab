@@ -48,14 +48,17 @@ container_list:
   - gluetun
   - gotenberg
   - homepage
+  - immich
   - jellyfin
   - jellyseerr
   - lldap
+  - metube
+  - navidrome
   - ntfy
   - paperless
   - postgres
   - prowlarr
-  - pyload
+  # - pyload
   - qbittorrent
   - radarr
   - recyclarr

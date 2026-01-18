@@ -21,7 +21,7 @@ services:
       FTLCONF_dns_domain_name: "lan"
       FTLCONF_dns_rateLimit_count: "1500"
       FTLCONF_dns_rateLimit_interval: "60"
-      FTLCONF_dhcp_active: "true"
+      FTLCONF_dhcp_active: "false"
       FTLCONF_dhcp_start: "{{ container_lan.dhcp_start }}"
       FTLCONF_dhcp_end: "{{ container_lan.dhcp_end }}"
       FTLCONF_dhcp_router: "{{ container_lan.router }}"

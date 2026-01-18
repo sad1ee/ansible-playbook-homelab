@@ -21,4 +21,4 @@ Settings:
       @ntfy.{{ homeserver_domain_base }}/cache-mover?\
       tags=floppy_disk&priority=2",
     ]
-  EXCLUDED_DIRS: { { homeserver_mergerfs_cache_mover.excluded } }
+  EXCLUDED_DIRS: {{ homeserver_mergerfs_cache_mover.excluded }}

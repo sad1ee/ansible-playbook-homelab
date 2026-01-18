@@ -16,7 +16,7 @@ services:
       TOKEN: "{{ container_beszel_token }}"
       DISK_USAGE_CACHE: "24h"
 {% if inventory_hostname == "netserver" %}
-      SKIP_GPU: ture
+      SKIP_GPU: true
 {% endif %}
 
     volumes:
