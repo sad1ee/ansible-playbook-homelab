@@ -1,0 +1,43 @@
+services:
+  backrest:
+    image: "ghcr.io/garethgeorge/backrest:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.backrest.rule: "Host(`backrest.{{ container_domain_base }}`)"
+      traefik.http.services.backrest.loadbalancer.server.port: "9898"
+      traefik.http.routers.backrest.middlewares: "authelia@docker"
+
+      dev.dozzle.group: "Media"
+
+    environment:
+      TZ: "{{ container_tz }}"
+      BACKREST_DATA: "/data"
+      BACKREST_CONFIG: "/config/config.json"
+      XDG_CACHE_HOME: "/cache"
+
+    volumes:
+      - "{{ container_path.backrest }}/data:/data"
+      - "{{ container_path.backrest }}/config:/config"
+      - "{{ container_path.backrest }}/cache:/cache"
+      - "{{ container_path_ssd1 }}:/local-data"
+      - "{{ container_path_hdd_pool }}/backup/backrest:/local-backup"
+
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    container_name: "backrest"
+    hostname: "backrest"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+      - "ntfy"
+
+networks:
+  traefik:
+    external: true
+    name: "traefik"
+  ntfy:
+    external: true
+    name: "ntfy"

@@ -37,6 +37,11 @@ entryPoints:
       tls:
         certResolver: "cloudflare"
     asDefault: true
+    transport:
+      respondingTimeouts:
+        readTimeout: "600s"
+        idleTimeout: "600s"
+        writeTimeout: "600s"
 
 certificatesResolvers:
   cloudflare:

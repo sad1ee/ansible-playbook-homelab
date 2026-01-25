@@ -12,7 +12,13 @@ services:
 
     volumes:
       - "{{ container_path.postgres }}:/var/lib/postgresql"
+      - "/etc/passwd:/etc/passwd:ro"
       - "/etc/localtime:/etc/localtime:ro"
+
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    shm_size: "128mb"
 
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "postgres" ]

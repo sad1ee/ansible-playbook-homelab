@@ -28,25 +28,19 @@ services:
       PAPERLESS_TIKA_ENABLED: "1"
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: "http://gotenberg:3000"
       PAPERLESS_TIKA_ENDPOINT: "http://tika:9998"
-      PAPERLESS_CONSUMER_DISABLE: "1"
+      # PAPERLESS_CONSUMER_DISABLE: "1"
       PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
       PAPERLESS_DISABLE_REGULAR_LOGIN: true
-      PAPERLESS_SOCIALACCOUNT_PROVIDERS:
-        "{\"openid_connect\":{\
-        \"SCOPE\":[\"openid\",\"profile\",\"email\"],\
-        \"OAUTH_PKCE_ENABLED\":true,\
-        \"APPS\":[{\"provider_id\":\"authelia\",\
-        \"name\":\"Authelia\",\
-        \"client_id\":\"paperless\",\
-        \"secret\":\"{{ container_authelia_client_secret_paperless_plain }}\",\
-        \"settings\":{\
-        \"server_url\":\"https://authelia.{{ container_domain_base }}\",\
-        \"token_auth_method\":\"client_secret_basic\"}}]}}"
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"SCOPE":["openid","profile","email"],"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"authelia","name":"Authelia","client_id":"paperless","secret":"{{ container_authelia_client_secret_paperless_plain }}","settings":{"server_url":"https://authelia.{{ container_domain_base }}","token_auth_method":"client_secret_basic"}}]}}'
+      PAPERLESS_MEDIA_ROOT: "/usr/src/paperless/media"
+      PAPERLESS_EMPTY_TRASH_DIR: "/usr/src/paperless/media/trash"
 
     volumes:
-      - "{{ container_path.paperless.data}}/data:/usr/src/paperless/data"
-      - "{{ container_path.paperless.data}}/media:/usr/src/paperless/media"
-      - "{{ container_path.paperless.export}}:/usr/src/paperless/export"
+      - "{{ container_path.paperless.data }}/data:/usr/src/paperless/data"
+      - "{{ container_path.paperless.media }}/media:/usr/src/paperless/media"
+      - "{{ container_path.paperless.trash }}/media:/usr/src/paperless/media/trash"
+      - "{{ container_path.paperless.consume }}:/usr/src/paperless/consume"
+      - "{{ container_path.paperless.export }}:/usr/src/paperless/export"
 
     depends_on:
       postgres:

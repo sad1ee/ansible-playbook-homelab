@@ -40,7 +40,7 @@ container_beszel_agent_image: "henrygd/beszel-agent:latest"
 container_dozzle_hostname: netserver
 
 container_path_compose: "/opt/docker/compose"
-container_path_data: "/opt/docker/docker"
+container_path_docker: "/opt/docker/docker"
 
 container_list:
   - pihole

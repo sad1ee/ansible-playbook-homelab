@@ -54,7 +54,6 @@ homeserver_mergerfs_cache_mover:
     - "docker"
     - "media/torrents/audiobooks"
     - "media/library/audiobooks"
-    - "media/downloads/music"
     - "media/library/music"
 
 homeserver_disabled_services: []

@@ -37,10 +37,12 @@ container_dozzle_remote_agent: "netserver.lan:7007"
 container_list:
   - audiobookshelf
   - authelia
+  - backrest
   - bazarr
   - beszel-agent
   - beszel
   - cwa
+  # - databasus
   - diun
   - docker-proxy
   - dozzle

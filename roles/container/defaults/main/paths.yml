@@ -1,78 +1,93 @@
 ---
+container_path_ssd1: "/mnt/ssd1"
+container_path_hdd_pool: "/mnt/hdd-pool"
+
 container_path_compose: "/opt/docker/compose"
 container_path_tmp: "/opt/docker/tmp"
-container_path_data: "/mnt/ssd1/docker"
+container_path_docker: "/mnt/ssd1/docker"
 
 container_path:
   media: "/mnt/storage/media"
 
   audiobookshelf:
-    config: "{{ container_path_data }}/audiobookshelf/config"
-    metadata: "{{ container_path_data }}/audiobookshelf/metadata"
+    config: "{{ container_path_docker }}/audiobookshelf/config"
+    metadata: "{{ container_path_docker }}/audiobookshelf/metadata"
 
-  authelia: "{{ container_path_data }}/authelia"
+  authelia: "{{ container_path_docker }}/authelia"
 
-  bazarr: "{{ container_path_data }}/bazarr"
+  backrest: "{{ container_path_docker }}/backrest"
+
+  bazarr: "{{ container_path_docker }}/bazarr"
 
   beszel:
-    data: "{{ container_path_data }}/beszel/data"
-    agent: "{{ container_path_data }}/beszel/agent"
+    data: "{{ container_path_docker }}/beszel/data"
+    agent: "{{ container_path_docker }}/beszel/agent"
 
   calibre:
-    config: "{{ container_path_data }}/cwa/config"
-    ingest: "{{ container_path_data }}/cwa/ingest"
-    library: "{{ container_path_data }}/cwa/library"
+    config: "{{ container_path_docker }}/cwa"
+    ingest: "{{ container_path_tmp }}/cwa-ingest"
+    library: "{{ container_path_ssd1 }}/data/calibre-library"
 
-  diun: "{{ container_path_data }}/diun"
+  databasus: "{{ container_path_docker }}/databasus"
 
-  dozzle: "{{ container_path_data }}/dozzle"
+  diun: "{{ container_path_docker }}/diun"
 
-  homepage: "{{ container_path_data }}/homepage"
+  dozzle: "{{ container_path_docker }}/dozzle"
 
-  jellyfin: "{{ container_path_data }}/jellyfin"
+  homepage: "{{ container_path_docker }}/homepage"
 
-  jellyseerr: "{{ container_path_data }}/jellyseerr"
+  immich:
+    ml: "{{ container_path_docker }}/immich/ml"
+    db: "{{ container_path_docker }}/immich/db"
+    data: "{{ container_path_ssd1 }}/data/immich-data"
 
-  lldap: "{{ container_path_data }}/lldap"
+  jellyfin: "{{ container_path_docker }}/jellyfin"
 
-  metube: "{{ container_path_data }}/metube"
+  jellyseerr: "{{ container_path_docker }}/jellyseerr"
 
-  navidrome: "{{ container_path_data }}/navidrome"
+  lldap: "{{ container_path_docker }}/lldap"
 
-  ntfy: "{{ container_path_data }}/ntfy"
+  metube: "{{ container_path_ssd1 }}/media/downloads"
+
+  navidrome: "{{ container_path_docker }}/navidrome"
+
+  ntfy: "{{ container_path_docker }}/ntfy"
 
   paperless:
-    data: "{{ container_path_data }}/paperless/data"
-    export: "{{ container_path_data }}/paperless/export"
+    data: "{{ container_path_docker }}/paperless"
+    media: "{{ container_path_ssd1 }}/data/paperless-data"
+    trash: "{{ container_path_ssd1 }}/data/paperless-data/trash"
+    consume: "{{ container_path_tmp }}/paperless-consume"
+    export: "{{ container_path_tmp }}/paperless-export"
 
   pihole:
-    pihole: "{{ container_path_data }}/pihole/pihole"
-    dnsmasq: "{{ container_path_data }}/pihole/dnsmasq"
+    pihole: "{{ container_path_docker }}/pihole/pihole"
+    dnsmasq: "{{ container_path_docker }}/pihole/dnsmasq"
 
-  postgres: "{{ container_path_data }}/postgres/data"
+  postgres: "{{ container_path_docker }}/postgres/data"
 
-  prowlarr: "{{ container_path_data }}/prowlarr"
+  prowlarr: "{{ container_path_docker }}/prowlarr"
 
   pyload:
-    config: "{{ container_path_data }}/pyload/config"
-    downloads: "{{ container_path_data }}/pyload/downloads"
+    config: "{{ container_path_docker }}/pyload/config"
+    downloads: "{{ container_path_docker }}/pyload/downloads"
 
-  qbittorrent: "{{ container_path_data }}/qbittorrent"
+  qbittorrent: "{{ container_path_docker }}/qbittorrent"
 
-  radarr: "{{ container_path_data }}/radarr"
+  radarr: "{{ container_path_docker }}/radarr"
 
-  recyclarr: "{{ container_path_data }}/recyclarr"
+  recyclarr: "{{ container_path_docker }}/recyclarr"
 
-  redis: "{{ container_path_data }}/redis"
+  redis: "{{ container_path_docker }}/redis"
 
   samba: "/mnt/storage"
 
-  shelfmark: "{{ container_path_data }}/shelfmark"
+  shelfmark: "{{ container_path_docker }}/shelfmark"
 
-  sonarr: "{{ container_path_data }}/sonarr"
+  sonarr: "{{ container_path_docker }}/sonarr"
 
   syncthing:
-    config: "{{ container_path_data }}/syncthing/config"
-    data: "{{ container_path_data }}/syncthing/data"
+    config: "{{ container_path_docker }}/syncthing"
+    data: "{{ container_path_ssd1 }}/data/syncthing-data"
 
-  traefik: "{{ container_path_data }}/traefik"
+  traefik: "{{ container_path_docker }}/traefik"

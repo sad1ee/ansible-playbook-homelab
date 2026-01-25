@@ -17,6 +17,9 @@ services:
       start_period: "60s"
       start_interval: "5s"
 
+    security_opt: [ "no-new-privileges:true" ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
     container_name: "redis"
     hostname: "redis"
     restart: "unless-stopped"

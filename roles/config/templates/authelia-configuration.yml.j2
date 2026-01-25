@@ -47,6 +47,10 @@ access_control:
       policy: "bypass"
       networks: "localnet"
 
+    - domain: "immich.{{ config_domain_base }}"
+      policy: "bypass"
+      networks: "localnet"
+
     # Bypass completly for mobile and tv access (has lldap)
 
     - domain: "jellyfin.{{ config_domain_base }}"
@@ -181,3 +185,16 @@ identity_providers:
         pre_configured_consent_duration: "3M"
         require_pkce: true
         pkce_challenge_method: "S256"
+
+      - client_id: "immich"
+        client_name: "Immich"
+        client_secret: "{{ config_authelia_client_secret_immich }}"
+        authorization_policy: "allow-all"
+        redirect_uris:
+          - "https://immich.{{ config_domain_base }}/auth/login"
+          - "https://immich.{{ config_domain_base }}/user-settings"
+          - "app.immich:///oauth-callback"
+        pre_configured_consent_duration: "3M"
+        require_pkce: false
+        pkce_challenge_method: ""
+        token_endpoint_auth_method: "client_secret_post"
