@@ -27,7 +27,8 @@ services:
       # ND_CACHEFOLDER: "/cache"
 
     volumes:
-      - "{{ container_path.navidrome }}:/data"
+      - "{{ container_path.navidrome.data }}:/data"
+      - "{{ container_path.navidrome.cache }}:/data/cache"
       - "{{ container_path.media }}/library/music:/music:ro"
       - "/etc/localtime:/etc/localtime:ro"
 

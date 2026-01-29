@@ -1,6 +1,7 @@
 services:
   jellyfin:
     image: "lscr.io/linuxserver/jellyfin:latest"
+    # image: "jellyfin/jellyfin:latest"
 
     labels:
       traefik.enable: true
@@ -17,7 +18,10 @@ services:
       DOCKER_MODS: "linuxserver/mods:jellyfin-opencl-intel"
 
     volumes:
-      - "{{ container_path.jellyfin }}:/config"
+      - "{{ container_path.jellyfin.config }}:/config"
+      - "{{ container_path.jellyfin.cache }}:/config/cache"
+      - "{{ container_path.jellyfin.dot_cache }}:/config/.cache"
+      - "{{ container_path.jellyfin.transcodes }}:/config/data/transcodes"
       - "{{ container_path.media }}/library:/media/library"
 
     devices:

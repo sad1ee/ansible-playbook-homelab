@@ -16,7 +16,8 @@ services:
       TZ: "{{ container_tz }}"
 
     volumes:
-      - "{{ container_path.sonarr }}:/config"
+      - "{{ container_path.sonarr.config }}:/config"
+      - "{{ container_path.sonarr.cache }}:/config/MediaCover"
       - "{{ container_path.media }}:/media"
 
     container_name: "sonarr"

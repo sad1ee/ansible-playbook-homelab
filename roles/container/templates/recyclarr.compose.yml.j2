@@ -9,9 +9,10 @@ services:
       TZ: "{{ container_tz }}"
 
     volumes:
-      - "{{ container_path.recyclarr }}:/config"
+      - "{{ container_path.recyclarr.config }}:/config"
+      - "{{ container_path.recyclarr.cache }}:/config/cache"
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: ["no-new-privileges:true"]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     container_name: "recyclarr"

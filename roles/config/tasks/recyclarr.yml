@@ -50,7 +50,7 @@
   ansible.builtin.copy:
     src: "{{ container_path_tmp }}/{{ item }}"
     remote_src: true
-    dest: "{{ config_path.recyclarr }}/includes/{{ item }}"
+    dest: "{{ config_path.recyclarr.config }}/includes/{{ item }}"
     mode: "0640"
     owner: "{{ config_user }}"
     group: "{{ config_user }}"

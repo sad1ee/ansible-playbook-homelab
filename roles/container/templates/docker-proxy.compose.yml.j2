@@ -47,14 +47,7 @@ services:
       - "127.0.0.1:2375:2375"
 
     healthcheck:
-      test: [
-        "CMD",
-        "wget",
-        "--no-verbose",
-        "--tries=1",
-        "--spider",
-        "http://localhost:2375/_ping"
-      ]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:2375/_ping"]
       interval: "300s"
       timeout: "30s"
       retries: "3"

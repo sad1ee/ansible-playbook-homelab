@@ -12,7 +12,7 @@ rules:
 
   quoted-strings:
     quote-type: "any"
-    required: true
+    # required: only-when-needed
 
   braces:
     max-spaces-inside: 1

@@ -8,12 +8,18 @@
     group: "{{ config_user }}"
   when: item.service in config_list
   loop:
+    - service: authelia
+      file: configuration.yml
+    - service: diun
+      file: external.yml
     - service: homepage
       file: docker.yaml
     - service: homepage
       file: services.yaml
     - service: homepage
       file: settings.yaml
+    - service: podsync
+      file: config.toml
     - service: recyclarr
       file: recyclarr.yml
     - service: recyclarr
@@ -24,55 +30,64 @@
       file: traefik.yml
     - service: traefik
       file: dynamic.yml
-    - service: authelia
-      file: configuration.yml
-    - service: diun
-      file: external.yml
   delegate_to: localhost
   tags: [config, configs]
 
 - name: configs | Copy locally rendered compose templates to remote
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
-    dest: "{{ config_path[item.service] }}/{{ item.path }}"
+    dest: "{{ item.config_path_key }}/{{ item.path }}"
     mode: "0640"
     owner: "{{ config_user }}"
     group: "{{ config_user }}"
   when: item.service in config_list
   loop:
-    - service: homepage
-      file: docker.yaml
-      path: docker.yaml
-    - service: homepage
-      file: services.yaml
-      path: services.yaml
-    - service: homepage
-      file: settings.yaml
-      path: settings.yaml
-    - service: recyclarr
-      file: recyclarr.yml
-      path: recyclarr.yml
-    - service: recyclarr
-      file: radarr-quality-profile-uhd-bluray-web-german.yml
-      path: includes/radarr-quality-profile-uhd-bluray-web-german.yml
-    - service: recyclarr
-      file: sonarr-v4-quality-profile-uhd-bluray-web-german.yml
-      path: includes/sonarr-v4-quality-profile-uhd-bluray-web-german.yml
-    - service: traefik
-      file: traefik.yml
-      path: traefik.yml
     - service: authelia
+      config_path_key: "{{ config_path.authelia }}"
       file: configuration.yml
       path: configuration.yml
     - service: diun
+      config_path_key: "{{ config_path.diun }}"
       file: external.yml
       path: external.yml
+    - service: homepage
+      config_path_key: "{{ config_path.homepage }}"
+      file: docker.yaml
+      path: docker.yaml
+    - service: homepage
+      config_path_key: "{{ config_path.homepage }}"
+      file: services.yaml
+      path: services.yaml
+    - service: homepage
+      config_path_key: "{{ config_path.homepage }}"
+      file: settings.yaml
+      path: settings.yaml
+    - service: podsync
+      config_path_key: "{{ config_path.podsync.config }}"
+      file: config.toml
+      path: config.toml
+    - service: recyclarr
+      config_path_key: "{{ config_path.recyclarr.config }}"
+      file: recyclarr.yml
+      path: recyclarr.yml
+    - service: recyclarr
+      config_path_key: "{{ config_path.recyclarr.config }}"
+      file: radarr-quality-profile-uhd-bluray-web-german.yml
+      path: includes/radarr-quality-profile-uhd-bluray-web-german.yml
+    - service: recyclarr
+      config_path_key: "{{ config_path.recyclarr.config }}"
+      file: sonarr-v4-quality-profile-uhd-bluray-web-german.yml
+      path: includes/sonarr-v4-quality-profile-uhd-bluray-web-german.yml
+    - service: traefik
+      config_path_key: "{{ config_path.traefik.config }}"
+      file: traefik.yml
+      path: traefik.yml
   tags: [config, configs]
 
 - name: configs | Copy locally rendered traefik templates to remote
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
-    dest: "/tmp/{{ item.service }}-{{ item.file }}"
+    dest: /tmp/{{ item.service }}-{{ item.file }}
     mode: "0644"
     owner: "{{ config_user }}"
     group: "{{ config_user }}"
@@ -84,9 +99,9 @@
   tags: [config, configs]
 
 - name: configs | Atomically move traefik configs into traefiks dynamic directory
-  ansible.builtin.command:
-    "cp /tmp/{{ item.service }}-{{ item.file }} {{ config_path.traefik }}/{{ item.path }}/{{
-    item.file }}"
+  ansible.builtin.command: >
+    cp /tmp/{{ item.service }}-{{ item.file }} \
+    {{ config_path.traefik.config }}/{{ item.path }}/{{ item.file }}
   when:
     - config_traefik_changed is defined
     - config_traefik_changed.changed

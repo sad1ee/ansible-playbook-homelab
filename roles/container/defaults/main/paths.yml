@@ -1,32 +1,42 @@
 ---
-container_path_ssd1: "/mnt/ssd1"
-container_path_hdd_pool: "/mnt/hdd-pool"
+container_path_ssd1: /mnt/ssd1
+container_path_hdd_pool: /mnt/hdd-pool
 
-container_path_compose: "/opt/docker/compose"
-container_path_tmp: "/opt/docker/tmp"
-container_path_docker: "/mnt/ssd1/docker"
+container_path_compose: /opt/docker/compose
+container_path_tmp: /opt/docker/tmp
+container_path_docker: /mnt/ssd1/docker/config
+container_path_docker_cache: /mnt/ssd1/docker/cache
+container_path_docker_data: /mnt/ssd1/docker/data
 
 container_path:
-  media: "/mnt/storage/media"
+  media: /mnt/storage/media
 
   audiobookshelf:
     config: "{{ container_path_docker }}/audiobookshelf/config"
     metadata: "{{ container_path_docker }}/audiobookshelf/metadata"
+    cache: "{{ container_path_docker_cache }}/audiobookshelf/cache"
+    streams: "{{ container_path_docker_cache }}/audiobookshelf/streams"
 
   authelia: "{{ container_path_docker }}/authelia"
 
-  backrest: "{{ container_path_docker }}/backrest"
+  backrest:
+    data: "{{ container_path_docker }}/backrest/data"
+    config: "{{ container_path_docker }}/backrest/config"
+    cache: "{{ container_path_docker_cache }}/backrest"
 
-  bazarr: "{{ container_path_docker }}/bazarr"
+  bazarr:
+    config: "{{ container_path_docker }}/bazarr"
+    cache: "{{ container_path_docker_cache }}/bazarr"
 
-  beszel:
-    data: "{{ container_path_docker }}/beszel/data"
-    agent: "{{ container_path_docker }}/beszel/agent"
+  beszel: "{{ container_path_docker }}/beszel"
+
+  beszel_agent: "{{ container_path_docker }}/beszel-agent"
 
   calibre:
     config: "{{ container_path_docker }}/cwa"
+    thumbnails: "{{ container_path_docker_cache }}/cwa/thumbnails"
     ingest: "{{ container_path_tmp }}/cwa-ingest"
-    library: "{{ container_path_ssd1 }}/data/calibre-library"
+    library: "{{ container_path_docker_data }}/calibre-library"
 
   databasus: "{{ container_path_docker }}/databasus"
 
@@ -37,26 +47,39 @@ container_path:
   homepage: "{{ container_path_docker }}/homepage"
 
   immich:
-    ml: "{{ container_path_docker }}/immich/ml"
-    db: "{{ container_path_docker }}/immich/db"
-    data: "{{ container_path_ssd1 }}/data/immich-data"
+    ml: "{{ container_path_docker_cache }}/immich-ml"
+    db: "{{ container_path_docker }}/immich-db"
+    data: "{{ container_path_docker_data }}/immich-data"
 
-  jellyfin: "{{ container_path_docker }}/jellyfin"
+  jellyfin:
+    config: "{{ container_path_docker }}/jellyfin"
+    cache: "{{ container_path_docker_cache }}/jellyfin/cache"
+    dot_cache: "{{ container_path_docker_cache }}/jellyfin/.cache"
+    transcodes: "{{ container_path_docker_cache }}/jellyfin/transcodes"
 
-  jellyseerr: "{{ container_path_docker }}/jellyseerr"
+  jellyseerr:
+    config: "{{ container_path_docker }}/jellyseerr"
+    cache: "{{ container_path_docker_cache }}/jellyseerr"
 
   lldap: "{{ container_path_docker }}/lldap"
 
-  metube: "{{ container_path_ssd1 }}/media/downloads"
+  metube:
+    video: "{{ container_path.media }}/downloads/video"
+    audio: "{{ container_path.media }}/downloads/audio"
+    cache: "{{ container_path_docker_cache }}/metube"
 
-  navidrome: "{{ container_path_docker }}/navidrome"
+  navidrome:
+    data: "{{ container_path_docker }}/navidrome"
+    cache: "{{ container_path_docker_cache }}/navidrome"
 
-  ntfy: "{{ container_path_docker }}/ntfy"
+  ntfy:
+    config: "{{ container_path_docker }}/ntfy"
+    cache: "{{ container_path_docker_cache }}/ntfy"
 
   paperless:
     data: "{{ container_path_docker }}/paperless"
-    media: "{{ container_path_ssd1 }}/data/paperless-data"
-    trash: "{{ container_path_ssd1 }}/data/paperless-data/trash"
+    media: "{{ container_path_docker_data }}/paperless-data"
+    trash: "{{ container_path_docker_data }}/paperless-data/trash"
     consume: "{{ container_path_tmp }}/paperless-consume"
     export: "{{ container_path_tmp }}/paperless-export"
 
@@ -64,7 +87,14 @@ container_path:
     pihole: "{{ container_path_docker }}/pihole/pihole"
     dnsmasq: "{{ container_path_docker }}/pihole/dnsmasq"
 
-  postgres: "{{ container_path_docker }}/postgres/data"
+  podsync:
+    data: "{{ container_path_docker }}/podsync/data"
+    db: "{{ container_path_docker }}/podsync/db"
+    config: "{{ container_path_docker }}/podsync"
+
+  tubefeed: "{{ container_path_docker_cache }}/tubefeed"
+
+  postgres: "{{ container_path_docker }}/postgres"
 
   prowlarr: "{{ container_path_docker }}/prowlarr"
 
@@ -74,20 +104,32 @@ container_path:
 
   qbittorrent: "{{ container_path_docker }}/qbittorrent"
 
-  radarr: "{{ container_path_docker }}/radarr"
+  radarr:
+    config: "{{ container_path_docker }}/radarr"
+    cache: "{{ container_path_docker_cache }}/radarr/MediaCover"
 
-  recyclarr: "{{ container_path_docker }}/recyclarr"
+  recyclarr:
+    config: "{{ container_path_docker }}/recyclarr"
+    cache: "{{ container_path_docker_cache }}/recyclarr"
 
   redis: "{{ container_path_docker }}/redis"
 
-  samba: "/mnt/storage"
+  samba: /mnt/storage
 
-  shelfmark: "{{ container_path_docker }}/shelfmark"
+  shelfmark:
+    config: "{{ container_path_docker }}/shelfmark"
+    covers: "{{ container_path_docker_cache }}/shelfmark/covers"
 
-  sonarr: "{{ container_path_docker }}/sonarr"
+  sonarr:
+    config: "{{ container_path_docker }}/sonarr"
+    cache: "{{ container_path_docker_cache }}/sonarr/MediaCover"
+
+  stirlingpdf: "{{ container_path_docker }}/stirlingpdf"
 
   syncthing:
     config: "{{ container_path_docker }}/syncthing"
-    data: "{{ container_path_ssd1 }}/data/syncthing-data"
+    data: "{{ container_path_docker_data }}/syncthing-data"
 
-  traefik: "{{ container_path_docker }}/traefik"
+  traefik:
+    config: "{{ container_path_docker }}/traefik"
+    plugins: "{{ container_path_docker_cache }}/traefik/plugins"

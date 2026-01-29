@@ -16,7 +16,7 @@ services:
       USER_CREATION: true
 
     volumes:
-      - "{{ container_path.beszel.data }}:/beszel_data"
+      - "{{ container_path.beszel }}:/beszel_data"
       - "/etc/localtime:/etc/localtime:ro"
 
     healthcheck:

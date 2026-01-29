@@ -34,6 +34,8 @@ container_beszel_agent_image: "henrygd/beszel-agent-intel:latest"
 container_dozzle_hostname: homeserver
 container_dozzle_remote_agent: "netserver.lan:7007"
 
+container_path_compose: "/opt/docker/compose"
+
 container_list:
   - audiobookshelf
   - authelia
@@ -42,7 +44,7 @@ container_list:
   - beszel-agent
   - beszel
   - cwa
-  # - databasus
+  - databasus
   - diun
   - docker-proxy
   - dozzle
@@ -58,6 +60,8 @@ container_list:
   - navidrome
   - ntfy
   - paperless
+  # - podsync
+  - tubefeed
   - postgres
   - prowlarr
   # - pyload
@@ -69,6 +73,7 @@ container_list:
   - samba
   - shelfmark
   - sonarr
+  - stirlingpdf
   - syncthing
   - tika
   - traefik

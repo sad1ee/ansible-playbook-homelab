@@ -1,0 +1,40 @@
+services:
+  stirlingpdf:
+    image: "stirlingtools/stirling-pdf:latest"
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.stirlingpdf.rule: "Host(`stirlingpdf.{{ container_domain_base }}`)"
+      traefik.http.services.stirlingpdf.loadbalancer.server.port: "8080"
+      traefik.http.routers.stirlingpdf.middlewares: "authelia@docker, sablier@file"
+
+      sablier.enable: true
+      sablier.group: "default"
+      traefik.docker.allownonrunning: true
+
+      dev.dozzle.group: "Media"
+
+    environment:
+      PUID: "{{ container_puid }}"
+      PGID: "{{ container_pgid }}"
+      TZ: "{{ container_tz }}"
+      SECURITY_ENABLELOGIN: false
+      LANGS: "de_DE"
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - "{{ container_path.stirlingpdf }}:/configs"
+
+    container_name: "stirlingpdf"
+    hostname: "stirlingpdf"
+    restart: "unless-stopped"
+
+    networks:
+      - "traefik"
+
+networks:
+  traefik:
+    external: true
+    name: "traefik"

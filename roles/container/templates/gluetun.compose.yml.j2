@@ -5,6 +5,11 @@ services:
     labels:
       traefik.enable: true
 
+      traefik.http.routers.metube.rule: Host(`metube.{{ container_domain_base }}`)
+      traefik.http.routers.metube.service: "metube"
+      traefik.http.services.metube.loadbalancer.server.port: "8081"
+      # traefik.http.routers.metube.middlewares: "authelia@docker, sablier@file"
+
       traefik.http.routers.shelfmark.rule: Host(`shelfmark.{{ container_domain_base }}`)
       traefik.http.routers.shelfmark.service: "shelfmark"
       traefik.http.services.shelfmark.loadbalancer.server.port: "{{ container_webui_port.shelfmark }}"

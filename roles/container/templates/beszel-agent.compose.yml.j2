@@ -14,13 +14,13 @@ services:
       HUB_URL: "https://beszel.{{ container_domain_base }}"
       KEY: "{{ container_beszel_key }}"
       TOKEN: "{{ container_beszel_token }}"
-      DISK_USAGE_CACHE: "24h"
+      DISK_USAGE_CACHE: "1h"
 {% if inventory_hostname == "netserver" %}
       SKIP_GPU: true
 {% endif %}
 
     volumes:
-      - "{{ container_path.beszel.agent }}:/var/lib/beszel-agent"
+      - "{{ container_path.beszel_agent }}:/var/lib/beszel-agent"
       - "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro"
       - "/etc/localtime:/etc/localtime:ro"
 {% if inventory_hostname == "netserver" %}

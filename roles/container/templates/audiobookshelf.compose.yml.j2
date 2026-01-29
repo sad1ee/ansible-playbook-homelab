@@ -12,11 +12,16 @@ services:
 
     environment:
       TZ: "{{ container_tz }}"
+      SSRF_REQUEST_FILTER_WHITELIST: "tubefeed" # derived from the container name
+      PODCAST_DOWNLOAD_TIMEOUT: 1800000 # equals 30 minutes in ms
 
     volumes:
       - "{{ container_path.audiobookshelf.config }}:/config"
       - "{{ container_path.audiobookshelf.metadata }}:/metadata"
+      - "{{ container_path.audiobookshelf.cache }}:/metadata/cache"
+      - "{{ container_path.audiobookshelf.streams }}:/metadata/streams"
       - "{{ container_path.media }}/library/audiobooks:/audiobooks:ro"
+      - "{{ container_path.media }}/library/podcasts:/podcasts"
 
     security_opt: [ "no-new-privileges:true" ]
     user: "{{ container_puid }}:{{ container_pgid }}"
@@ -27,8 +32,12 @@ services:
 
     networks:
       - "traefik"
+      - "podsync"
 
 networks:
   traefik:
     external: true
     name: "traefik"
+  podsync:
+    external: true
+    name: "podsync"

@@ -1,5 +1,5 @@
 ---
-user: "user"
+user: user
 
 # Common defaults override
 common_user: "{{ user }}"
@@ -21,7 +21,7 @@ container_domain_base: "{{ domain_base }}"
 container_user: "{{ user }}"
 container_puid: 1000
 container_pgid: 1000
-container_tz: "Europe/Berlin"
+container_tz: Europe/Berlin
 
 # Container defaults override
 homeserver_domain_base: "{{ domain_base }}"

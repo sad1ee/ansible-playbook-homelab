@@ -16,7 +16,8 @@ services:
       TZ: "{{ container_tz }}"
 
     volumes:
-      - "{{ container_path.bazarr }}:/config"
+      - "{{ container_path.bazarr.config }}:/config"
+      - "{{ container_path.bazarr.cache }}:/config/cache"
       - "{{ container_path.media }}/library:/media/library"
 
     container_name: "bazarr"

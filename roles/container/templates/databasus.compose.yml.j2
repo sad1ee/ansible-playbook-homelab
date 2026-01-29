@@ -17,7 +17,7 @@ services:
 
     volumes:
       - "{{ container_path.databasus }}:/databasus-data"
-      - "{{ container_path_hdd_pool }}/backup/databasus:/local-backup"
+      - "{{ container_path_hdd_pool }}/backup/databasus:/databasus-data/backups"
 
     container_name: "databasus"
     hostname: "databasus"
@@ -27,6 +27,7 @@ services:
       - "traefik"
       - "postgres"
       - "immich"
+      - "ntfy"
 
 networks:
   traefik:
@@ -38,3 +39,6 @@ networks:
   immich:
     external: true
     name: "immich"
+  ntfy:
+    external: true
+    name: "ntfy"

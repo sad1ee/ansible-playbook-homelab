@@ -14,13 +14,14 @@ container_bridge_networks:
   - "diun"
   - "docker-proxy"
   - "flaresolverr"
+  - "immich"
+  - "podsync"
   - "recyclarr"
   - "samba"
   - "traefik"
 
 container_internal_networks:
   - "gotenberg"
-  - "immich"
   - "lldap"
   - "ntfy"
   - "postgres"

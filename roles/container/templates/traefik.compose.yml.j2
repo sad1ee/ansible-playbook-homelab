@@ -12,12 +12,7 @@ services:
 
       # Dashboard
       traefik.http.routers.traefik.rule: >
-        Host(`traefik.{{ container_domain_base }}`) &&
-        PathPrefix(`/dashboard`) ||
-        Host(`traefik.{{ container_domain_base }}`) &&
-        PathPrefix(`/api`) ||
-        Host(`traefik.{{ container_domain_base }}`) &&
-        Path(`/`)
+        Host(`traefik.{{ container_domain_base }}`) && PathPrefix(`/dashboard`) || Host(`traefik.{{ container_domain_base }}`) && PathPrefix(`/api`) || Host(`traefik.{{ container_domain_base }}`) && Path(`/`)
       traefik.http.routers.traefik.entrypoints: "websecure"
       traefik.http.routers.traefik.service: "api@internal"
       traefik.http.routers.traefik.middlewares: "authelia@docker,traefik-dashboard-redirect"
@@ -35,16 +30,16 @@ services:
       dev.dozzle.group: "Admin"
 
     volumes:
-      - "{{ container_path.traefik }}/acme.json:/certs/acme.json:rw"
-      - "{{ container_path.traefik }}/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "{{ container_path.traefik }}/dynamic:/etc/traefik/dynamic:rw"
-      - "{{ container_path.traefik }}/plugins:/plugins-storage"
+      - "{{ container_path.traefik.config }}/acme.json:/certs/acme.json:rw"
+      - "{{ container_path.traefik.config }}/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ container_path.traefik.config }}/dynamic:/etc/traefik/dynamic:rw"
+      - "{{ container_path.traefik.plugins }}:/plugins-storage:rw"
 
     ports:
       - "80:80"
       - "443:443"
 
-    security_opt: ["no-new-privileges:true"]
+    security_opt: [ "no-new-privileges:true" ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     depends_on:
@@ -57,7 +52,7 @@ services:
         condition: "service_started"
 
     healthcheck:
-      test: ["CMD", "traefik", "healthcheck"]
+      test: [ "CMD", "traefik", "healthcheck" ]
       interval: "60s"
       timeout: "30s"
       retries: "3"

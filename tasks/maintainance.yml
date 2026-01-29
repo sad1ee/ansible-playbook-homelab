@@ -27,3 +27,17 @@
     volumes: true
     builder_cache: true
   tags: [never, maintainance]
+
+- name: maintainance | Select compose files
+  ansible.builtin.set_fact:
+    container_list_compose_files:
+      "{{ container_list_compose_files | default([]) + [item | string + '.compose.yml'] }}"
+  loop: "{{ container_list }}"
+  tags: [never, maintainance, compose_maintain]
+
+- name: maintainance | Run docker compose pull with all found compose files
+  community.docker.docker_compose_v2_pull:
+    project_src: "{{ container_path_compose }}"
+    files: "{{ container_list_compose_files }}"
+    project_name: services
+  tags: [never, maintainance, compose_maintain]

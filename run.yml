@@ -18,6 +18,11 @@
         var: ansible_facts
       tags: [never, debug]
 
+  tasks:
+    - name: Run maintainance
+      ansible.builtin.include_tasks: tasks/maintainance.yml
+      tags: [never, maintainance, compose_maintain]
+
   roles:
     - role: common
 

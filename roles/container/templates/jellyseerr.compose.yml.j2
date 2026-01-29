@@ -21,20 +21,13 @@ services:
       DB_PASS: "{{ container_jellyseerr_db_pass }}"
 
     volumes:
-      - "{{ container_path.jellyseerr }}:/app/config"
+      - "{{ container_path.jellyseerr.config }}:/app/config"
+      - "{{ container_path.jellyseerr.cache  }}:/app/config/cache"
 
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:5055/api/v1/status",
-        ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5055/api/v1/status" ]
       interval: "300s"
       timeout: "30s"
       retries: "3"

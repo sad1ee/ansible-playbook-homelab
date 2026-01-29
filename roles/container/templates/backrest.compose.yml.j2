@@ -12,19 +12,24 @@ services:
 
     environment:
       TZ: "{{ container_tz }}"
+      DOCKER_HOST: "{{ container_docker_proxy_host }}"
       BACKREST_DATA: "/data"
       BACKREST_CONFIG: "/config/config.json"
       XDG_CACHE_HOME: "/cache"
+      TMPDIR: "/tmp"
 
     volumes:
-      - "{{ container_path.backrest }}/data:/data"
-      - "{{ container_path.backrest }}/config:/config"
-      - "{{ container_path.backrest }}/cache:/cache"
+      - "{{ container_path.backrest.data }}:/data"
+      - "{{ container_path.backrest.config }}:/config"
+      - "{{ container_path.backrest.cache }}:/cache"
       - "{{ container_path_ssd1 }}:/local-data"
-      - "{{ container_path_hdd_pool }}/backup/backrest:/local-backup"
+      - "{{ container_path_hdd_pool }}/backup/backrest:/local-backup:rw"
 
     security_opt: [ "no-new-privileges:true" ]
     user: "{{ container_puid }}:{{ container_pgid }}"
+
+    tmpfs:
+      - "/tmp"
 
     container_name: "backrest"
     hostname: "backrest"
@@ -32,12 +37,16 @@ services:
 
     networks:
       - "traefik"
+      - "docker-proxy"
       - "ntfy"
 
 networks:
   traefik:
     external: true
     name: "traefik"
+  docker-proxy:
+    external: true
+    name: "docker-proxy"
   ntfy:
     external: true
     name: "ntfy"

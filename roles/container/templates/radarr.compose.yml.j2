@@ -16,7 +16,8 @@ services:
       TZ: "{{ container_tz }}"
 
     volumes:
-      - "{{ container_path.radarr }}:/config"
+      - "{{ container_path.radarr.config }}:/config"
+      - "{{ container_path.radarr.cache }}:/config/MediaCover"
       - "{{ container_path.media }}:/media"
 
     container_name: "radarr"

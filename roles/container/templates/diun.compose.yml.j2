@@ -18,6 +18,7 @@ services:
       DIUN_WATCH_WORKERS: "20"
       DIUN_WATCH_SCHEDULE: "0 */24 * * *"
       DIUN_WATCH_JITTER: "30s"
+      DIUN_WATCH_RUNONSTARTUP: false
 
       DIUN_NOTIF_NTFY_ENDPOINT: "http://ntfy:{{ container_webui_port.ntfy }}"
       DIUN_NOTIF_NTFY_TOKEN: "{{ container_diun_ntfy_token }}"

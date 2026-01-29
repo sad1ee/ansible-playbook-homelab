@@ -51,10 +51,15 @@ homeserver_mergerfs_cache_mover:
     target: 40
   excluded:
     - "lost+found"
+    - ".Trash-1000"
     - "docker"
+    - "media/downloads"
     - "media/torrents/audiobooks"
+    - "media/torrents/books"
+    - "media/torrents/incomplete"
     - "media/library/audiobooks"
     - "media/library/music"
+    - "media/library/podcasts"
 
 homeserver_disabled_services: []
 

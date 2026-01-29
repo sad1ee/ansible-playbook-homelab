@@ -6,9 +6,8 @@ Paths:
 Settings:
   AUTO_UPDATE: "false"
   UPDATE_BRANCH: "main"
-  THRESHOLD_PERCENTAGE:
-    { { homeserver_mergerfs_cache_mover.trigger.threshold } }
-  TARGET_PERCENTAGE: { { homeserver_mergerfs_cache_mover.trigger.target } }
+  THRESHOLD_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.threshold }}
+  TARGET_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.target }}
   MAX_WORKERS: 8
   MAX_LOG_SIZE_MB: 100
   BACKUP_COUNT: 5

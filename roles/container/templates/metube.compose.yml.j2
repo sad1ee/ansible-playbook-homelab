@@ -3,14 +3,14 @@ services:
     image: "ghcr.io/alexta69/metube:latest"
 
     labels:
-      traefik.enable: true
-      traefik.http.routers.metube.rule: Host(`metube.{{ container_domain_base }}`)
-      traefik.http.services.metube.loadbalancer.server.port: "8081"
-      traefik.http.routers.metube.middlewares: "authelia@docker, sablier@file"
+      # traefik.enable: true
+      # traefik.http.routers.metube.rule: Host(`metube.{{ container_domain_base }}`)
+      # traefik.http.services.metube.loadbalancer.server.port: "8081"
+      # traefik.http.routers.metube.middlewares: "authelia@docker, sablier@file"
 
-      sablier.enable: true
-      sablier.group: "default"
-      traefik.docker.allownonrunning: true
+      # sablier.enable: true
+      # sablier.group: "default"
+      # traefik.docker.allownonrunning: true
 
       dev.dozzle.group: "Media"
 
@@ -19,7 +19,8 @@ services:
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
       LOGLEBEL: "INFO" # INFO, DEBUG
-      MAX_CONCURRENT_DOWNLOADS: "8"
+      # YTDL_OPTIONS: "{'extractor_args': {'youtube': {'player_client': ['web_embedded','web','tv']}}}"
+      MAX_CONCURRENT_DOWNLOADS: "4"
       TEMP_DIR: "/tmp"
       DOWNLOAD_DIR: "/video"
       AUDIO_DOWNLOAD_DIR: "/audio"
@@ -28,14 +29,12 @@ services:
       OUTPUT_TEMPLATE_PLAYLIST: "%(title)s.%(ext)s"
 
     volumes:
-      - "{{ container_path.metube }}/video:/video"
-      - "{{ container_path.metube }}/audio:/audio"
-
-    tmpfs:
-      - "/tmp"
+      - "{{ container_path.metube.video }}:/video"
+      - "{{ container_path.metube.audio }}:/audio"
+      - "{{ container_path.metube.cache }}:/tmp"
 
     healthcheck:
-      test: ["CMD", "wget", "-q", "--tries=1", "--spider", "http://127.0.0.1:8081"]
+      test: [ "CMD", "wget", "-q", "--tries=1", "--spider", "http://127.0.0.1:8081" ]
       interval: "300s"
       timeout: "30s"
       retries: "3"
@@ -43,13 +42,15 @@ services:
       start_interval: "2s"
 
     container_name: "metube"
-    hostname: "metube"
+    # hostname: "metube"
     restart: "unless-stopped"
 
-    networks:
-      - "traefik"
+    network_mode: "service:gluetun"
 
-networks:
-  traefik:
-    external: true
-    name: "traefik"
+#     networks:
+#       - "traefik"
+#
+# networks:
+#   traefik:
+#     external: true
+#     name: "traefik"

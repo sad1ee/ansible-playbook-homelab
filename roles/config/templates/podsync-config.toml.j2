@@ -1,0 +1,20 @@
+# [cleanup]
+# keep_last = 50
+
+[server]
+port = 8080
+web_ui = false
+
+[storage]
+  [storage.local]
+  data_dir = "/app/data/"
+
+[tokens]
+youtube = "{{ config_podsync_youtube_api_key }}"
+
+[feeds]
+    [feeds.viidith22]
+    url = "https://www.youtube.com/channel/UCG0n2_EiM7pIoNtUICZRu-g"
+    update_period = "12h"
+    quality = "high"
+    format = "audio"

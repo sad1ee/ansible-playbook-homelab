@@ -12,7 +12,8 @@ services:
       LOGLEVEL: "info" # debug, info, warning, error, critical
 
     volumes:
-      - "{{ container_path.shelfmark }}:/config"
+      - "{{ container_path.shelfmark.config }}:/config"
+      - "{{ container_path.shelfmark.covers }}:/config/covers"
       - "{{ container_path.calibre.ingest }}:/cwa-book-ingest"
       - "{{ container_path.media }}:/media"
 
@@ -21,7 +22,7 @@ services:
         condition: "service_healthy"
 
     healthcheck:
-      test: [ "CMD", "curl", "-sf", "http://localhost:8084/api/health" ]
+      test: ["CMD", "curl", "-sf", "http://localhost:8084/api/health"]
       interval: "300s"
       timeout: "30s"
       retries: "3"

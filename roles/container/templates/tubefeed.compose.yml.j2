@@ -1,0 +1,41 @@
+services:
+  tubefeed:
+    image: "troebs/tubefeed"
+
+    volumes:
+      - "{{ container_path.tubefeed }}:/data"
+
+    environment:
+      BASE_URL: "http://tubefeed"
+      YT_API_KEY: "{{ config_podsync_youtube_api_key }}"
+      YT_DELAY_STATIC: 600 # delay video by at least 10 minutes
+      YT_DELAY_DURATION_FACTOR: 1 # delay video by its runtime
+      YT_FEED_LIMIT: 1000 # limit feed size to 1000 items
+      # YT_DEFAULT_FEED_FORMAT: "webm"  # default container (+codec)
+      # YT_AAC_DOWNLOAD_FORMAT: "bestaudio[ext=m4a]"  # format to pass to yt-dlp for m4a/aac
+      # YT_OPUS_DOWNLOAD_FORMAT: "bestaudio[ext=webm]"  # format to pass to yt-dlp for webm/opus
+      # YT_MAX_DOWNLOAD_RATE: "1M"  # limit download rate to 1 MB/s
+      # YT_REENCODE_AAC_BITRATE: "96k"  # re-encode aac downloads with 96 kbit/s
+      # YT_REENCODE_OPUS_BITRATE: "96k"  # re-encode opus downloads with 96 kbit/s
+      # YT_SPONSORBLOCK: true # add sponsor blocks as chapters
+      # TWITCH_CLIENT_ID: "<your CLIENT_ID>"
+      # TWITCH_CLIENT_SECRET: "<your CLIENT_SECRET>"
+      # TWITCH_DEFAULT_FEED_FORMAT: "webm"  # default container (+codec)
+      # TWITCH_DOWNLOAD_FORMAT: "Audio_Only"  # format to pass to yt-dlp
+      # TWITCH_MAX_DOWNLOAD_RATE: "1M"  # limit download rate to 1 MB/s
+      # TWITCH_REENCODE_AAC_BITRATE: "96k"  # re-encode aac downloads with 96 kbit/s
+      # TWITCH_REENCODE_OPUS_BITRATE: "96k"  # re-encode opus downloads with 96 kbit/s
+
+    container_name: "tubefeed"
+    # hostname: "tubefeed"
+    restart: "unless-stopped"
+
+    network_mode: "service:gluetun"
+
+#     networks:
+#       - "podsync"
+#
+# networks:
+#   podsync:
+#     external: true
+#     name: "podsync"

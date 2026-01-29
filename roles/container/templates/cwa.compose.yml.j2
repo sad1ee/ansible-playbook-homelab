@@ -19,6 +19,7 @@ services:
 
     volumes:
       - "{{ container_path.calibre.config }}:/config"
+      - "{{ container_path.calibre.thumbnails }}:/config/thumbnails"
       - "{{ container_path.calibre.ingest }}:/cwa-book-ingest"
       - "{{ container_path.calibre.library }}:/calibre-library"
 
