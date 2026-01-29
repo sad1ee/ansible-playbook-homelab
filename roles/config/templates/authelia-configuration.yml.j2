@@ -1,72 +1,69 @@
 ---
-theme: "auto"
+theme: auto
 
 log:
-  level: "info" # info, debug, trace
+  level: info # info, debug, trace
 
 definitions:
   network:
     localhost:
-      - "192.168.0.100/32"
+      - 192.168.0.100/32
     localnet:
-      - "192.168.0.0/24"
+      - 192.168.0.0/24
 
 access_control:
-  default_policy: "deny"
+  default_policy: deny
   rules:
     # Bypass only locally (no oidc, just trusted header)
-    - domain: "ntfy.{{ config_domain_base }}"
-      policy: "bypass"
-      networks: "localhost"
+    - domain: ntfy.{{ config_domain_base }}
+      policy: bypass
+      networks: localhost
 
-    - domain: "navidrome.{{ config_domain_base }}"
-      policy: "bypass"
-      networks: "localnet"
+    - domain: navidrome.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
 
     # Bypass for paths for api and mobile access (has oidc)
-
-    - domain: "beszel.{{ config_domain_base }}"
-      policy: "bypass"
+    - domain: beszel.{{ config_domain_base }}
+      policy: bypass
       resources:
-        - "^/api([/?].*)?$"
-      networks: "localnet"
+        - ^/api([/?].*)?$
+      networks: localnet
 
-    - domain: "paperless.{{ config_domain_base }}"
-      policy: "bypass"
+    - domain: paperless.{{ config_domain_base }}
+      policy: bypass
       resources:
-        - "^/api([/?].*)?$"
-        - "^/static/frontend/en-US/manifest.webmanifest$"
-      networks: "localnet"
+        - ^/api([/?].*)?$
+        - ^/static/frontend/en-US/manifest.webmanifest$
+      networks: localnet
 
     # Bypass completly for mobile access (has oidc)
-    - domain: "audiobookshelf.{{ config_domain_base }}"
-      policy: "bypass"
-      networks: "localnet"
+    - domain: audiobookshelf.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
 
-    - domain: "cwa.{{ config_domain_base }}"
-      policy: "bypass"
-      networks: "localnet"
+    - domain: cwa.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
 
-    - domain: "immich.{{ config_domain_base }}"
-      policy: "bypass"
-      networks: "localnet"
+    - domain: immich.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
 
     # Bypass completly for mobile and tv access (has lldap)
-
-    - domain: "jellyfin.{{ config_domain_base }}"
-      policy: "bypass"
-      networks: "localnet"
+    - domain: jellyfin.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
 
     # RBAC for groups
-
     - domain:
-        - "shelfmark.{{ config_domain_base }}"
-      policy: "one_factor"
-      subject: ["group:application_user"]
+        - shelfmark.{{ config_domain_base }}
+      policy: one_factor
+      subject: [group:application_user]
 
     - domain: "*.{{ config_domain_base }}"
-      policy: "one_factor"
-      subject: ["group:application_admin"]
+      policy: one_factor
+      subject: [group:application_admin]
 
 authentication_backend:
   password_change:
@@ -74,127 +71,127 @@ authentication_backend:
   password_reset:
     disable: true
     custom_url: ""
-  refresh_interval: "1m"
+  refresh_interval: 1m
   ldap:
-    implementation: "lldap"
-    address: "ldap://lldap:3890"
-    base_dn: "DC={{ config_domain_base_seperated[0] }},DC={{ config_domain_base_seperated[1] }}"
-    user: "UID=authelia_bind_user,OU=people,DC={{ config_domain_base_seperated[0] }},DC={{ config_domain_base_seperated[1] }}"
+    implementation: lldap
+    address: ldap://lldap:3890
+    base_dn: DC={{ config_domain_base_seperated[0] }},DC={{ config_domain_base_seperated[1] }}
+    user: UID=authelia_bind_user,OU=people,DC={{ config_domain_base_seperated[0] }},DC={{ config_domain_base_seperated[1] }}
     password: "{{ config_authelia_lldap_pass }}"
 
 session:
   secret: "{{ config_authelia_session_secret }}"
-  inactivity: "5m"
-  expiration: "1d"
-  remember_me: "3M"
+  inactivity: 5m
+  expiration: 1d
+  remember_me: 3M
   redis:
-    host: "redis"
+    host: redis
     port: 6379
     database_index: 1
   cookies:
     - domain: "{{ config_domain_base }}"
-      authelia_url: "https://authelia.{{ config_domain_base }}"
-      default_redirection_url: "https://homepage.{{ config_domain_base }}"
+      authelia_url: https://authelia.{{ config_domain_base }}
+      default_redirection_url: https://homepage.{{ config_domain_base }}
 
 regulation:
   modes:
-    - "ip"
+    - ip
 
 storage:
   encryption_key: "{{ config_authelia_storage_key }}"
   postgres:
-    address: "tcp://postgres:5432"
-    database: "authelia"
-    username: "authelia"
+    address: tcp://postgres:5432
+    database: authelia
+    username: authelia
     password: "{{ config_authelia_db_pass }}"
 
 notifier:
   disable_startup_check: false
   filesystem:
-    filename: "/config/notification.txt"
+    filename: /config/notification.txt
 
 server:
   endpoints:
     authz:
       forward-auth:
-        implementation: "ForwardAuth"
+        implementation: ForwardAuth
       legacy:
-        implementation: "Legacy"
+        implementation: Legacy
 
 identity_providers:
   oidc:
     hmac_secret: "{{ config_authelia_hmac_secret }}"
     jwks:
-      - algorithm: "RS256"
-        use: "sig"
+      - algorithm: RS256
+        use: sig
         key: |
           {{ config_authelia_jwks_rs256 | trim | indent(10) }}
     authorization_policies:
       allow-all:
-        default_policy: "deny"
+        default_policy: deny
         rules:
-          - policy: "one_factor"
-            subject: "group:application_user"
-          - policy: "one_factor"
-            subject: "group:application_admin"
+          - policy: one_factor
+            subject: group:application_user
+          - policy: one_factor
+            subject: group:application_admin
       allow-admin:
-        default_policy: "deny"
+        default_policy: deny
         rules:
-          - policy: "one_factor"
-            subject: "group:application_admin"
+          - policy: one_factor
+            subject: group:application_admin
     clients:
-      - client_id: "beszel"
-        client_name: "Beszel"
+      - client_id: beszel
+        client_name: Beszel
         client_secret: "{{ config_authelia_client_secret_beszel }}"
-        authorization_policy: "allow-admin"
+        authorization_policy: allow-admin
         redirect_uris:
-          - "https://beszel.{{ config_domain_base }}/api/oauth2-redirect"
-        pre_configured_consent_duration: "3M"
+          - https://beszel.{{ config_domain_base }}/api/oauth2-redirect
+        pre_configured_consent_duration: 3M
         require_pkce: true
-        pkce_challenge_method: "S256"
+        pkce_challenge_method: S256
 
-      - client_id: "paperless"
-        client_name: "Paperless"
+      - client_id: paperless
+        client_name: Paperless
         client_secret: "{{ config_authelia_client_secret_paperless }}"
-        authorization_policy: "allow-all"
+        authorization_policy: allow-all
         redirect_uris:
-          - "https://paperless.{{ config_domain_base }}/accounts/oidc/authelia/login/callback/"
-        pre_configured_consent_duration: "3M"
+          - https://paperless.{{ config_domain_base }}/accounts/oidc/authelia/login/callback/
+        pre_configured_consent_duration: 3M
         require_pkce: true
-        pkce_challenge_method: "S256"
+        pkce_challenge_method: S256
 
-      - client_id: "cwa"
-        client_name: "CWA"
+      - client_id: cwa
+        client_name: CWA
         client_secret: "{{ config_authelia_client_secret_cwa }}"
-        authorization_policy: "allow-all"
+        authorization_policy: allow-all
         redirect_uris:
-          - "https://cwa.{{ config_domain_base }}/login/generic/authorized"
-        pre_configured_consent_duration: "3M"
+          - https://cwa.{{ config_domain_base }}/login/generic/authorized
+        pre_configured_consent_duration: 3M
         require_pkce: false
         pkce_challenge_method: ""
 
-      - client_id: "audiobookshelf"
-        client_name: "Audiobookshelf"
+      - client_id: audiobookshelf
+        client_name: Audiobookshelf
         client_secret: "{{ config_authelia_client_secret_audiobookshelf }}"
-        authorization_policy: "allow-all"
+        authorization_policy: allow-all
         redirect_uris:
-          - "https://audiobookshelf.{{ config_domain_base }}/auth/openid/callback"
-          - "https://audiobookshelf.{{ config_domain_base }}/auth/openid/mobile-redirect"
-          - "audiobookshelf://oauth"
-          - "lissen://oauth"
-        pre_configured_consent_duration: "3M"
+          - https://audiobookshelf.{{ config_domain_base }}/auth/openid/callback
+          - https://audiobookshelf.{{ config_domain_base }}/auth/openid/mobile-redirect
+          - audiobookshelf://oauth
+          - lissen://oauth
+        pre_configured_consent_duration: 3M
         require_pkce: true
-        pkce_challenge_method: "S256"
+        pkce_challenge_method: S256
 
-      - client_id: "immich"
-        client_name: "Immich"
+      - client_id: immich
+        client_name: Immich
         client_secret: "{{ config_authelia_client_secret_immich }}"
-        authorization_policy: "allow-all"
+        authorization_policy: allow-all
         redirect_uris:
-          - "https://immich.{{ config_domain_base }}/auth/login"
-          - "https://immich.{{ config_domain_base }}/user-settings"
-          - "app.immich:///oauth-callback"
-        pre_configured_consent_duration: "3M"
+          - https://immich.{{ config_domain_base }}/auth/login
+          - https://immich.{{ config_domain_base }}/user-settings
+          - app.immich:///oauth-callback
+        pre_configured_consent_duration: 3M
         require_pkce: false
         pkce_challenge_method: ""
-        token_endpoint_auth_method: "client_secret_post"
+        token_endpoint_auth_method: client_secret_post

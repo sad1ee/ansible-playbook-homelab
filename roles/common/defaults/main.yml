@@ -14,7 +14,7 @@ common_firewall_reset: false
 common_firewall_allowed_tcp_udp_ports:
   - port: "{{ common_ssh_port }}"
     proto: tcp
-    comment: "SSH"
+    comment: SSH
 
 # network.yml
 common_network_lan:

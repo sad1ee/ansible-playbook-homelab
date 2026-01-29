@@ -3,7 +3,7 @@
 # --------------------- #
 - name: facts | Gather facts from remote hosts
   ansible.builtin.setup:
-  # NOTE: Might have to clean fact cache or something before?
+    # NOTE: Might have to clean fact cache or something before?
     gather_subset:
       - apparmor
       - architecture

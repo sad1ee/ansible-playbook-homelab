@@ -1,13 +1,13 @@
 services:
   docker-proxy:
-    image: "lscr.io/linuxserver/socket-proxy:latest"
+    image: lscr.io/linuxserver/socket-proxy:latest
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     environment:
       TZ: "{{ container_tz }}"
-      LOG_LEVEL: "notice" # notice, info, debug
+      LOG_LEVEL: notice # notice, info, debug
       DISABLE_IPV6: 0
       ALLOW_START: 1
       ALLOW_STOP: 1
@@ -38,30 +38,30 @@ services:
 
     read_only: true
     tmpfs:
-      - "/run"
+      - /run
 
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - /var/run/docker.sock:/var/run/docker.sock
 
     ports:
-      - "127.0.0.1:2375:2375"
+      - 127.0.0.1:2375:2375
 
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:2375/_ping"]
-      interval: "300s"
-      timeout: "30s"
+      test: [CMD, wget, --no-verbose, --tries=1, --spider, http://localhost:2375/_ping]
+      interval: 300s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "2s"
+      start_period: 60s
+      start_interval: 2s
 
-    container_name: "docker-proxy"
-    hostname: "docker-proxy"
-    restart: "unless-stopped"
+    container_name: docker-proxy
+    hostname: docker-proxy
+    restart: unless-stopped
 
     networks:
-      - "docker-proxy"
+      - docker-proxy
 
 networks:
   docker-proxy:
     external: true
-    name: "docker-proxy"
+    name: docker-proxy

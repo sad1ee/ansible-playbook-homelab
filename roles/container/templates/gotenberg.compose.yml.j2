@@ -1,26 +1,26 @@
 services:
   gotenberg:
-    image: "docker.io/gotenberg/gotenberg:8.25"
+    image: docker.io/gotenberg/gotenberg:8.25
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     command:
-      - "gotenberg"
-      - "--chromium-disable-javascript=true"
-      - "--chromium-allow-list=file:///tmp/.*"
+      - gotenberg
+      - --chromium-disable-javascript=true
+      - --chromium-allow-list=file:///tmp/.*
 
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
-    container_name: "gotenberg"
-    hostname: "gotenberg"
-    restart: "unless-stopped"
+    container_name: gotenberg
+    hostname: gotenberg
+    restart: unless-stopped
 
     networks:
-      - "gotenberg"
+      - gotenberg
 
 networks:
   gotenberg:
     external: true
-    name: "gotenberg"
+    name: gotenberg

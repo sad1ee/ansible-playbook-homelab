@@ -1,33 +1,33 @@
 ---
 container_lan:
-  dhcp_start: "192.168.0.150"
-  dhcp_end: "192.168.0.247"
-  router: "192.168.0.1"
-  netmask: "255.255.255.0"
+  dhcp_start: 192.168.0.150
+  dhcp_end: 192.168.0.247
+  router: 192.168.0.1
+  netmask: 255.255.255.0
 
 container_traefik_network:
-  subnet: "172.25.0.0/16"
-  gateway: "172.25.0.1"
-  traefik: "172.25.255.254"
+  subnet: 172.25.0.0/16
+  gateway: 172.25.0.1
+  traefik: 172.25.255.254
 
 container_bridge_networks:
-  - "diun"
-  - "docker-proxy"
-  - "flaresolverr"
-  - "immich"
-  - "podsync"
-  - "recyclarr"
-  - "samba"
-  - "traefik"
+  - diun
+  - docker-proxy
+  - flaresolverr
+  - immich
+  - podsync
+  - recyclarr
+  - samba
+  - traefik
 
 container_internal_networks:
-  - "gotenberg"
-  - "lldap"
-  - "ntfy"
-  - "postgres"
-  - "redis"
-  - "sablier"
-  - "tika"
+  - gotenberg
+  - lldap
+  - ntfy
+  - postgres
+  - redis
+  - sablier
+  - tika
 
 container_webui_port:
   qbittorrent: 8112

@@ -1,14 +1,14 @@
 services:
   cwa:
-    image: "crocodilestick/calibre-web-automated:dev" # :latest"
+    image: crocodilestick/calibre-web-automated:dev # :latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.cwa.rule: Host(`cwa.{{ container_domain_base }}`)
       traefik.http.services.cwa.loadbalancer.server.port: "{{ container_webui_port.cwa }}"
-      traefik.http.routers.cwa.middlewares: "authelia@docker"
+      traefik.http.routers.cwa.middlewares: authelia@docker
 
-      dev.dozzle.group: "Frontend"
+      dev.dozzle.group: Frontend
 
     environment:
       PUID: "{{ container_puid }}"
@@ -23,18 +23,18 @@ services:
       - "{{ container_path.calibre.ingest }}:/cwa-book-ingest"
       - "{{ container_path.calibre.library }}:/calibre-library"
 
-    container_name: "cwa"
-    hostname: "cwa"
-    restart: "unless-stopped"
+    container_name: cwa
+    hostname: cwa
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "lldap"
+      - traefik
+      - lldap
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   lldap:
     external: true
-    name: "lldap"
+    name: lldap

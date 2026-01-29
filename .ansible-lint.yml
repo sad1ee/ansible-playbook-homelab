@@ -1,19 +1,19 @@
 ---
-profile: "production"
-loop_var_prefix: "^(__|{role}_)"
-var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+profile: production
+loop_var_prefix: ^(__|{role}_)
+var_naming_pattern: ^[a-z_][a-z0-9_]*$
 use_default_rules: true
 
 mock_roles:
-  - "geerlingguy.security"
-  - "geerlingguy.pip"
-  - "geerlingguy.docker"
+  - geerlingguy.security
+  - geerlingguy.pip
+  - geerlingguy.docker
 
 enable_list:
-  - "args"
-  - "empty-string-compare" # opt-in
-  - "no-log-password" # opt-in
-  - "no-same-owner" # opt-in
-  - "name[prefix]" # opt-in
-  - "galaxy-version-incorrect" # opt-in
-  - "yaml"
+  - args
+  - empty-string-compare # opt-in
+  - no-log-password # opt-in
+  - no-same-owner # opt-in
+  - name[prefix] # opt-in
+  - galaxy-version-incorrect # opt-in
+  - yaml

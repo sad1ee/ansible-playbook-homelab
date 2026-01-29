@@ -1,44 +1,44 @@
 services:
   beszel:
-    image: "henrygd/beszel:latest"
+    image: henrygd/beszel:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.beszel.rule: Host(`beszel.{{ container_domain_base }}`)
       traefik.http.services.beszel.loadbalancer.server.port: "{{ container_webui_port.beszel }}"
-      traefik.http.routers.beszel.middlewares: "authelia@docker"
+      traefik.http.routers.beszel.middlewares: authelia@docker
 
-      dev.dozzle.group: "Admin"
+      dev.dozzle.group: Admin
 
     environment:
-      APP_URL: "https://beszel.{{ container_domain_base }}"
+      APP_URL: https://beszel.{{ container_domain_base }}
       DISABLE_PASSWORD_AUTH: true
       USER_CREATION: true
 
     volumes:
       - "{{ container_path.beszel }}:/beszel_data"
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
-      test: [ "CMD", "/beszel", "health", "--url", "http://localhost:8090" ]
-      interval: "300s"
-      timeout: "30s"
+      test: [ CMD, /beszel, health, --url, http://localhost:8090 ]
+      interval: 300s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "2s"
+      start_period: 60s
+      start_interval: 2s
 
-    container_name: "beszel"
-    hostname: "beszel"
-    restart: "unless-stopped"
+    container_name: beszel
+    hostname: beszel
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "ntfy"
+      - traefik
+      - ntfy
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   ntfy:
     external: true
-    name: "ntfy"
+    name: ntfy

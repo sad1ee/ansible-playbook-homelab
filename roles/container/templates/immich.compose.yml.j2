@@ -1,26 +1,26 @@
 services:
   immich:
-    image: "ghcr.io/immich-app/immich-server:v2"
+    image: ghcr.io/immich-app/immich-server:v2
 
     labels:
       traefik.enable: true
       traefik.http.routers.immich.rule: Host(`immich.{{ container_domain_base }}`)
       traefik.http.services.immich.loadbalancer.server.port: "2283"
-      traefik.http.routers.immich.middlewares: "authelia@docker"
+      traefik.http.routers.immich.middlewares: authelia@docker
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      IMMICH_LOG_LEVEL: "log" # debug, log
-      DB_HOSTNAME: "immich-db"
+      IMMICH_LOG_LEVEL: log # debug, log
+      DB_HOSTNAME: immich-db
       DB_PORT: "5432"
-      DB_DATABASE_NAME: "immich"
-      DB_USERNAME: "postgres"
+      DB_DATABASE_NAME: immich
+      DB_USERNAME: postgres
       DB_PASSWORD: "{{ container_immich_db_pass }}"
-      REDIS_HOSTNAME: "redis"
+      REDIS_HOSTNAME: redis
       REDIS_PORT: "6379"
       REDIS_DBINDEX: "2"
 
@@ -28,88 +28,88 @@ services:
       - "{{ container_path.immich.data }}:/data"
 
     depends_on:
-      - "redis"
-      - "immich-db"
+      - redis
+      - immich-db
 
     healthcheck:
       disable: false
 
-    container_name: "immich"
-    hostname: "immich"
-    restart: "unless-stopped"
+    container_name: immich
+    hostname: immich
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "redis"
-      - "immich"
+      - traefik
+      - redis
+      - immich
 
   immich-ml:
-    image: "ghcr.io/immich-app/immich-machine-learning:v2-openvino"
+    image: ghcr.io/immich-app/immich-machine-learning:v2-openvino
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     volumes:
       - "{{ container_path.immich.ml }}:/cache"
-      - "/etc/localtime:/etc/localtime:ro"
-      - "/dev/bus/usb:/dev/bus/usb"
+      - /etc/localtime:/etc/localtime:ro
+      - /dev/bus/usb:/dev/bus/usb
 
     device_cgroup_rules:
-      - "c 189:* rmw"
+      - c 189:* rmw
 
     devices:
-      - "/dev/dri:/dev/dri"
+      - /dev/dri:/dev/dri
 
     healthcheck:
       disable: false
 
-    container_name: "immich-ml"
-    hostname: "immich-ml"
-    restart: "unless-stopped"
+    container_name: immich-ml
+    hostname: immich-ml
+    restart: unless-stopped
 
     networks:
-      - "immich"
+      - immich
 
   immich-db:
-    image: "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23"
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     environment:
-      POSTGRES_DB: "immich"
-      POSTGRES_USER: "postgres"
+      POSTGRES_DB: immich
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "{{ container_immich_db_pass }}"
-      POSTGRES_INITDB_ARGS: "--data-checksums"
+      POSTGRES_INITDB_ARGS: --data-checksums
 
     volumes:
       - "{{ container_path.immich.db }}:/var/lib/postgresql/data"
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
-    shm_size: "128mb"
+    shm_size: 128mb
 
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
-      interval: "60s"
-      timeout: "30s"
+      test: [CMD, pg_isready, -U, postgres, -d, postgres]
+      interval: 60s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "5s"
+      start_period: 60s
+      start_interval: 5s
 
-    container_name: "immich-db"
-    hostname: "immich-db"
-    restart: "unless-stopped"
+    container_name: immich-db
+    hostname: immich-db
+    restart: unless-stopped
 
     networks:
-      - "immich"
+      - immich
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   redis:
     external: true
-    name: "immich"
+    name: redis
   immich:
     external: true
-    name: "immich"
+    name: immich

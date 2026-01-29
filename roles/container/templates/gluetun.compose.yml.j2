@@ -1,41 +1,36 @@
 services:
   gluetun:
-    image: "ghcr.io/qdm12/gluetun:latest"
+    image: ghcr.io/qdm12/gluetun:latest
 
     labels:
       traefik.enable: true
 
-      traefik.http.routers.metube.rule: Host(`metube.{{ container_domain_base }}`)
-      traefik.http.routers.metube.service: "metube"
-      traefik.http.services.metube.loadbalancer.server.port: "8081"
-      # traefik.http.routers.metube.middlewares: "authelia@docker, sablier@file"
-
       traefik.http.routers.shelfmark.rule: Host(`shelfmark.{{ container_domain_base }}`)
-      traefik.http.routers.shelfmark.service: "shelfmark"
+      traefik.http.routers.shelfmark.service: shelfmark
       traefik.http.services.shelfmark.loadbalancer.server.port: "{{ container_webui_port.shelfmark }}"
-      traefik.http.routers.shelfmark.middlewares: "authelia@docker"
+      traefik.http.routers.shelfmark.middlewares: authelia@docker
 
       traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.{{ container_domain_base }}`)
-      traefik.http.routers.qbittorrent.service: "qbittorrent"
+      traefik.http.routers.qbittorrent.service: qbittorrent
       traefik.http.services.qbittorrent.loadbalancer.server.port: "{{ container_webui_port.qbittorrent }}"
-      traefik.http.routers.qbittorrent.middlewares: "authelia@docker"
+      traefik.http.routers.qbittorrent.middlewares: authelia@docker
 
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     environment:
       PUID: "{{ container_puid }}"
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      LOGLEVEL: "debug" # debug, info, warning, error
-      VPN_SERVICE_PROVIDER: "protonvpn"
-      VPN_TYPE: "openvpn"
+      LOGLEVEL: debug # debug, info, warning, error
+      VPN_SERVICE_PROVIDER: protonvpn
+      VPN_TYPE: openvpn
       OPENVPN_USER: "{{ container_gluetun_openvpn_user }}+pmp"
       OPENVPN_PASSWORD: "{{ container_gluetun_openvpn_password }}"
-      SERVER_COUNTRIES: "Germany"
+      SERVER_COUNTRIES: Germany
       PORT_FORWARD_ONLY: "on"
       VPN_PORT_FORWARDING: "on"
-      VPN_PORT_FORWARDING_PROVIDER: "protonvpn"
-      UPDATER_PERIOD: "24h"
+      VPN_PORT_FORWARDING_PROVIDER: protonvpn
+      UPDATER_PERIOD: 24h
       UPDATER_PROTONVPN_EMAIL: "{{ container_gluetun_protonvpn_email }}"
       UPDATER_PROTONVPN_PASSWORD: "{{ container_gluetun_protonvpn_password }}"
       VPN_PORT_FORWARDING_UP_COMMAND:
@@ -58,19 +53,19 @@ services:
         /api/v2/app/setPreferences 2>&1'"
 
     devices:
-      - "/dev/net/tun:/dev/net/tun"
+      - /dev/net/tun:/dev/net/tun
 
     cap_add:
-      - "NET_ADMIN"
+      - NET_ADMIN
 
-    container_name: "gluetun"
-    hostname: "gluetun"
-    restart: "unless-stopped"
+    container_name: gluetun
+    hostname: gluetun
+    restart: unless-stopped
 
     networks:
-      - "traefik"
+      - traefik
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik

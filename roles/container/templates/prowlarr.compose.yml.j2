@@ -1,14 +1,14 @@
 services:
   prowlarr:
-    image: "lscr.io/linuxserver/prowlarr:latest"
+    image: lscr.io/linuxserver/prowlarr:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.prowlarr.rule: Host(`prowlarr.{{ container_domain_base }}`)
       traefik.http.services.prowlarr.loadbalancer.server.port: "{{ container_webui_port.prowlarr }}"
-      traefik.http.routers.prowlarr.middlewares: "authelia@docker"
+      traefik.http.routers.prowlarr.middlewares: authelia@docker
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
@@ -18,18 +18,18 @@ services:
     volumes:
       - "{{ container_path.prowlarr }}:/config"
 
-    container_name: "prowlarr"
-    hostname: "prowlarr"
-    restart: "unless-stopped"
+    container_name: prowlarr
+    hostname: prowlarr
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "flaresolverr"
+      - traefik
+      - flaresolverr
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   flaresolverr:
     external: true
-    name: "flaresolverr"
+    name: flaresolverr

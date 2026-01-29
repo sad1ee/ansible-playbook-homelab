@@ -1,15 +1,15 @@
 services:
   lldap:
-    image: "lldap/lldap:latest-alpine-rootless"
+    image: lldap/lldap:latest-alpine-rootless
 
     labels:
       traefik.enable: true
       traefik.http.routers.lldap.rule: Host(`lldap.{{ container_domain_base }}`)
       traefik.http.services.lldap.loadbalancer.server.port: "{{ container_webui_port.lldap }}"
-      traefik.http.routers.lldap.middlewares: "authelia@docker"
-      traefik.docker.network: "lldap"
+      traefik.http.routers.lldap.middlewares: authelia@docker
+      traefik.docker.network: lldap
 
-      dev.dozzle.group: "Admin"
+      dev.dozzle.group: Admin
 
     environment:
       TZ: "{{ container_tz }}"
@@ -17,31 +17,31 @@ services:
       LLDAP_JWT_SECRET: "{{ container_lldap_jwt_secret }}"
       LLDAP_KEY_SEED: "{{ container_lldap_key_seed }}"
       LLDAP_LDAP_BASE_DN:
-        "dc={{ container_domain_base_seperated[0] }},dc={{ container_domain_base_seperated[1] }}"
-      LLDAP_DATABASE_URL: "postgres://lldap:{{ container_lldap_db_pass }}@postgres/lldap"
+        dc={{ container_domain_base_seperated[0] }},dc={{ container_domain_base_seperated[1] }}
+      LLDAP_DATABASE_URL: postgres://lldap:{{ container_lldap_db_pass }}@postgres/lldap
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: [ no-new-privileges:true ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     depends_on:
       postgres:
-        condition: "service_healthy"
+        condition: service_healthy
 
     volumes:
       - "{{ container_path.lldap }}:/data"
 
-    container_name: "lldap"
-    hostname: "lldap"
-    restart: "unless-stopped"
+    container_name: lldap
+    hostname: lldap
+    restart: unless-stopped
 
     networks:
-      - "lldap"
-      - "postgres"
+      - lldap
+      - postgres
 
 networks:
   lldap:
     external: true
-    name: "lldap"
+    name: lldap
   postgres:
     external: true
-    name: "postgres"
+    name: postgres

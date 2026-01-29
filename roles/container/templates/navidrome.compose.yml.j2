@@ -1,13 +1,13 @@
 services:
   navidrome:
-    image: "deluan/navidrome:latest"
+    image: deluan/navidrome:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.navidrome.rule: Host(`navidrome.{{ container_domain_base }}`)
-      traefik.http.routers.navidrome.service: "navidrome"
+      traefik.http.routers.navidrome.service: navidrome
       traefik.http.services.navidrome.loadbalancer.server.port: "4533"
-      traefik.http.routers.navidrome.middlewares: "authelia-legacy@docker"
+      traefik.http.routers.navidrome.middlewares: authelia-legacy@docker
 
       # traefik.http.routers.navidrome-subsonic.rule: >
       #   Host(`navidrome.{{ container_domain_base }}`) &&
@@ -17,10 +17,10 @@ services:
       # traefik.http.services.navidrome-subsonic.loadbalancer.server.port: "4533"
       # traefik.http.routers.navidrome-subsonic.middlewares: "authelia-basic@docker"
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
-      ND_LOGLEVEL: "info" # debug
+      ND_LOGLEVEL: info # debug
       ND_EXTAUTH_TRUSTEDSOURCES: "{{ container_traefik_network.traefik }}/32"
       # ND_ENABLEUSEREDITING: false
       ND_ENABLEINSIGHTSCOLLECTOR: false
@@ -30,19 +30,19 @@ services:
       - "{{ container_path.navidrome.data }}:/data"
       - "{{ container_path.navidrome.cache }}:/data/cache"
       - "{{ container_path.media }}/library/music:/music:ro"
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: [ no-new-privileges:true ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
-    container_name: "navidrome"
-    hostname: "navidrome"
-    restart: "unless-stopped"
+    container_name: navidrome
+    hostname: navidrome
+    restart: unless-stopped
 
     networks:
-      - "traefik"
+      - traefik
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik

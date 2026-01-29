@@ -1,6 +1,6 @@
 services:
   databasus:
-    image: "databasus/databasus:latest"
+    image: databasus/databasus:latest
 
     labels:
       traefik.enable: true
@@ -8,7 +8,7 @@ services:
       traefik.http.services.databasus.loadbalancer.server.port: "4005"
       # traefik.http.routers.databasus.middlewares: "authelia@docker" # TODO: fix login loop
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
@@ -17,28 +17,29 @@ services:
 
     volumes:
       - "{{ container_path.databasus }}:/databasus-data"
-      - "{{ container_path_hdd_pool }}/backup/databasus:/databasus-data/backups"
+      - "{{ container_path_hdd_pool }}/backup/databasus/backup:/databasus-data/backups"
+      - "{{ container_path_hdd_pool }}/backup/databasus/temp:/databasus-data/temp"
 
-    container_name: "databasus"
-    hostname: "databasus"
-    restart: "unless-stopped"
+    container_name: databasus
+    hostname: databasus
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "postgres"
-      - "immich"
-      - "ntfy"
+      - traefik
+      - postgres
+      - immich
+      - ntfy
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   postgres:
     external: true
-    name: "postgres"
+    name: postgres
   immich:
     external: true
-    name: "immich"
+    name: immich
   ntfy:
     external: true
-    name: "ntfy"
+    name: ntfy

@@ -1,14 +1,14 @@
 services:
   sonarr:
-    image: "lscr.io/linuxserver/sonarr:latest"
+    image: lscr.io/linuxserver/sonarr:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.sonarr.rule: Host(`sonarr.{{ container_domain_base }}`)
       traefik.http.services.sonarr.loadbalancer.server.port: "{{ container_webui_port.sonarr }}"
-      traefik.http.routers.sonarr.middlewares: "authelia@docker"
+      traefik.http.routers.sonarr.middlewares: authelia@docker
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
@@ -20,22 +20,22 @@ services:
       - "{{ container_path.sonarr.cache }}:/config/MediaCover"
       - "{{ container_path.media }}:/media"
 
-    container_name: "sonarr"
-    hostname: "sonarr"
-    restart: "unless-stopped"
+    container_name: sonarr
+    hostname: sonarr
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "flaresolverr"
-      - "recyclarr"
+      - traefik
+      - flaresolverr
+      - recyclarr
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   flaresolverr:
     external: true
-    name: "flaresolverr"
+    name: flaresolverr
   recyclarr:
     external: true
-    name: "recyclarr"
+    name: recyclarr

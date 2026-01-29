@@ -1,15 +1,15 @@
 services:
   shelfmark:
-    image: "ghcr.io/calibrain/shelfmark:latest"
+    image: ghcr.io/calibrain/shelfmark:latest
 
     labels:
-      dev.dozzle.group: "Frontend"
+      dev.dozzle.group: Frontend
 
     environment:
       UID: "{{ container_puid }}"
       GID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      LOGLEVEL: "info" # debug, info, warning, error, critical
+      LOGLEVEL: info # debug, info, warning, error, critical
 
     volumes:
       - "{{ container_path.shelfmark.config }}:/config"
@@ -19,17 +19,17 @@ services:
 
     depends_on:
       gluetun:
-        condition: "service_healthy"
+        condition: service_healthy
 
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:8084/api/health"]
-      interval: "300s"
-      timeout: "30s"
+      test: [CMD, curl, -sf, http://localhost:8084/api/health]
+      interval: 300s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "2s"
+      start_period: 60s
+      start_interval: 2s
 
-    container_name: "shelfmark"
-    restart: "unless-stopped"
+    container_name: shelfmark
+    restart: unless-stopped
 
-    network_mode: "service:gluetun"
+    network_mode: service:gluetun

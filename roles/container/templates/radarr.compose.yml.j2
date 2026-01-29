@@ -1,14 +1,14 @@
 services:
   radarr:
-    image: "lscr.io/linuxserver/radarr:latest"
+    image: lscr.io/linuxserver/radarr:latest
 
     labels:
       traefik.enable: true
-      traefik.http.routers.radarr.rule: "Host(`radarr.{{ container_domain_base }}`)"
+      traefik.http.routers.radarr.rule: Host(`radarr.{{ container_domain_base }}`)
       traefik.http.services.radarr.loadbalancer.server.port: "{{ container_webui_port.radarr }}"
-      traefik.http.routers.radarr.middlewares: "authelia@docker"
+      traefik.http.routers.radarr.middlewares: authelia@docker
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
@@ -20,22 +20,22 @@ services:
       - "{{ container_path.radarr.cache }}:/config/MediaCover"
       - "{{ container_path.media }}:/media"
 
-    container_name: "radarr"
-    hostname: "radarr"
-    restart: "unless-stopped"
+    container_name: radarr
+    hostname: radarr
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "flaresolverr"
-      - "recyclarr"
+      - traefik
+      - flaresolverr
+      - recyclarr
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   flaresolverr:
     external: true
-    name: "flaresolverr"
+    name: flaresolverr
   recyclarr:
     external: true
-    name: "recyclarr"
+    name: recyclarr

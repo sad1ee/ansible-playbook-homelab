@@ -1,12 +1,12 @@
 services:
   tubefeed:
-    image: "troebs/tubefeed"
+    image: troebs/tubefeed
 
     volumes:
       - "{{ container_path.tubefeed }}:/data"
 
     environment:
-      BASE_URL: "http://tubefeed"
+      BASE_URL: http://tubefeed
       YT_API_KEY: "{{ config_podsync_youtube_api_key }}"
       YT_DELAY_STATIC: 600 # delay video by at least 10 minutes
       YT_DELAY_DURATION_FACTOR: 1 # delay video by its runtime
@@ -26,16 +26,14 @@ services:
       # TWITCH_REENCODE_AAC_BITRATE: "96k"  # re-encode aac downloads with 96 kbit/s
       # TWITCH_REENCODE_OPUS_BITRATE: "96k"  # re-encode opus downloads with 96 kbit/s
 
-    container_name: "tubefeed"
-    # hostname: "tubefeed"
-    restart: "unless-stopped"
+    container_name: tubefeed
+    hostname: tubefeed
+    restart: unless-stopped
 
-    network_mode: "service:gluetun"
+    networks:
+      - podsync
 
-#     networks:
-#       - "podsync"
-#
-# networks:
-#   podsync:
-#     external: true
-#     name: "podsync"
+networks:
+  podsync:
+    external: true
+    name: podsync

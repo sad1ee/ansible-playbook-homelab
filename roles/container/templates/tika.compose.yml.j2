@@ -1,21 +1,21 @@
 services:
   tika:
-    image: "docker.io/apache/tika:latest"
+    image: docker.io/apache/tika:latest
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
-    container_name: "tika"
-    hostname: "tika"
-    restart: "unless-stopped"
+    container_name: tika
+    hostname: tika
+    restart: unless-stopped
 
     networks:
-      - "tika"
+      - tika
 
 networks:
   tika:
     external: true
-    name: "tika"
+    name: tika

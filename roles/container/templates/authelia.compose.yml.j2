@@ -1,6 +1,6 @@
 services:
   authelia:
-    image: "docker.io/authelia/authelia:4"
+    image: docker.io/authelia/authelia:4
 
     labels:
       traefik.enable: true
@@ -8,22 +8,21 @@ services:
       traefik.http.services.authelia.loadbalancer.server.port: "{{ container_webui_port.authelia }}"
 
       traefik.http.middlewares.authelia.forwardAuth.address:
-        "http://authelia:{{ container_webui_port.authelia }}/api/authz/forward-auth"
+        http://authelia:{{ container_webui_port.authelia }}/api/authz/forward-auth
       traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
 
       traefik.http.middlewares.authelia-legacy.forwardauth.address:
         "http://authelia:{{ container_webui_port.authelia }}/api/verify\
         ?rd=https://authelia.{{ container_domain_base }}"
       traefik.http.middlewares.authelia-legacy.forwardauth.trustForwardHeader: "true"
-      traefik.http.middlewares.authelia-legacy.forwardauth.authResponseHeaders: "Remote-User"
+      traefik.http.middlewares.authelia-legacy.forwardauth.authResponseHeaders: Remote-User
 
       # traefik.http.middlewares.authelia-basic.forwardauth.address:
-      #   "http://authelia:{{ container_webui_port.authelia }}/api/verify?auth=basic"
+      #   http://authelia:{{ container_webui_port.authelia }}/api/verify?auth=basic
       # traefik.http.middlewares.authelia-basic.forwardauth.trustForwardHeader: "true"
-      # traefik.http.middlewares.authelia-basic.forwardauth.authResponseHeaders: "Remote-User"
+      # traefik.http.middlewares.authelia-basic.forwardauth.authResponseHeaders: Remote-User
 
-
-      dev.dozzle.group: "Admin"
+      dev.dozzle.group: Admin
 
     environment:
       TZ: "{{ container_tz }}"
@@ -33,33 +32,33 @@ services:
 
     depends_on:
       postgres:
-        condition: "service_healthy"
+        condition: service_healthy
       redis:
-        condition: "service_healthy"
+        condition: service_healthy
 
-    security_opt: ["no-new-privileges:true"]
+    security_opt: [no-new-privileges:true]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
-    container_name: "authelia"
-    hostname: "authelia"
-    restart: "unless-stopped"
+    container_name: authelia
+    hostname: authelia
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "postgres"
-      - "redis"
-      - "lldap"
+      - traefik
+      - postgres
+      - redis
+      - lldap
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   postgres:
     external: true
-    name: "postgres"
+    name: postgres
   redis:
     external: true
-    name: "redis"
+    name: redis
   lldap:
     external: true
-    name: "lldap"
+    name: lldap

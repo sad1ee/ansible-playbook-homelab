@@ -1,33 +1,33 @@
 services:
   redis:
-    image: "docker.io/library/redis:8"
+    image: docker.io/library/redis:8
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     volumes:
       - "{{ container_path.redis }}:/data"
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: "60s"
-      timeout: "30s"
+      test: [ CMD, redis-cli, ping ]
+      interval: 60s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "5s"
+      start_period: 60s
+      start_interval: 5s
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: [ no-new-privileges:true ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
-    container_name: "redis"
-    hostname: "redis"
-    restart: "unless-stopped"
+    container_name: redis
+    hostname: redis
+    restart: unless-stopped
 
     networks:
-      - "redis"
+      - redis
 
 networks:
   redis:
     external: true
-    name: "redis"
+    name: redis

@@ -3,33 +3,33 @@
 http:
   routers:
     pihole:
-      rule: "Host(`pihole.{{ config_domain_base }}`)"
+      rule: Host(`pihole.{{ config_domain_base }}`)
       middlewares:
-        - "pihole-dashboard-redirect"
-      service: "pihole"
+        - pihole-dashboard-redirect
+      service: pihole
 
   middlewares:
     # FIX: For some reason not working
     pihole-dashboard-redirect:
       redirectRegex:
-        regex: "^/$"
-        replacement: "/admin"
-        permanent: "true"
+        regex: ^/$
+        replacement: /admin
+        permanent: true
     sablier:
       plugin:
         sablier:
-          sablierUrl: "http://sablier:10000"
-          group: "default"
+          sablierUrl: http://sablier:10000
+          group: default
           dynamic:
-            displayName: "..."
+            displayName: ...
 
   services:
     pihole:
       loadBalancer:
         servers:
-          - url: "https://{{ config_netserver_domain }}"
-        serversTransport: "pihole-insecure-ssl@file"
+          - url: https://{{ config_netserver_domain }}
+        serversTransport: pihole-insecure-ssl@file
 
   serversTransports:
     pihole-insecure-ssl:
-      insecureSkipVerify: "true"
+      insecureSkipVerify: true

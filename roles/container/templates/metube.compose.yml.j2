@@ -12,18 +12,18 @@ services:
       # sablier.group: "default"
       # traefik.docker.allownonrunning: true
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      LOGLEBEL: "INFO" # INFO, DEBUG
+      LOGLEBEL: INFO # INFO, DEBUG
       # YTDL_OPTIONS: "{'extractor_args': {'youtube': {'player_client': ['web_embedded','web','tv']}}}"
       MAX_CONCURRENT_DOWNLOADS: "4"
-      TEMP_DIR: "/tmp"
-      DOWNLOAD_DIR: "/video"
-      AUDIO_DOWNLOAD_DIR: "/audio"
+      TEMP_DIR: /tmp
+      DOWNLOAD_DIR: /video
+      AUDIO_DOWNLOAD_DIR: /audio
       OUTPUT_TEMPLATE: "%(title)s.%(ext)s"
       OUTPUT_TEMPLATE_CHAPTER: "%(title)s/%(title)s - %(section_number)s - %(section_title)s.%(ext)s"
       OUTPUT_TEMPLATE_PLAYLIST: "%(title)s.%(ext)s"
@@ -34,23 +34,20 @@ services:
       - "{{ container_path.metube.cache }}:/tmp"
 
     healthcheck:
-      test: [ "CMD", "wget", "-q", "--tries=1", "--spider", "http://127.0.0.1:8081" ]
-      interval: "300s"
-      timeout: "30s"
+      test: [ CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:8081 ]
+      interval: 300s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "2s"
+      start_period: 60s
+      start_interval: 2s
 
-    container_name: "metube"
-    # hostname: "metube"
-    restart: "unless-stopped"
+    container_name: metube
+    hostname: metube
+    restart: unless-stopped
 
-    network_mode: "service:gluetun"
+    networks:
+      - traefik
 
-#     networks:
-#       - "traefik"
-#
-# networks:
-#   traefik:
-#     external: true
-#     name: "traefik"
+networks:
+  traefik:
+  external: true

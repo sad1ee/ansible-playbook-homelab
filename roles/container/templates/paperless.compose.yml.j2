@@ -1,39 +1,39 @@
 services:
   paperless:
-    image: "ghcr.io/paperless-ngx/paperless-ngx:latest"
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.paperless.rule: Host(`paperless.{{ container_domain_base }}`)
       traefik.http.services.paperless.loadbalancer.server.port: "{{ container_webui_port.paperless }}"
-      traefik.http.routers.paperless.middlewares: "authelia@docker"
+      traefik.http.routers.paperless.middlewares: authelia@docker
 
-      dev.dozzle.group: "Frontend"
+      dev.dozzle.group: Frontend
 
     environment:
       USERMAP_UID: "{{ container_puid }}"
       USERMAP_GID: "{{ container_pgid }}"
-      PAPERLESS_URL: "https://paperless.{{ container_domain_base }}"
+      PAPERLESS_URL: https://paperless.{{ container_domain_base }}
       PAPERLESS_PORT: "{{ container_webui_port.paperless }}"
       PAPERLESS_TIME_ZONE: "{{ container_tz }}"
-      PAPERLESS_OCR_LANGUAGE: "deu"
-      PAPERLESS_OCR_LANGUAGES: "eng"
-      PAPERLESS_REDIS: "redis://redis:6379/0"
-      PAPERLESS_REDIS_PREFIX: "paperless"
-      PAPERLESS_DBHOST: "postgres"
+      PAPERLESS_OCR_LANGUAGE: deu
+      PAPERLESS_OCR_LANGUAGES: eng
+      PAPERLESS_REDIS: redis://redis:6379/0
+      PAPERLESS_REDIS_PREFIX: paperless
+      PAPERLESS_DBHOST: postgres
       PAPERLESS_DBPORT: "5432"
-      PAPERLESS_DBNAME: "paperless"
-      PAPERLESS_DBUSER: "paperless"
+      PAPERLESS_DBNAME: paperless
+      PAPERLESS_DBUSER: paperless
       PAPERLESS_DBPASS: "{{ container_paperless_db_pass }}"
       PAPERLESS_TIKA_ENABLED: "1"
-      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: "http://gotenberg:3000"
-      PAPERLESS_TIKA_ENDPOINT: "http://tika:9998"
-      # PAPERLESS_CONSUMER_DISABLE: "1"
-      PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+      PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
       PAPERLESS_DISABLE_REGULAR_LOGIN: true
       PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"SCOPE":["openid","profile","email"],"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"authelia","name":"Authelia","client_id":"paperless","secret":"{{ container_authelia_client_secret_paperless_plain }}","settings":{"server_url":"https://authelia.{{ container_domain_base }}","token_auth_method":"client_secret_basic"}}]}}'
-      PAPERLESS_MEDIA_ROOT: "/usr/src/paperless/media"
-      PAPERLESS_EMPTY_TRASH_DIR: "/usr/src/paperless/media/trash"
+      PAPERLESS_MEDIA_ROOT: /usr/src/paperless/media
+      PAPERLESS_EMPTY_TRASH_DIR: /usr/src/paperless/media/trash
+      PAPERLESS_FILENAME_FORMAT: "{% raw %}{{ owner_username }}/{{ correspondent }}/{{ document_type }}/{{ created_year }}/{{ created_month }}-{{ created_day }}-{{ title }}{% endraw %}"
 
     volumes:
       - "{{ container_path.paperless.data }}:/usr/src/paperless/data"
@@ -44,41 +44,41 @@ services:
 
     depends_on:
       postgres:
-        condition: "service_healthy"
+        condition: service_healthy
       redis:
-        condition: "service_healthy"
+        condition: service_healthy
       gotenberg:
-        condition: "service_started"
+        condition: service_started
       tika:
-        condition: "service_started"
+        condition: service_started
 
     healthcheck:
       disable: true
 
-    container_name: "paperless"
-    hostname: "paperless"
-    restart: "unless-stopped"
+    container_name: paperless
+    hostname: paperless
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "postgres"
-      - "redis"
-      - "gotenberg"
-      - "tika"
+      - traefik
+      - postgres
+      - redis
+      - gotenberg
+      - tika
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   postgres:
     external: true
-    name: "postgres"
+    name: postgres
   redis:
     external: true
-    name: "redis"
+    name: redis
   gotenberg:
     external: true
-    name: "gotenberg"
+    name: gotenberg
   tika:
     external: true
-    name: "tika"
+    name: tika

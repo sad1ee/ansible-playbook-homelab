@@ -1,40 +1,40 @@
 ---
-- name: "dirs | Create local template dirs"
+- name: dirs | Create local template dirs
   ansible.builtin.file:
     path: "{{ item }}"
-    state: "directory"
+    state: directory
     mode: "0755"
     owner: "{{ config_user }}"
     group: "{{ config_user }}"
   loop:
     - "{{ playbook_dir }}/.ansible/templates"
     - "{{ playbook_dir }}/.ansible/configs"
-  delegate_to: "localhost"
-  tags: ["config", "dirs"]
+  delegate_to: localhost
+  tags: [config, dirs]
 
-- name: "dirs | Create docker compose dirs"
+- name: dirs | Create docker compose dirs
   ansible.builtin.file:
     path: "{{ item }}"
-    state: "directory"
+    state: directory
     mode: "0750"
     owner: "{{ config_user }}"
     group: "{{ config_user }}"
   loop:
     - "{{ config_path_compose }}"
     - "{{ container_path_tmp }}"
-  tags: ["config", "dirs"]
+  tags: [config, dirs]
 
 
-- name: "dirs | Create docker compose dir"
+- name: dirs | Create docker compose dir
   ansible.builtin.file:
     path: "{{ item }}"
-    state: "directory"
+    state: directory
     mode: "0750"
     owner: "{{ config_user }}"
     group: "{{ config_user }}"
-  when: "inventory_hostname == 'homeserver'"
+  when: inventory_hostname == 'homeserver'
   loop:
     - "{{ container_path_tmp }}/cwa-ingest"
     - "{{ container_path_tmp }}/paperless-consume"
     - "{{ container_path_tmp }}/paperless-export"
-  tags: ["config", "dirs"]
+  tags: [config, dirs]

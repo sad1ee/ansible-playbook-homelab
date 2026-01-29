@@ -2,7 +2,7 @@
 - name: general | Ensure default editor is vim
   community.general.alternatives:
     name: editor
-    path: "/usr/bin/vim.tiny"
+    path: /usr/bin/vim.tiny
   tags: [common, general]
 
 - name: general | Ensure timezone is Europe/Berlin
@@ -28,7 +28,7 @@
   ansible.builtin.debug:
     msg: LANG is not en_US.UTF-8
   when:
-    - "common_localectl_status.stdout is defined"
+    - common_localectl_status.stdout is defined
     - "'System Locale: LANG=en_US.UTF-8' not in common_localectl_status.stdout_lines"
   changed_when: true
   notify: Set LANG

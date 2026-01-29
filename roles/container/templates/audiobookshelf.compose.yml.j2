@@ -1,18 +1,18 @@
 services:
   audiobookshelf:
-    image: "ghcr.io/advplyr/audiobookshelf:latest"
+    image: ghcr.io/advplyr/audiobookshelf:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.audiobookshelf.rule: Host(`audiobookshelf.{{ container_domain_base }}`)
       traefik.http.services.audiobookshelf.loadbalancer.server.port: "80"
-      traefik.http.routers.audiobookshelf.middlewares: "authelia@docker"
+      traefik.http.routers.audiobookshelf.middlewares: authelia@docker
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       TZ: "{{ container_tz }}"
-      SSRF_REQUEST_FILTER_WHITELIST: "tubefeed" # derived from the container name
+      SSRF_REQUEST_FILTER_WHITELIST: tubefeed # derived from the container name
       PODCAST_DOWNLOAD_TIMEOUT: 1800000 # equals 30 minutes in ms
 
     volumes:
@@ -23,21 +23,21 @@ services:
       - "{{ container_path.media }}/library/audiobooks:/audiobooks:ro"
       - "{{ container_path.media }}/library/podcasts:/podcasts"
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: [ no-new-privileges:true ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
-    container_name: "audiobookshelf"
-    hostname: "audiobookshelf"
-    restart: "unless-stopped"
+    container_name: audiobookshelf
+    hostname: audiobookshelf
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "podsync"
+      - traefik
+      - podsync
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   podsync:
     external: true
-    name: "podsync"
+    name: podsync

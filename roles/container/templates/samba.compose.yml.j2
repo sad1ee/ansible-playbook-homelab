@@ -1,15 +1,15 @@
 services:
   samba:
-    image: "dockurr/samba:latest"
+    image: dockurr/samba:latest
 
     labels:
-      dev.dozzle.group: "Frontend"
+      dev.dozzle.group: Frontend
 
     environment:
       UID: "{{ container_puid }}"
       GID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      NAME: "Share"
+      NAME: Share
       USER: "{{ container_samba_user }}"
       PASS: "{{ container_samba_pass }}"
 
@@ -17,19 +17,19 @@ services:
       - "{{ container_path.samba }}:/storage"
 
     ports:
-      - "445:445"
+      - 445:445
 
     healthcheck:
       disable: true
 
-    container_name: "samba"
-    hostname: "samba"
-    restart: "unless-stopped"
+    container_name: samba
+    hostname: samba
+    restart: unless-stopped
 
     networks:
-      - "samba"
+      - samba
 
 networks:
   samba:
     external: true
-    name: "samba"
+    name: samba

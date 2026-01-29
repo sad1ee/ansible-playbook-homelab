@@ -1,41 +1,41 @@
 services:
   postgres:
-    image: "docker.io/library/postgres:18"
+    image: docker.io/library/postgres:18
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
     environment:
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "{{ container_postgres_db_pass }}"
 
     volumes:
       - "{{ container_path.postgres }}:/var/lib/postgresql"
-      - "/etc/passwd:/etc/passwd:ro"
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/localtime:/etc/localtime:ro
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: [ no-new-privileges:true ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
-    shm_size: "128mb"
+    shm_size: 128mb
 
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "postgres" ]
-      interval: "60s"
-      timeout: "30s"
+      test: [ CMD, pg_isready, -U, postgres, -d, postgres ]
+      interval: 60s
+      timeout: 30s
       retries: "3"
-      start_period: "60s"
-      start_interval: "5s"
+      start_period: 60s
+      start_interval: 5s
 
-    container_name: "postgres"
-    hostname: "postgres"
-    restart: "unless-stopped"
+    container_name: postgres
+    hostname: postgres
+    restart: unless-stopped
 
     networks:
-      - "postgres"
+      - postgres
 
 networks:
   postgres:
     external: true
-    name: "postgres"
+    name: postgres

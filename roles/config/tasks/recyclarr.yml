@@ -9,9 +9,9 @@
   when: "'recyclarr' in config_list"
   register: config_recyclarr_download_changed
   loop:
-    - url: "https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/radarr/includes/custom-formats/radarr-custom-formats-uhd-bluray-web-german.yml"
+    - url: https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/radarr/includes/custom-formats/radarr-custom-formats-uhd-bluray-web-german.yml
       dest: "{{ container_path_tmp }}/radarr-custom-formats-uhd-bluray-web-german.original.yml"
-    - url: "https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/sonarr/includes/custom-formats/sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
+    - url: https://raw.githubusercontent.com/recyclarr/config-templates/refs/heads/master/sonarr/includes/custom-formats/sonarr-v4-custom-formats-uhd-bluray-web-german.yml
       dest: "{{ container_path_tmp }}/sonarr-v4-custom-formats-uhd-bluray-web-german.original.yml"
   tags: [config, recyclarr]
 
@@ -27,8 +27,8 @@
     - "'recyclarr' in config_list"
     - config_recyclarr_download_changed.changed
   loop:
-    - "radarr-custom-formats-uhd-bluray-web-german"
-    - "sonarr-v4-custom-formats-uhd-bluray-web-german"
+    - radarr-custom-formats-uhd-bluray-web-german
+    - sonarr-v4-custom-formats-uhd-bluray-web-german
   tags: [config, recyclarr]
 
 - name: recyclarr | Replace the assign_scores_to entries
@@ -56,6 +56,6 @@
     group: "{{ config_user }}"
   when: "'recyclarr' in config_list"
   loop:
-    - "radarr-custom-formats-uhd-bluray-web-german.yml"
-    - "sonarr-v4-custom-formats-uhd-bluray-web-german.yml"
+    - radarr-custom-formats-uhd-bluray-web-german.yml
+    - sonarr-v4-custom-formats-uhd-bluray-web-german.yml
   tags: [config, recyclarr]

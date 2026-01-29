@@ -1,22 +1,22 @@
 services:
   backrest:
-    image: "ghcr.io/garethgeorge/backrest:latest"
+    image: ghcr.io/garethgeorge/backrest:latest
 
     labels:
       traefik.enable: true
-      traefik.http.routers.backrest.rule: "Host(`backrest.{{ container_domain_base }}`)"
+      traefik.http.routers.backrest.rule: Host(`backrest.{{ container_domain_base }}`)
       traefik.http.services.backrest.loadbalancer.server.port: "9898"
-      traefik.http.routers.backrest.middlewares: "authelia@docker"
+      traefik.http.routers.backrest.middlewares: authelia@docker
 
-      dev.dozzle.group: "Media"
+      dev.dozzle.group: Media
 
     environment:
       TZ: "{{ container_tz }}"
       DOCKER_HOST: "{{ container_docker_proxy_host }}"
-      BACKREST_DATA: "/data"
-      BACKREST_CONFIG: "/config/config.json"
-      XDG_CACHE_HOME: "/cache"
-      TMPDIR: "/tmp"
+      BACKREST_DATA: /data
+      BACKREST_CONFIG: /config/config.json
+      XDG_CACHE_HOME: /cache
+      TMPDIR: /tmp
 
     volumes:
       - "{{ container_path.backrest.data }}:/data"
@@ -25,28 +25,28 @@ services:
       - "{{ container_path_ssd1 }}:/local-data"
       - "{{ container_path_hdd_pool }}/backup/backrest:/local-backup:rw"
 
-    security_opt: [ "no-new-privileges:true" ]
+    security_opt: [ no-new-privileges:true ]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     tmpfs:
-      - "/tmp"
+      - /tmp
 
-    container_name: "backrest"
-    hostname: "backrest"
-    restart: "unless-stopped"
+    container_name: backrest
+    hostname: backrest
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "docker-proxy"
-      - "ntfy"
+      - traefik
+      - docker-proxy
+      - ntfy
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   docker-proxy:
     external: true
-    name: "docker-proxy"
+    name: docker-proxy
   ntfy:
     external: true
-    name: "ntfy"
+    name: ntfy

@@ -1,9 +1,9 @@
 services:
   pihole:
-    image: "mpgirro/pihole-unbound:latest"
+    image: mpgirro/pihole-unbound:latest
 
     labels:
-      dev.dozzle.group: "Admin"
+      dev.dozzle.group: Admin
 
     environment:
       PIHOLE_UID: "{{ container_puid }}"
@@ -13,12 +13,12 @@ services:
       FTLCONF_webserver_api_password: "{{ container_pihole_pass }}"
       FTLCONF_webserver_domain: "{{ container_netserver_domain }}"
       FTLCONF_webserver_session_timeout: "2592000"
-      FTLCONF_dns_upstreams: "127.0.0.1#5335"
-      FTLCONF_dns_piholePTR: "NONE"
+      FTLCONF_dns_upstreams: 127.0.0.1#5335
+      FTLCONF_dns_piholePTR: NONE
       FTLCONF_dns_domainNeeded: "true"
       FTLCONF_dns_dnssec: "true"
-      FTLCONF_dns_listeningMode: "LOCAL"
-      FTLCONF_dns_domain_name: "lan"
+      FTLCONF_dns_listeningMode: LOCAL
+      FTLCONF_dns_domain_name: lan
       FTLCONF_dns_rateLimit_count: "1500"
       FTLCONF_dns_rateLimit_interval: "60"
       FTLCONF_dhcp_active: "false"
@@ -26,7 +26,7 @@ services:
       FTLCONF_dhcp_end: "{{ container_lan.dhcp_end }}"
       FTLCONF_dhcp_router: "{{ container_lan.router }}"
       FTLCONF_dhcp_netmask: "{{ container_lan.netmask }}"
-      FTLCONF_dhcp_leaseTime: "1d"
+      FTLCONF_dhcp_leaseTime: 1d
       FTLCONF_dhcp_ipv6: "true"
       FTLCONF_dhcp_multiDNS: "true"
       FTLCONF_dhcp_hosts: |
@@ -47,13 +47,13 @@ services:
       - "{{ container_path.pihole.dnsmasq }}:/etc/dnsmasq.d"
 
     cap_add:
-      - "NET_ADMIN"
-      - "SYS_TIME"
-      - "CAP_NET_BIND_SERVICE"
-      - "SYS_NICE"
+      - NET_ADMIN
+      - SYS_TIME
+      - CAP_NET_BIND_SERVICE
+      - SYS_NICE
 
-    container_name: "pihole"
-    hostname: "pihole"
-    restart: "unless-stopped"
+    container_name: pihole
+    hostname: pihole
+    restart: unless-stopped
 
-    network_mode: "host"
+    network_mode: host

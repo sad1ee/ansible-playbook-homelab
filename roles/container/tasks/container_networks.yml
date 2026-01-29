@@ -1,20 +1,20 @@
 ---
 - name: container_networks | Ensure proxy network exist
   community.docker.docker_network:
-    name: "traefik"
-    driver: "bridge"
+    name: traefik
+    driver: bridge
     ipam_config:
       - subnet: "{{ container_traefik_network.subnet }}"
         gateway: "{{ container_traefik_network.gateway }}"
-    state: "present"
+    state: present
   when: "'traefik' in container_list"
   tags: [container, container_networks]
 
 - name: container_networks | Ensure bridge networks exist
   community.docker.docker_network:
     name: "{{ item }}"
-    driver: "bridge"
-    state: "present"
+    driver: bridge
+    state: present
   when: item in container_list
   loop: "{{ container_bridge_networks }}"
   tags: [container, container_networks]

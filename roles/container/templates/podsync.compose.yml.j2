@@ -1,30 +1,30 @@
 services:
   podsync:
-    image: "ghcr.io/mxpv/podsync"
+    image: ghcr.io/mxpv/podsync
 
     labels:
-      dev.dozzle.group: "Backend"
+      dev.dozzle.group: Backend
 
-    # environment:
-    # PODSYNC_YOUTUBE_API_KEY: "{{ config_podsync_youtube_api_key }}"
-    # PODSYNC_VIMEO_API_KEY: ""
-    # PODSYNC_SOUNDCLOUD_API_KEY: ""
-    # PODSYNC_TWITCH_API_KEY: ""
+    environment:
+      PODSYNC_YOUTUBE_API_KEY: "{{ config_podsync_youtube_api_key }}"
 
     volumes:
       - "{{ container_path.podsync.data }}:/app/data/"
       - "{{ container_path.podsync.db }}:/app/db/"
       - "{{ container_path.podsync.config }}/config.toml:/app/config.toml"
-      - "/etc/localtime:/etc/localtime:ro"
+      - /etc/localtime:/etc/localtime:ro
 
-    container_name: "podsync"
-    hostname: "podsync"
-    restart: "unless-stopped"
+    security_opt: [ no-new-privileges:true ]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    container_name: podsync
+    hostname: podsync
+    restart: unless-stopped
 
     networks:
-      - "podsync"
+      - podsync
 
 networks:
   podsync:
     external: true
-    name: "podsync"
+    name: podsync

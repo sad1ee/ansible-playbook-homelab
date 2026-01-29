@@ -1,32 +1,32 @@
 ---
 - name: cache_mover | Clone mergerfs-cache-mover git repo
   ansible.builtin.git:
-    repo: "https://github.com/MonsterMuffin/mergerfs-cache-mover.git"
-    dest: "/usr/local/share/mergerfs-cache-mover"
-    version: "main"
+    repo: https://github.com/MonsterMuffin/mergerfs-cache-mover.git
+    dest: /usr/local/share/mergerfs-cache-mover
+    version: main
     update: "false"
   tags: [homeserver, cache_mover]
 
 - name: cache_mover | Install mergerfs-cache-mover requirements
   ansible.builtin.pip:
-    requirements: "/usr/local/share/mergerfs-cache-mover/requirements.txt"
-    virtualenv: "/usr/local/share/mergerfs-cache-mover/venv"
-    virtualenv_command: "python3 -m venv"
+    requirements: /usr/local/share/mergerfs-cache-mover/requirements.txt
+    virtualenv: /usr/local/share/mergerfs-cache-mover/venv
+    virtualenv_command: python3 -m venv
   tags: [homeserver, cache_mover]
 
 - name: cache_mover | Copy mergerfs-cache-mover config
   ansible.builtin.template:
     src: "{{ role_path }}/templates/mergerfs-cache-mover-config.yml.j2"
-    dest: "/usr/local/share/mergerfs-cache-mover/config.yml"
-    owner: "root"
-    group: "root"
+    dest: /usr/local/share/mergerfs-cache-mover/config.yml
+    owner: root
+    group: root
     mode: "0644"
   tags: [homeserver, cache_mover]
 
 - name: cache_mover | Setup daily mergerfs-cache-mover cronjob
   ansible.builtin.cron:
-    name: "mergerfs-cache-mover daily run"
-    user: "root"
+    name: mergerfs-cache-mover daily run
+    user: root
     job: >
       /usr/local/share/mergerfs-cache-mover/venv/bin/python
       /usr/local/share/mergerfs-cache-mover/cache-mover.py

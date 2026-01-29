@@ -1,21 +1,21 @@
 services:
   jellyfin:
-    image: "lscr.io/linuxserver/jellyfin:latest"
+    image: lscr.io/linuxserver/jellyfin:latest
     # image: "jellyfin/jellyfin:latest"
 
     labels:
       traefik.enable: true
       traefik.http.routers.jellyfin.rule: Host(`jellyfin.{{ container_domain_base }}`)
       traefik.http.services.jellyfin.loadbalancer.server.port: "{{ container_webui_port.jellyfin }}"
-      traefik.http.routers.jellyfin.middlewares: "authelia@docker"
+      traefik.http.routers.jellyfin.middlewares: authelia@docker
 
-      dev.dozzle.group: "Frontend"
+      dev.dozzle.group: Frontend
 
     environment:
       PUID: "{{ container_puid }}"
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      DOCKER_MODS: "linuxserver/mods:jellyfin-opencl-intel"
+      DOCKER_MODS: linuxserver/mods:jellyfin-opencl-intel
 
     volumes:
       - "{{ container_path.jellyfin.config }}:/config"
@@ -25,20 +25,20 @@ services:
       - "{{ container_path.media }}/library:/media/library"
 
     devices:
-      - "/dev/dri:/dev/dri"
+      - /dev/dri:/dev/dri
 
-    container_name: "jellyfin"
-    hostname: "jellyfin"
-    restart: "unless-stopped"
+    container_name: jellyfin
+    hostname: jellyfin
+    restart: unless-stopped
 
     networks:
-      - "traefik"
-      - "lldap"
+      - traefik
+      - lldap
 
 networks:
   traefik:
     external: true
-    name: "traefik"
+    name: traefik
   lldap:
     external: true
-    name: "lldap"
+    name: lldap
