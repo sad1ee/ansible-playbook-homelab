@@ -15,7 +15,7 @@ services:
       traefik.http.services.qbittorrent.loadbalancer.server.port: "{{ container_webui_port.qbittorrent }}"
       traefik.http.routers.qbittorrent.middlewares: authelia@docker
 
-      dev.dozzle.group: Backend
+      dev.dozzle.group: Acquisition
 
     environment:
       PUID: "{{ container_puid }}"
@@ -33,30 +33,22 @@ services:
       UPDATER_PERIOD: 24h
       UPDATER_PROTONVPN_EMAIL: "{{ container_gluetun_protonvpn_email }}"
       UPDATER_PROTONVPN_PASSWORD: "{{ container_gluetun_protonvpn_password }}"
-      VPN_PORT_FORWARDING_UP_COMMAND:
-        "/bin/sh -c 'wget -O- --retry-connrefused --post-data \
-        {% raw %}\"json={\
-        \"listen_port\":{{PORT}},\
-        \"current_network_interface\":\"{{VPN_INTERFACE}}\",\
-        \"random_port\":false,\
-        \"upnp\":false }\" \
-        {% endraw %} \
-        http://127.0.0.1:{{ container_webui_port.qbittorrent }}\
-        /api/v2/app/setPreferences 2>&1'"
-      VPN_PORT_FORWARDING_DOWN_COMMAND:
-        "/bin/sh -c 'wget -O- --retry-connrefused --post-data \
-        {% raw %}\"json={\
-        \"listen_port\":0,\
-        \"current_network_interface\":\"lo\" }\"\
-        {% endraw %} \
-        http://127.0.0.1:{{ container_webui_port.qbittorrent }}\
-        /api/v2/app/setPreferences 2>&1'"
+      VPN_PORT_FORWARDING_UP_COMMAND: '/bin/sh -c ''wget -O- --retry-connrefused --post-data {% raw %}"json={"listen_port":{{PORT}},"current_network_interface":"{{VPN_INTERFACE}}","random_port":false,"upnp":false }" {% endraw %} http://127.0.0.1:{{ container_webui_port.qbittorrent }}/api/v2/app/setPreferences 2>&1'''
+      VPN_PORT_FORWARDING_DOWN_COMMAND: '/bin/sh -c ''wget -O- --retry-connrefused --post-data {% raw %}"json={"listen_port":0,"current_network_interface":"lo" }"{% endraw %} http://127.0.0.1:{{ container_webui_port.qbittorrent }}/api/v2/app/setPreferences 2>&1'''
 
     devices:
       - /dev/net/tun:/dev/net/tun
 
     cap_add:
       - NET_ADMIN
+
+    healthcheck:
+      test: [CMD, /gluetun-entrypoint, healthcheck]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: gluetun
     hostname: gluetun

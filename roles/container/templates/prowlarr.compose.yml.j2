@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.prowlarr.rule: Host(`prowlarr.{{ container_domain_base }}`)
-      traefik.http.services.prowlarr.loadbalancer.server.port: "{{ container_webui_port.prowlarr }}"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
       traefik.http.routers.prowlarr.middlewares: authelia@docker
 
-      dev.dozzle.group: Media
+      dev.dozzle.group: Arr
 
     environment:
       PUID: "{{ container_puid }}"
@@ -17,6 +17,14 @@ services:
 
     volumes:
       - "{{ container_path.prowlarr }}:/config"
+
+    healthcheck:
+      test: [CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:9696]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: prowlarr
     hostname: prowlarr

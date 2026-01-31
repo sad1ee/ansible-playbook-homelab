@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.dozzle.rule: Host(`dozzle.{{ container_domain_base }}`)
-      traefik.http.services.dozzle.loadbalancer.server.port: "{{ container_webui_port.dozzle }}"
+      traefik.http.services.dozzle.loadbalancer.server.port: "8080"
       traefik.http.routers.dozzle.middlewares: authelia-legacy@docker
 
-      dev.dozzle.group: Admin
+      dev.dozzle.group: Administration
 
     environment:
       DOZZLE_LEVEL: info
@@ -30,6 +30,10 @@ services:
       retries: "3"
       start_period: 60s
       start_interval: 2s
+
+    depends_on:
+      docker-proxy:
+        condition: service_healthy
 
     container_name: dozzle
     hostname: dozzle

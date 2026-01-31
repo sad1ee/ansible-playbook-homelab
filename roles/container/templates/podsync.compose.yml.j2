@@ -3,7 +3,7 @@ services:
     image: ghcr.io/mxpv/podsync
 
     labels:
-      dev.dozzle.group: Backend
+      dev.dozzle.group: Acquisition
 
     environment:
       PODSYNC_YOUTUBE_API_KEY: "{{ config_podsync_youtube_api_key }}"
@@ -14,7 +14,7 @@ services:
       - "{{ container_path.podsync.config }}/config.toml:/app/config.toml"
       - /etc/localtime:/etc/localtime:ro
 
-    security_opt: [ no-new-privileges:true ]
+    security_opt: [no-new-privileges:true]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     container_name: podsync

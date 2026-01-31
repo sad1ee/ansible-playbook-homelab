@@ -44,7 +44,7 @@ container_list:
   - beszel-agent
   - beszel
   - cwa
-  - databasus
+  # - databasus
   - diun
   - docker-proxy
   - dozzle
@@ -61,7 +61,7 @@ container_list:
   - ntfy
   - paperless
   # - podsync
-  - tubefeed
+  # - tubefeed
   - postgres
   - prowlarr
   # - pyload

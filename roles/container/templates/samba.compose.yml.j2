@@ -3,7 +3,7 @@ services:
     image: dockurr/samba:latest
 
     labels:
-      dev.dozzle.group: Frontend
+      dev.dozzle.group: Services
 
     environment:
       UID: "{{ container_puid }}"
@@ -20,7 +20,12 @@ services:
       - 445:445
 
     healthcheck:
-      disable: true
+      test: [CMD-SHELL, smbclient --configfile=/etc/samba.conf -L \\localhost -U \% -m SMB3]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: samba
     hostname: samba

@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.beszel.rule: Host(`beszel.{{ container_domain_base }}`)
-      traefik.http.services.beszel.loadbalancer.server.port: "{{ container_webui_port.beszel }}"
+      traefik.http.services.beszel.loadbalancer.server.port: "8090"
       traefik.http.routers.beszel.middlewares: authelia@docker
 
-      dev.dozzle.group: Admin
+      dev.dozzle.group: Administration
 
     environment:
       APP_URL: https://beszel.{{ container_domain_base }}
@@ -20,7 +20,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
-      test: [ CMD, /beszel, health, --url, http://localhost:8090 ]
+      test: [CMD, /beszel, health, --url, http://localhost:8090]
       interval: 300s
       timeout: 30s
       retries: "3"

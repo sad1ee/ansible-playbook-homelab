@@ -34,19 +34,3 @@ container_webui_port:
   shelfmark: 8084
   radarr: 7878
   sonarr: 8989
-  prowlarr: 9696
-  bazarr: 6767
-  jellyseerr: 5055
-  jellyfin: 8096
-  lldap: 17170
-  cwa: 8083
-  authelia: 9091
-  beszel: 8090
-  dozzle: 8080
-  homepage: 3000
-  ntfy: 2586
-  paperless: 8000
-  pihole: 443
-  pyload: 8000
-  syncthing: 8384
-  audiobookshelf: 13378

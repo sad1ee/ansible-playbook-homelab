@@ -5,22 +5,20 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.lldap.rule: Host(`lldap.{{ container_domain_base }}`)
-      traefik.http.services.lldap.loadbalancer.server.port: "{{ container_webui_port.lldap }}"
+      traefik.http.services.lldap.loadbalancer.server.port: "17170"
       traefik.http.routers.lldap.middlewares: authelia@docker
       traefik.docker.network: lldap
 
-      dev.dozzle.group: Admin
+      dev.dozzle.group: Administration
 
     environment:
       TZ: "{{ container_tz }}"
-      LLDAP_HTTP_PORT: "{{ container_webui_port.lldap }}"
       LLDAP_JWT_SECRET: "{{ container_lldap_jwt_secret }}"
       LLDAP_KEY_SEED: "{{ container_lldap_key_seed }}"
-      LLDAP_LDAP_BASE_DN:
-        dc={{ container_domain_base_seperated[0] }},dc={{ container_domain_base_seperated[1] }}
+      LLDAP_LDAP_BASE_DN: dc={{ container_domain_base_seperated[0] }},dc={{ container_domain_base_seperated[1] }}
       LLDAP_DATABASE_URL: postgres://lldap:{{ container_lldap_db_pass }}@postgres/lldap
 
-    security_opt: [ no-new-privileges:true ]
+    security_opt: [no-new-privileges:true]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     depends_on:
@@ -29,6 +27,14 @@ services:
 
     volumes:
       - "{{ container_path.lldap }}:/data"
+
+    healthcheck:
+      test: [CMD, /app/lldap, healthcheck, --config-file, /data/lldap_config.toml]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: lldap
     hostname: lldap

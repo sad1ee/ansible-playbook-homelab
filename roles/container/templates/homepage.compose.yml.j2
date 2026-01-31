@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.homepage.rule: Host(`homepage.{{ container_domain_base }}`)
-      traefik.http.services.homepage.loadbalancer.server.port: "{{ container_webui_port.homepage }}"
+      traefik.http.services.homepage.loadbalancer.server.port: "3000"
       traefik.http.routers.homepage.middlewares: authelia@docker
 
-      dev.dozzle.group: Frontend
+      dev.dozzle.group: Services
 
     environment:
       PUID: "{{ container_puid }}"
@@ -21,7 +21,16 @@ services:
       - "{{ container_path.homepage }}:/app/config"
 
     healthcheck:
-      disable: true
+      test: [CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:3000/api/healthcheck]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
+    depends_on:
+      docker-proxy:
+        condition: service_healthy
 
     container_name: homepage
     hostname: homepage

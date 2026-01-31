@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.bazarr.rule: Host(`bazarr.{{ container_domain_base }}`)
-      traefik.http.services.bazarr.loadbalancer.server.port: "{{ container_webui_port.bazarr }}"
+      traefik.http.services.bazarr.loadbalancer.server.port: "6767"
       traefik.http.routers.bazarr.middlewares: authelia@docker
 
-      dev.dozzle.group: Media
+      dev.dozzle.group: Arr
 
     environment:
       PUID: "{{ container_puid }}"
@@ -19,6 +19,14 @@ services:
       - "{{ container_path.bazarr.config }}:/config"
       - "{{ container_path.bazarr.cache }}:/config/cache"
       - "{{ container_path.media }}/library:/media/library"
+
+    healthcheck:
+      test: [CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:6767]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: bazarr
     hostname: bazarr

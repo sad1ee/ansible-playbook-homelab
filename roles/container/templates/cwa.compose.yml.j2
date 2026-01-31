@@ -1,20 +1,19 @@
 services:
   cwa:
-    image: crocodilestick/calibre-web-automated:dev # :latest"
+    image: crocodilestick/calibre-web-automated:latest
 
     labels:
       traefik.enable: true
       traefik.http.routers.cwa.rule: Host(`cwa.{{ container_domain_base }}`)
-      traefik.http.services.cwa.loadbalancer.server.port: "{{ container_webui_port.cwa }}"
+      traefik.http.services.cwa.loadbalancer.server.port: "8083"
       traefik.http.routers.cwa.middlewares: authelia@docker
 
-      dev.dozzle.group: Frontend
+      dev.dozzle.group: Media
 
     environment:
       PUID: "{{ container_puid }}"
       PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      CWA_PORT_OVERRIDE: "{{ container_webui_port.cwa }}"
       HARDCOVER_TOKEN: "{{ container_cwa_hardcover_token }}"
 
     volumes:
@@ -22,6 +21,14 @@ services:
       - "{{ container_path.calibre.thumbnails }}:/config/thumbnails"
       - "{{ container_path.calibre.ingest }}:/cwa-book-ingest"
       - "{{ container_path.calibre.library }}:/calibre-library"
+
+    healthcheck:
+      test: [CMD, curl, -sf, http://127.0.0.1:8083/health]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: cwa
     hostname: cwa

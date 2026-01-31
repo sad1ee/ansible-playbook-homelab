@@ -24,6 +24,18 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
+    depends_on:
+      docker-proxy:
+        condition: service_healthy
+
+    healthcheck:
+      test: [CMD, sablier, health]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
     container_name: sablier
     hostname: sablier
     restart: unless-stopped

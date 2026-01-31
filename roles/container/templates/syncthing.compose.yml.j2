@@ -5,10 +5,10 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.syncthing.rule: Host(`syncthing.{{ container_domain_base }}`)
-      traefik.http.services.syncthing.loadbalancer.server.port: "{{ container_webui_port.syncthing }}"
+      traefik.http.services.syncthing.loadbalancer.server.port: "8384"
       traefik.http.routers.syncthing.middlewares: authelia@docker
 
-      dev.dozzle.group: Media
+      dev.dozzle.group: Services
 
     environment:
       PUID: "{{ container_puid }}"
@@ -23,6 +23,14 @@ services:
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
+
+    healthcheck:
+      test: [CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:8384]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: syncthing
     hostname: syncthing

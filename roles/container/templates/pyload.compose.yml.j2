@@ -5,14 +5,14 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.pyload.rule: Host(`pyload.{{ container_domain_base }}`)
-      traefik.http.services.pyload.loadbalancer.server.port: "{{ container_webui_port.pyload }}"
+      traefik.http.services.pyload.loadbalancer.server.port: "8000"
       traefik.http.routers.pyload.middlewares: authelia@docker, sablier@file
 
       sablier.enable: true
       sablier.group: default
       traefik.docker.allownonrunning: true
 
-      dev.dozzle.group: Frontend
+      dev.dozzle.group: Acquisition
 
     environment:
       PUID: "{{ container_puid }}"

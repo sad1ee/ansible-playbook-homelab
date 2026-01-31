@@ -12,7 +12,7 @@ services:
       sablier.group: default
       traefik.docker.allownonrunning: true
 
-      dev.dozzle.group: Media
+      dev.dozzle.group: Services
 
     environment:
       PUID: "{{ container_puid }}"
@@ -23,6 +23,14 @@ services:
 
     volumes:
       - "{{ container_path.stirlingpdf }}:/configs"
+
+    healthcheck:
+      test: [CMD, curl, -sf, http://127.0.0.1:8080] # NOTE: Broken currently: /v1/info/status
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: stirlingpdf
     hostname: stirlingpdf

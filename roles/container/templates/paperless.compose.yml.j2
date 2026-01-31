@@ -5,16 +5,15 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.paperless.rule: Host(`paperless.{{ container_domain_base }}`)
-      traefik.http.services.paperless.loadbalancer.server.port: "{{ container_webui_port.paperless }}"
+      traefik.http.services.paperless.loadbalancer.server.port: "8000"
       traefik.http.routers.paperless.middlewares: authelia@docker
 
-      dev.dozzle.group: Frontend
+      dev.dozzle.group: Services
 
     environment:
       USERMAP_UID: "{{ container_puid }}"
       USERMAP_GID: "{{ container_pgid }}"
       PAPERLESS_URL: https://paperless.{{ container_domain_base }}
-      PAPERLESS_PORT: "{{ container_webui_port.paperless }}"
       PAPERLESS_TIME_ZONE: "{{ container_tz }}"
       PAPERLESS_OCR_LANGUAGE: deu
       PAPERLESS_OCR_LANGUAGES: eng
@@ -53,7 +52,12 @@ services:
         condition: service_started
 
     healthcheck:
-      disable: true
+      test: [CMD, curl, -fs, -S, -L, --max-time, "2", http://localhost:8000]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: paperless
     hostname: paperless

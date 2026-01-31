@@ -3,13 +3,13 @@ services:
     image: mpgirro/pihole-unbound:latest
 
     labels:
-      dev.dozzle.group: Admin
+      dev.dozzle.group: Administration
 
     environment:
       PIHOLE_UID: "{{ container_puid }}"
       PIHOLE_GID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
-      FTLCONF_webserver_port: "{{ container_webui_port.pihole }}s"
+      FTLCONF_webserver_port: 443s
       FTLCONF_webserver_api_password: "{{ container_pihole_pass }}"
       FTLCONF_webserver_domain: "{{ container_netserver_domain }}"
       FTLCONF_webserver_session_timeout: "2592000"
@@ -51,6 +51,15 @@ services:
       - SYS_TIME
       - CAP_NET_BIND_SERVICE
       - SYS_NICE
+
+    healthcheck:
+      test:
+        [CMD, dig, -p, 5335, +short, +norecurse, +retry=0, @127.0.0.1, pi.hole]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
 
     container_name: pihole
     hostname: pihole

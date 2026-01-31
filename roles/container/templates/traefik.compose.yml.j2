@@ -27,7 +27,7 @@ services:
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ container_domain_base }}"
 
       # App Labels
-      dev.dozzle.group: Admin
+      dev.dozzle.group: Administration
 
     volumes:
       - "{{ container_path.traefik.config }}/acme.json:/certs/acme.json:rw"
@@ -39,7 +39,7 @@ services:
       - 80:80
       - 443:443
 
-    security_opt: [ no-new-privileges:true ]
+    security_opt: [no-new-privileges:true]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
     depends_on:
@@ -52,7 +52,7 @@ services:
         condition: service_started
 
     healthcheck:
-      test: [ CMD, traefik, healthcheck ]
+      test: [CMD, traefik, healthcheck]
       interval: 60s
       timeout: 30s
       retries: "3"

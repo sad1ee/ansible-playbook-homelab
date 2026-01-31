@@ -20,7 +20,7 @@ services:
       DIUN_WATCH_JITTER: 30s
       DIUN_WATCH_RUNONSTARTUP: false
 
-      DIUN_NOTIF_NTFY_ENDPOINT: http://ntfy:{{ container_webui_port.ntfy }}
+      DIUN_NOTIF_NTFY_ENDPOINT: http://ntfy:2586
       DIUN_NOTIF_NTFY_TOKEN: "{{ container_diun_ntfy_token }}"
       DIUN_NOTIF_NTFY_TOPIC: diun
       DIUN_NOTIF_NTFY_PRIORITY: "2"
@@ -34,6 +34,8 @@ services:
 
     depends_on:
       docker-proxy:
+        condition: service_healthy
+      ntfy:
         condition: service_healthy
 
     container_name: diun
