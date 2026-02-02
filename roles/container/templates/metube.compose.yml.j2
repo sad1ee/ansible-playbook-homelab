@@ -3,14 +3,14 @@ services:
     image: ghcr.io/alexta69/metube:latest
 
     labels:
-      # traefik.enable: true
-      # traefik.http.routers.metube.rule: Host(`metube.{{ container_domain_base }}`)
-      # traefik.http.services.metube.loadbalancer.server.port: "8081"
-      # traefik.http.routers.metube.middlewares: "authelia@docker, sablier@file"
+      traefik.enable: true
+      traefik.http.routers.metube.rule: Host(`metube.{{ container_domain_base }}`)
+      traefik.http.services.metube.loadbalancer.server.port: "8081"
+      traefik.http.routers.metube.middlewares: authelia@docker, sablier@file
 
-      # sablier.enable: true
-      # sablier.group: "default"
-      # traefik.docker.allownonrunning: true
+      sablier.enable: true
+      sablier.group: default
+      traefik.docker.allownonrunning: true
 
       dev.dozzle.group: Acquisition
 
@@ -34,7 +34,7 @@ services:
       - "{{ container_path.metube.cache }}:/tmp"
 
     healthcheck:
-      test: [CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:8081]
+      test: [ CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:8081 ]
       interval: 300s
       timeout: 30s
       retries: "3"
@@ -50,4 +50,5 @@ services:
 
 networks:
   traefik:
-  external: true
+    external: true
+    name: traefik

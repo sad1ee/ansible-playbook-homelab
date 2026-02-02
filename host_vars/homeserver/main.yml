@@ -56,12 +56,12 @@ container_list:
   - jellyfin
   - jellyseerr
   - lldap
-  # - metube
+  - metube
   - navidrome
   - ntfy
   - paperless
-  # - podsync
-  # - tubefeed
+  - pgadmin
+  - podsync
   - postgres
   - prowlarr
   # - pyload

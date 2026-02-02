@@ -83,16 +83,16 @@ container_path:
     consume: "{{ container_path_tmp }}/paperless-consume"
     export: "{{ container_path_tmp }}/paperless-export"
 
+  pgadmin: "{{ container_path_docker }}/pgadmin"
+
   pihole:
     pihole: "{{ container_path_docker }}/pihole/pihole"
     dnsmasq: "{{ container_path_docker }}/pihole/dnsmasq"
 
   podsync:
-    data: "{{ container_path_docker }}/podsync/data"
+    data: "{{ container_path_docker_cache }}/podsync"
     db: "{{ container_path_docker }}/podsync/db"
     config: "{{ container_path_docker }}/podsync"
-
-  tubefeed: "{{ container_path_docker_cache }}/tubefeed"
 
   postgres: "{{ container_path_docker }}/postgres"
 

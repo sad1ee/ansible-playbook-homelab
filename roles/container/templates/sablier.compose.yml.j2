@@ -7,7 +7,7 @@ services:
 
     environment:
       LOGGING_LEVEL: info # info, debug
-      DOCKER_HOST: "{{ container_docker_proxy_host }}"
+      # DOCKER_HOST: "{{ container_docker_proxy_host }}"
       PROVIDER_NAME: docker
       PROVIDER_NAME_STRATEGY: stop
       SERVER_PORT: 10000
@@ -23,13 +23,15 @@ services:
 
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      # NOTE: TMP until upstream fixes socket reliability
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
-    depends_on:
-      docker-proxy:
-        condition: service_healthy
+    # depends_on:
+    #   docker-proxy:
+    #     condition: service_healthy
 
     healthcheck:
-      test: [CMD, sablier, health]
+      test: [ CMD, sablier, health ]
       interval: 300s
       timeout: 30s
       retries: "3"
@@ -42,12 +44,12 @@ services:
 
     networks:
       - sablier
-      - docker-proxy
+      # - docker-proxy
 
 networks:
   sablier:
     external: true
     name: sablier
-  docker-proxy:
-    external: true
-    name: docker-proxy
+  # docker-proxy:
+  #   external: true
+  #   name: docker-proxy

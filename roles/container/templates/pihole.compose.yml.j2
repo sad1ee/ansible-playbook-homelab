@@ -53,8 +53,7 @@ services:
       - SYS_NICE
 
     healthcheck:
-      test:
-        [CMD, dig, -p, 5335, +short, +norecurse, +retry=0, @127.0.0.1, pi.hole]
+      test: [CMD, dig, -p, "5335", "+short", "+norecurse", "+retry=0", "@127.0.0.1", "pi.hole"]
       interval: 300s
       timeout: 30s
       retries: "3"

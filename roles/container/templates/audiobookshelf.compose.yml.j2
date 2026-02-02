@@ -12,7 +12,7 @@ services:
 
     environment:
       TZ: "{{ container_tz }}"
-      SSRF_REQUEST_FILTER_WHITELIST: tubefeed # derived from the container name
+      SSRF_REQUEST_FILTER_WHITELIST: podsync
       PODCAST_DOWNLOAD_TIMEOUT: 1800000 # equals 30 minutes in ms
 
     volumes:

@@ -24,7 +24,6 @@ services:
       ND_EXTAUTH_TRUSTEDSOURCES: "{{ container_traefik_network.traefik }}/32"
       # ND_ENABLEUSEREDITING: false
       ND_ENABLEINSIGHTSCOLLECTOR: false
-      # ND_CACHEFOLDER: "/cache"
 
     volumes:
       - "{{ container_path.navidrome.data }}:/data"
