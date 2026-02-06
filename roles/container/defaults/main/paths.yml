@@ -61,6 +61,8 @@ container_path:
     config: "{{ container_path_docker }}/jellyseerr"
     cache: "{{ container_path_docker_cache }}/jellyseerr"
 
+  linkding: "{{ container_path_docker }}/linkding"
+
   lldap: "{{ container_path_docker }}/lldap"
 
   metube:
@@ -133,3 +135,5 @@ container_path:
   traefik:
     config: "{{ container_path_docker }}/traefik"
     plugins: "{{ container_path_docker_cache }}/traefik/plugins"
+
+  uptime_kuma: "{{ container_path_docker }}/uptime-kuma"

@@ -1,0 +1,61 @@
+services:
+  linkding:
+    image: sissbruecker/linkding:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.linkding.rule: Host(`linkding.{{ container_domain_base }}`)
+      traefik.http.services.linkding.loadbalancer.server.port: "9090"
+      traefik.http.routers.linkding.middlewares: authelia@docker, sablier-linkding@file
+
+      sablier.enable: true
+      sablier.group: linkding
+      traefik.docker.allownonrunning: true
+
+      dev.dozzle.group: Services
+
+    environment:
+      PUID: "{{ container_puid }}"
+      PGID: "{{ container_pgid }}"
+      TZ: "{{ container_tz }}"
+      LD_ENABLE_OIDC: true
+      LD_CSRF_TRUSTED_ORIGINS: https://authelia.{{ container_domain_base }}
+      OIDC_RP_CLIENT_ID: linkding
+      OIDC_RP_CLIENT_SECRET: "{{ config_authelia_client_secret_linkding_plain }}"
+      OIDC_OP_AUTHORIZATION_ENDPOINT: https://authelia.{{ container_domain_base }}/api/oidc/authorization
+      OIDC_OP_TOKEN_ENDPOINT: https://authelia.{{ container_domain_base }}/api/oidc/token
+      OIDC_OP_USER_ENDPOINT: https://authelia.{{ container_domain_base }}/api/oidc/userinfo
+      OIDC_OP_JWKS_ENDPOINT: https://authelia.{{ container_domain_base }}/jwks.json
+      LD_DB_ENGINE: postgres
+      LD_DB_HOST: postgres
+      LD_DB_PORT: "5432"
+      PAPERLESS_DBNAME: linkding
+      LD_DB_USER: linkding
+      LD_DB_PASSWORD: "{{ container_linkding_db_pass }}"
+
+    volumes:
+      - "{{ container_path.linkding }}:/etc/linkding/data"
+
+    healthcheck:
+      test: [ CMD, curl, -f, http://127.0.0.1:9090 ]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
+    container_name: linkding
+    hostname: linkding
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - postgres
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  postgres:
+    external: true
+    name: postgres

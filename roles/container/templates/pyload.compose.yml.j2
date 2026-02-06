@@ -6,10 +6,10 @@ services:
       traefik.enable: true
       traefik.http.routers.pyload.rule: Host(`pyload.{{ container_domain_base }}`)
       traefik.http.services.pyload.loadbalancer.server.port: "8000"
-      traefik.http.routers.pyload.middlewares: authelia@docker, sablier@file
+      traefik.http.routers.pyload.middlewares: authelia@docker, sablier-pyload@file
 
       sablier.enable: true
-      sablier.group: default
+      sablier.group: pyload
       traefik.docker.allownonrunning: true
 
       dev.dozzle.group: Acquisition

@@ -1,7 +1,7 @@
 network:
   version: 2
   ethernets:
-    { { common_network_lan.interface } }:
+    {{ common_network_lan.interface }}:
       dhcp4: "no"
       dhcp6: "no"
       addresses:

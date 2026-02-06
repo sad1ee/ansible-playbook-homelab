@@ -3,8 +3,8 @@ Paths:
   BACKING_PATH: /mnt/{{ homeserver_mount_dirs.mergerfs_pool_hdds }}
   LOG_PATH: /var/log/cache-mover.log
 
-Settings:
-  AUTO_UPDATE: "false"
+Settings":
+  AUTO_UPDATE: false
   UPDATE_BRANCH: main
   THRESHOLD_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.threshold }}
   TARGET_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.target }}

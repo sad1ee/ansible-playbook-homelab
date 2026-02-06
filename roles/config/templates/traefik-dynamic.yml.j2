@@ -15,13 +15,34 @@ http:
         regex: ^/$
         replacement: /admin
         permanent: true
-    sablier:
+    sablier-stirlingpdf:
       plugin:
         sablier:
           sablierUrl: http://sablier:10000
-          group: default
+          group: stirlingpdf
           dynamic:
-            displayName: ...
+            displayName: Stirling-PDF
+    sablier-linkding:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: linkding
+          dynamic:
+            displayName: Linkding
+    sablier-metube:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: metube
+          dynamic:
+            displayName: MeTube
+    sablier-pyload:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: pyload
+          dynamic:
+            displayName: PyLoad
 
   services:
     pihole:

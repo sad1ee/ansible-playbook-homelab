@@ -23,9 +23,8 @@ services:
       TZ: "{{ container_tz }}"
       LOGLEVEL: debug # debug, info, warning, error
       VPN_SERVICE_PROVIDER: protonvpn
-      VPN_TYPE: openvpn
-      OPENVPN_USER: "{{ container_gluetun_openvpn_user }}+pmp"
-      OPENVPN_PASSWORD: "{{ container_gluetun_openvpn_password }}"
+      VPN_TYPE: wireguard # openvpn
+      WIREGUARD_PRIVATE_KEY: "{{ container_gluetun_wireguard_key }}" # "{{ container_gluetun_openvpn_user }}+pmp"
       SERVER_COUNTRIES: Germany
       PORT_FORWARD_ONLY: "on"
       VPN_PORT_FORWARDING: "on"
@@ -43,7 +42,7 @@ services:
       - NET_ADMIN
 
     healthcheck:
-      test: [CMD, /gluetun-entrypoint, healthcheck]
+      test: [ CMD, /gluetun-entrypoint, healthcheck ]
       interval: 300s
       timeout: 30s
       retries: "3"

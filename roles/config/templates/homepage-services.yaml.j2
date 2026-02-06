@@ -13,6 +13,12 @@
             server: local-docker
             container: dozzle
 
+        - Uptime-Kuma:
+            icon: uptime-kuma
+            href: https://uptime-kuma.{{ config_domain_base }}
+            server: local-docker
+            container: uptime-kuma
+
         - Pihole:
             icon: pi-hole-unbound
             href: https://pihole.{{ config_domain_base }}
@@ -84,6 +90,12 @@
             href: https://stirlingpdf.{{ config_domain_base }}
             server: local-docker
             container: stirlingpdf
+
+        - Linkding:
+            icon: linkding
+            href: https://linkding.{{ config_domain_base }}
+            server: local-docker
+            container: linkding
 
     - Media:
         - Jellyfin:

@@ -1,0 +1,49 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2-rootless
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.uptime-kuma.rule: Host(`uptime-kuma.{{ container_domain_base }}`)
+      traefik.http.services.uptime-kuma.loadbalancer.server.port: "3001"
+      traefik.http.routers.uptime-kuma.middlewares: authelia@docker
+
+      dev.dozzle.group: Administration
+
+    environment:
+      TZ: "{{ container_tz }}"
+
+    volumes:
+      - "{{ container_path.uptime_kuma }}:/app/data"
+
+    healthcheck:
+      test: [ CMD, curl, -f, http://127.0.0.1:3001 ]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
+    depends_on:
+      docker-proxy:
+        condition: service_healthy
+
+    container_name: uptime-kuma
+    hostname: uptime-kuma
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - docker-proxy
+      - ntfy
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  docker-proxy:
+    external: true
+    name: docker-proxy
+  ntfy:
+    external: true
+    name: ntfy

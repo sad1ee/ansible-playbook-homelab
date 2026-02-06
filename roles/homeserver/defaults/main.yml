@@ -7,6 +7,7 @@ homeserver_mount_dirs:
   ssd1: ssd1
   hdd1: hdd1
   hdd2: hdd2
+  parity1: parity1
   mergerfs_pool_hdds: hdd-pool
   mergerfs_pool_all: storage
 
@@ -23,6 +24,11 @@ homeserver_physical_drives:
     spindown: true
   - mnt: "{{ homeserver_mount_dirs.hdd2 }}"
     uuid: 2a085e2e-a05a-4e30-b730-b28e22ded775
+    type: xfs
+    opts: defaults,noatime
+    spindown: true
+  - mnt: "{{ homeserver_mount_dirs.parity1 }}"
+    uuid: b828bf4f-4787-4afe-850c-dd784b220131
     type: xfs
     opts: defaults,noatime
     spindown: true
@@ -51,10 +57,13 @@ homeserver_mergerfs_cache_mover:
     target: 40
   excluded:
     - lost+found
+    - .beszel
     - .Trash-1000
+    - .snapraid
     - docker
     - media/downloads
-    - media/torrents/audiobooks
+    - audiobooks
+    # - media/torrents/audiobooks
     - media/torrents/books
     - media/torrents/incomplete
     - media/library/audiobooks
