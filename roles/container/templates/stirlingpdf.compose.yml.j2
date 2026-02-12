@@ -25,7 +25,7 @@ services:
       - "{{ container_path.stirlingpdf }}:/configs"
 
     healthcheck:
-      test: [ CMD, curl, -sf, http://127.0.0.1:8080 ] # NOTE: Broken currently: /v1/info/status
+      test: [CMD, curl, -sf, http://127.0.0.1:8080] # NOTE: Broken currently: /v1/info/status
       interval: 300s
       timeout: 30s
       retries: "3"

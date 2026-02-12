@@ -1,56 +1,31 @@
 # yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
 
-http:
-  routers:
-    pihole:
-      rule: Host(`pihole.{{ config_domain_base }}`)
-      middlewares:
-        - pihole-dashboard-redirect
-      service: pihole
-
-  middlewares:
-    # FIX: For some reason not working
-    pihole-dashboard-redirect:
-      redirectRegex:
-        regex: ^/$
-        replacement: /admin
-        permanent: true
-    sablier-stirlingpdf:
-      plugin:
-        sablier:
-          sablierUrl: http://sablier:10000
-          group: stirlingpdf
-          dynamic:
-            displayName: Stirling-PDF
-    sablier-linkding:
-      plugin:
-        sablier:
-          sablierUrl: http://sablier:10000
-          group: linkding
-          dynamic:
-            displayName: Linkding
-    sablier-metube:
-      plugin:
-        sablier:
-          sablierUrl: http://sablier:10000
-          group: metube
-          dynamic:
-            displayName: MeTube
-    sablier-pyload:
-      plugin:
-        sablier:
-          sablierUrl: http://sablier:10000
-          group: pyload
-          dynamic:
-            displayName: PyLoad
-
-  services:
-    pihole:
-      loadBalancer:
-        servers:
-          - url: https://{{ config_netserver_domain }}
-        serversTransport: pihole-insecure-ssl@file
-
-  serversTransports:
-    pihole-insecure-ssl:
-      insecureSkipVerify: true
+middlewares:
+  sablier-stirlingpdf:
+    plugin:
+      sablier:
+        sablierUrl: http://sablier:10000
+        group: stirlingpdf
+        dynamic:
+          displayName: Stirling-PDF
+  sablier-linkding:
+    plugin:
+      sablier:
+        sablierUrl: http://sablier:10000
+        group: linkding
+        dynamic:
+          displayName: Linkding
+  sablier-metube:
+    plugin:
+      sablier:
+        sablierUrl: http://sablier:10000
+        group: metube
+        dynamic:
+          displayName: MeTube
+  sablier-pyload:
+    plugin:
+      sablier:
+        sablierUrl: http://sablier:10000
+        group: pyload
+        dynamic:
+          displayName: PyLoad

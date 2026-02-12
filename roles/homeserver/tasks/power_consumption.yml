@@ -1,0 +1,19 @@
+---
+- name: Update or create powertop.service
+  ansible.builtin.blockinfile:
+    path: /etc/systemd/system/powertop.service
+    mode: "0644"
+    owner: root
+    group: root
+    create: true
+    block: |
+      [Unit]
+      Description=Powertop tunings
+
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      ExecStart=/usr/sbin/powertop --auto-tune
+
+      [Install]
+      WantedBy=multi-user.target sleep.target

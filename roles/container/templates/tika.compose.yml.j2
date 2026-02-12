@@ -8,6 +8,14 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
+    healthcheck:
+      test: [CMD, java, --version]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
     container_name: tika
     hostname: tika
     restart: unless-stopped

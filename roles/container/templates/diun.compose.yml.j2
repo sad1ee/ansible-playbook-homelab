@@ -32,6 +32,14 @@ services:
 
     command: serve
 
+    healthcheck:
+      test: [CMD, diun, --version]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
     depends_on:
       docker-proxy:
         condition: service_healthy

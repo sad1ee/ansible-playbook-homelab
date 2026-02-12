@@ -14,7 +14,6 @@ config_path_tmp: "{{ container_path_tmp }}"
 config_path: "{{ container_path }}"
 config_webui_port: "{{ container_webui_port }}"
 config_docker_proxy_host: "{{ container_docker_proxy_host }}"
-config_netserver_domain: "{{ container_netserver_domain }}"
 
 # Container defaults override
 container_domain_base: "{{ domain_base }}"

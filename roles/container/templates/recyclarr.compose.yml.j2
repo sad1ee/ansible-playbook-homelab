@@ -15,6 +15,14 @@ services:
     security_opt: [no-new-privileges:true]
     user: "{{ container_puid }}:{{ container_pgid }}"
 
+    healthcheck:
+      test: [CMD, recyclarr, -v]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
     container_name: recyclarr
     hostname: recyclarr
     restart: unless-stopped

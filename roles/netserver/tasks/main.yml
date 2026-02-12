@@ -1,4 +1,0 @@
----
-- name: Configure system configuration for pihole
-  ansible.builtin.include_tasks: pihole.yml
-  tags: [netserver, pihole]

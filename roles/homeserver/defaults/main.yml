@@ -13,7 +13,7 @@ homeserver_mount_dirs:
 
 homeserver_physical_drives:
   - mnt: "{{ homeserver_mount_dirs.ssd1 }}"
-    uuid: fda22c38-eb4d-481a-adff-1b14d8f0288d
+    uuid: 22442d6e-d092-4897-8aca-d3200b936986 # fda22c38-eb4d-481a-adff-1b14d8f0288d
     type: ext4
     opts: defaults
     spindown: false
@@ -62,13 +62,15 @@ homeserver_mergerfs_cache_mover:
     - .snapraid
     - docker
     - media/downloads
-    - audiobooks
-    # - media/torrents/audiobooks
+    - media/torrents/audiobooks
     - media/torrents/books
     - media/torrents/incomplete
     - media/library/audiobooks
     - media/library/music
     - media/library/podcasts
+    - backup/opnsense
+    - backup/omada
+    - backup/switch
 
 homeserver_disabled_services: []
 

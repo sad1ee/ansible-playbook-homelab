@@ -19,11 +19,6 @@
             server: local-docker
             container: uptime-kuma
 
-        - Pihole:
-            icon: pi-hole-unbound
-            href: https://pihole.{{ config_domain_base }}
-            ping: netserver.lan
-
         - Traefik:
             icon: traefik
             href: https://traefik.{{ config_domain_base }}
@@ -65,6 +60,22 @@
             href: https://authelia.{{ config_domain_base }}
             server: local-docker
             container: authelia
+
+        - OPNsense:
+            icon: opnsense
+            href: https://opnsense.{{ config_domain_base }}
+
+        - Switch:
+            icon: router
+            href: https://switch.{{ config_domain_base }}
+
+        - Omada:
+            icon: omada
+            href: https://omada.{{ config_domain_base }}
+
+        - ISP-Router:
+            icon: vodafone
+            href: https://router.{{ config_domain_base }}
 
     - Services:
         - Paperless:

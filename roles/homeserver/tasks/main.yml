@@ -11,6 +11,10 @@
   ansible.builtin.import_tasks: hdd_spindown.yml
   tags: [homeserver, spindown]
 
+- name: Ensure power consumption is configured
+  ansible.builtin.import_tasks: power_consumption.yml
+  tags: [homeserver, power_consumption]
+
 - name: Ensure hardware transcoding for jellyfin is configured
   ansible.builtin.import_tasks: transcoding.yml
   tags: [homeserver, transcoding]

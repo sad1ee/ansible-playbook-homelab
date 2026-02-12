@@ -10,8 +10,6 @@ config_path_tmp: OverrideMeInGroupVars
 config_path: [OverrideMeInGroupVars]
 config_webui_port: [OverrideMeInGroupVars]
 
-config_netserver_domain: OverrideMeInGroupVars
-
 config_docker_proxy_host: OverrideMeInGroupVars
 
 # *********************************************************************************** #

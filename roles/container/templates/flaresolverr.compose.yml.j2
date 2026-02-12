@@ -13,6 +13,14 @@ services:
     hostname: flaresolverr
     restart: unless-stopped
 
+    healthcheck:
+      test: [CMD, curl, -sf, http://127.0.0.1:8191]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
     networks:
       - flaresolverr
 

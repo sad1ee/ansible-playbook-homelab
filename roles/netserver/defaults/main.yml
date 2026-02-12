@@ -1,4 +1,0 @@
----
-netserver_network_lan:
-  ipv4:
-    dns: 192.168.0.99

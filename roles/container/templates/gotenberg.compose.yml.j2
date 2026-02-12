@@ -13,6 +13,14 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
+    healthcheck:
+      test: [CMD, curl, -sf, http://127.0.0.1:3000/health]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
     container_name: gotenberg
     hostname: gotenberg
     restart: unless-stopped

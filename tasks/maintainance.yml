@@ -14,16 +14,18 @@
   community.docker.docker_prune:
     containers: true
     containers_filters:
-      until: 15m
+      until: 24h
     images: true
     images_filters:
-      until: 168h
+      until: 24h
       dangling: true
     networks: true
     networks_filters:
-      until: 15m
+      until: 24h
     volumes: true
     builder_cache: true
+    builder_cache_filters:
+      until: 24h
   tags: [never, maintainance]
 
 - name: maintainance | Select compose files
