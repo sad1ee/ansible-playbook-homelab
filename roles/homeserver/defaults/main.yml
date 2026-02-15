@@ -54,23 +54,21 @@ homeserver_mergerfs_cache_mover:
     minute: 0
   trigger:
     threshold: 80
-    target: 40
+    target: 60
   excluded:
-    - lost+found
     - .beszel
-    - .Trash-1000
     - .snapraid
+    - .Trash-1000
+    - backup
     - docker
+    - lost+found
     - media/downloads
-    - media/torrents/audiobooks
-    - media/torrents/books
-    - media/torrents/incomplete
     - media/library/audiobooks
     - media/library/music
     - media/library/podcasts
-    - backup/opnsense
-    - backup/omada
-    - backup/switch
+    - media/torrents/audiobooks
+    - media/torrents/books
+    - media/torrents/incomplete
 
 homeserver_disabled_services: []
 

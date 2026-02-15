@@ -1,13 +1,16 @@
 ---
 - name: cache_mover | Clone mergerfs-cache-mover git repo
+  become: false
   ansible.builtin.git:
     repo: https://github.com/MonsterMuffin/mergerfs-cache-mover.git
     dest: /home/user/repos/github/mergerfs-cache-mover
     version: main
-    update: "false"
+    force: true
+    update: true
   tags: [homeserver, cache_mover]
 
 - name: cache_mover | Install mergerfs-cache-mover requirements
+  become: false
   ansible.builtin.pip:
     requirements: /home/user/repos/github/mergerfs-cache-mover/requirements.txt
     virtualenv: /home/user/repos/github/mergerfs-cache-mover/venv

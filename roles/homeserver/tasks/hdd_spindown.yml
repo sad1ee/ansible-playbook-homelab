@@ -1,7 +1,7 @@
 ---
 - name: hdd_spindown | Configure hd-idle configuration
   ansible.builtin.lineinfile:
-    path: /etc/defaults/hd-idle
+    path: /etc/default/hd-idle
     regexp: ^#?HD_IDLE_OPTS=
     line: HD_IDLE_OPTS=-i 600 -l /var/log/hd-idle.log
     state: present
@@ -9,6 +9,14 @@
     group: root
     mode: "0644"
     create: "true"
+  tags: [homeserver, spindown]
+
+- name: hdd_spindown | Start and enable hd-idle
+  ansible.builtin.systemd:
+    name: hd-idle
+    state: started
+    enabled: enabled
+  loop: "{{ homeserver_disabled_services }}"
   tags: [homeserver, spindown]
 
 - name: hdd_spindown | Stop and disable services

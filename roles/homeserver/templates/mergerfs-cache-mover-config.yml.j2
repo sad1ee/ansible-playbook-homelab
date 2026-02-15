@@ -3,18 +3,18 @@ Paths:
   BACKING_PATH: /mnt/{{ homeserver_mount_dirs.mergerfs_pool_hdds }}
   LOG_PATH: /var/log/cache-mover.log
 
-Settings":
+Settings:
   AUTO_UPDATE: false
   UPDATE_BRANCH: main
   THRESHOLD_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.threshold }}
   TARGET_PERCENTAGE: {{ homeserver_mergerfs_cache_mover.trigger.target }}
   MAX_WORKERS: 8
-  MAX_LOG_SIZE_MB: 100
+  MAX_LOG_SIZE_MB: 250
   BACKUP_COUNT: 5
   SCHEDULE: 0 3 * * * # Docker only - ignored for cron
   LOG_LEVEL: INFO # INFO, DEBUG
-  NOTIFICATIONS_ENABLED: "true"
-  NOTIFY_THRESHOLD: "false"
+  NOTIFICATIONS_ENABLED: true
+  NOTIFY_THRESHOLD: false
   NOTIFICATION_URLS: [
       "ntfys://{{ homeserver_ntfy_cache_mover_token }}\
       @ntfy.{{ homeserver_domain_base }}/cache-mover?\

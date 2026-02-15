@@ -8,7 +8,7 @@ services:
       traefik.http.routers.shelfmark.rule: Host(`shelfmark.{{ container_domain_base }}`)
       traefik.http.routers.shelfmark.service: shelfmark
       traefik.http.services.shelfmark.loadbalancer.server.port: "{{ container_webui_port.shelfmark }}"
-      traefik.http.routers.shelfmark.middlewares: authelia@docker
+      traefik.http.routers.shelfmark.middlewares: authelia@docker, sablier-shelfmark@file
 
       traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.{{ container_domain_base }}`)
       traefik.http.routers.qbittorrent.service: qbittorrent
@@ -42,7 +42,7 @@ services:
       - NET_ADMIN
 
     healthcheck:
-      test: [ CMD, /gluetun-entrypoint, healthcheck ]
+      test: [CMD, /gluetun-entrypoint, healthcheck]
       interval: 300s
       timeout: 30s
       retries: "3"

@@ -57,6 +57,14 @@ access_control:
       policy: bypass
       networks: localnet
 
+    - domain: vaultwarden.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
+
+    - domain: freshrss.{{ config_domain_base }}
+      policy: bypass
+      networks: localnet
+
     # Bypass completly for browser addon access (has oidc)
     - domain: linkding.{{ config_domain_base }}
       policy: bypass
@@ -69,6 +77,8 @@ access_control:
 
     # RBAC for groups
     - domain:
+        - stirlingpdf.{{ config_domain_base }}
+        - jellyseer.{{ config_domain_base }}
         - shelfmark.{{ config_domain_base }}
       policy: one_factor
       subject: [group:application_user]
@@ -218,3 +228,41 @@ identity_providers:
         require_pkce: false
         pkce_challenge_method: ""
         token_endpoint_auth_method: client_secret_post
+
+      - client_id: vaultwarden
+        client_name: Vaultwarden
+        client_secret: "{{ config_authelia_client_secret_vaultwarden }}"
+        authorization_policy: allow-all
+        redirect_uris:
+          - https://vaultwarden.{{ config_domain_base }}/identity/connect/oidc-signin
+        pre_configured_consent_duration: 3M
+        require_pkce: true
+        pkce_challenge_method: S256
+        grant_types:
+          - authorization_code
+          - refresh_token
+        scopes:
+          - openid
+          - email
+          - profile
+          - offline_access
+
+      - client_id: pgadmin
+        client_name: pgAdmin
+        client_secret: "{{ config_authelia_client_secret_pgadmin }}"
+        authorization_policy: allow-admin
+        redirect_uris:
+          - https://pgadmin.{{ config_domain_base }}/oauth2/authorize
+        pre_configured_consent_duration: 3M
+        require_pkce: true
+        pkce_challenge_method: S256
+
+      - client_id: freshrss
+        client_name: FreshRSS
+        client_secret: "{{ config_authelia_client_secret_freshrss }}"
+        authorization_policy: allow-all
+        redirect_uris:
+          - https://freshrss.{{ config_domain_base }}:443/i/oidc/
+        pre_configured_consent_duration: 3M
+        require_pkce: false
+        pkce_challenge_method: ""

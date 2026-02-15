@@ -14,8 +14,8 @@ services:
       - "{{ container_path.podsync.config }}/config.toml:/app/config.toml"
       - /etc/localtime:/etc/localtime:ro
 
-    security_opt: [no-new-privileges:true]
-    user: "{{ container_puid }}:{{ container_pgid }}"
+    # security_opt: [no-new-privileges:true]
+    # user: "{{ container_puid }}:{{ container_pgid }}"
 
     healthcheck:
       test: [CMD, wget, -q, --tries=1, --spider, http://localhost:8080]

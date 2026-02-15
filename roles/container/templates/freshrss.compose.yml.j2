@@ -1,0 +1,55 @@
+services:
+  freshrss:
+    image: freshrss/freshrss:latest
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.freshrss.rule: Host(`freshrss.{{ container_domain_base }}`)
+      traefik.http.services.freshrss.loadbalancer.server.port: "80"
+      traefik.http.routers.freshrss.middlewares: authelia@docker
+
+      dev.dozzle.group: Services
+
+    environment:
+      TZ: "{{ container_tz }}"
+      CRON_MIN: 13,43
+      BASE_URL: https://freshrss.{{ container_domain_base }}
+      # DB_HOST: postgres
+      # DB_BASE: freshrss
+      # DB_USER: freshrss
+      # DB_PASSWORD: "{{ container_freshrss_db_pass }}"
+      OIDC_ENABLED: 1
+      OIDC_PROVIDER_METADATA_URL: https://authelia.{{ container_domain_base }}/.well-known/openid-configuration
+      OIDC_CLIENT_ID: freshrss
+      OIDC_CLIENT_SECRET: "{{ config_authelia_client_secret_freshrss_plain }}"
+      OIDC_CLIENT_CRYPTO_KEY: "{{ config_freshrss_crypto_key }}"
+      OIDC_REMOTE_USER_CLAIM: preferred_username
+      OIDC_SCOPES: openid groups email profile
+      OIDC_X_FORWARDED_HEADERS: X-Forwarded-Host X-Forwarded-Port X-Forwarded-Proto
+
+    volumes:
+      - "{{ container_path.freshrss }}:/var/www/FreshRSS/data"
+
+    healthcheck:
+      test: [CMD, cli/health.php]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
+    container_name: freshrss
+    hostname: freshrss
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - postgres
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  postgres:
+    external: true
+    name: postgres

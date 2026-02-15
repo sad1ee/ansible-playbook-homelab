@@ -1,0 +1,50 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest-alpine
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.vaultwarden.rule: Host(`vaultwarden.{{ container_domain_base }}`)
+      traefik.http.services.vaultwarden.loadbalancer.server.port: "80"
+      traefik.http.routers.vaultwarden.middlewares: authelia@docker
+
+      dev.dozzle.group: Services
+
+    environment:
+      DATABASE_URL: postgresql://vaultwarden:{{ container_vaultwarden_db_pass }}@postgres:5432/vaultwarden
+      PUSH_ENABLED: true
+      PUSH_INSTALLATION_ID: "{{ container_vaultwarden_push_installation_id }}"
+      PUSH_INSTALLATION_KEY: "{{ container_vaultwarden_push_installation_key }}"
+      PUSH_RELAY_URI: https://api.bitwarden.eu
+      PUSH_IDENTITY_URI: https://identity.bitwarden.eu
+
+    volumes:
+      - "{{ container_path.vaultwarden }}:/data"
+      - /etc/localtime:/etc/localtime:ro
+
+    security_opt: [no-new-privileges:true]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    healthcheck:
+      test: [CMD, curl, -sf, http://127.0.0.1:80/alive]
+      interval: 300s
+      timeout: 30s
+      retries: "3"
+      start_period: 60s
+      start_interval: 2s
+
+    container_name: vaultwarden
+    hostname: vaultwarden
+    restart: unless-stopped
+
+    networks:
+      - traefik
+      - postgres
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+  postgres:
+    external: true
+    name: postgres

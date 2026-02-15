@@ -52,7 +52,7 @@ services:
         condition: service_started
 
     healthcheck:
-      test: [CMD, curl, -fs, -S, -L, --max-time, "2", http://localhost:8000]
+      test: [CMD, curl, -sf, -S, -L, --max-time, "2", http://localhost:8000]
       interval: 300s
       timeout: 30s
       retries: "3"

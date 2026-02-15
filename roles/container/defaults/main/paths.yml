@@ -44,6 +44,8 @@ container_path:
 
   dozzle: "{{ container_path_docker }}/dozzle"
 
+  freshrss: "{{ container_path_docker }}/freshrss"
+
   homepage: "{{ container_path_docker }}/homepage"
 
   immich:
@@ -137,3 +139,5 @@ container_path:
     plugins: "{{ container_path_docker_cache }}/traefik/plugins"
 
   uptime_kuma: "{{ container_path_docker }}/uptime-kuma"
+
+  vaultwarden: "{{ container_path_docker }}/vaultwarden"

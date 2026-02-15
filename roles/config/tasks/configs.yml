@@ -30,6 +30,8 @@
       file: traefik.yml
     - service: traefik
       file: dynamic.yml
+    - service: pgadmin
+      file: config_local.py
   delegate_to: localhost
   tags: [config, configs]
 
@@ -82,6 +84,21 @@
       config_path_key: "{{ config_path.traefik.config }}"
       file: traefik.yml
       path: traefik.yml
+  tags: [config, configs]
+
+- name: configs | Copy locally rendered compose templates to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/.ansible/configs/{{ item.file }}"
+    dest: "{{ item.config_path_key }}/{{ item.path }}"
+    mode: "0640"
+    owner: "5050"
+    group: "5050"
+  when: item.service in config_list
+  loop:
+    - service: pgadmin
+      config_path_key: "{{ config_path.pgadmin }}"
+      file: config_local.py
+      path: config_local.py
   tags: [config, configs]
 
 - name: configs | Copy locally rendered traefik templates to remote

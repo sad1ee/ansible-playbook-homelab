@@ -11,8 +11,6 @@ services:
       dev.dozzle.group: Services
 
     environment:
-      PUID: "{{ container_puid }}"
-      PGID: "{{ container_pgid }}"
       TZ: "{{ container_tz }}"
       IMMICH_LOG_LEVEL: log # debug, log
       DB_HOSTNAME: immich-db
@@ -27,8 +25,14 @@ services:
     volumes:
       - "{{ container_path.immich.data }}:/data"
 
-    devices:
-      - /dev/dri:/dev/dri
+    security_opt: [no-new-privileges:true]
+    user: "{{ container_puid }}:{{ container_pgid }}"
+
+    # devices:
+    #   - /dev/dri:/dev/dri
+    #
+    # group_add:
+    #   - 993
 
     depends_on:
       immich-db:
@@ -37,7 +41,7 @@ services:
         condition: service_healthy
 
     healthcheck:
-      test: [ CMD, immich-healthcheck ]
+      test: [CMD, immich-healthcheck]
       interval: 60s
       timeout: 30s
       retries: "3"
@@ -54,27 +58,29 @@ services:
       - immich
 
   immich-ml:
-    image: ghcr.io/immich-app/immich-machine-learning:v2-rocm
+    image: ghcr.io/immich-app/immich-machine-learning:v2 # -rocm
 
     labels:
       dev.dozzle.group: Backend
 
-    group_add:
-      - video
-
-    devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
+    # NOTE: GFX not jet supported by rocm
+    # environment:
+    #   HSA_OVERRIDE_GFX_VERSION: 11.0.0
+    #   HSA_USE_SVM: 0
+    #
+    # group_add:
+    #   - video
+    #
+    # devices:
+    #   - /dev/dri:/dev/dri
+    #   - /dev/kfd:/dev/kfd
 
     volumes:
       - "{{ container_path.immich.ml }}:/cache"
       - /etc/localtime:/etc/localtime:ro
 
-    # device_cgroup_rules:
-    #   - c 189:* rmw
-
     healthcheck:
-      test: [ CMD, python3, healthcheck.py ]
+      test: [CMD, python3, healthcheck.py]
       interval: 60s
       timeout: 30s
       retries: "3"
@@ -107,7 +113,7 @@ services:
     shm_size: 128mb
 
     healthcheck:
-      test: [ CMD, pg_isready, -U, postgres, -d, postgres ]
+      test: [CMD, pg_isready, -U, postgres, -d, postgres]
       interval: 60s
       timeout: 30s
       retries: "3"

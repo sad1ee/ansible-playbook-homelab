@@ -1,31 +1,39 @@
 # yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
 
-middlewares:
-  sablier-stirlingpdf:
-    plugin:
-      sablier:
-        sablierUrl: http://sablier:10000
-        group: stirlingpdf
-        dynamic:
-          displayName: Stirling-PDF
-  sablier-linkding:
-    plugin:
-      sablier:
-        sablierUrl: http://sablier:10000
-        group: linkding
-        dynamic:
-          displayName: Linkding
-  sablier-metube:
-    plugin:
-      sablier:
-        sablierUrl: http://sablier:10000
-        group: metube
-        dynamic:
-          displayName: MeTube
-  sablier-pyload:
-    plugin:
-      sablier:
-        sablierUrl: http://sablier:10000
-        group: pyload
-        dynamic:
-          displayName: PyLoad
+http:
+  middlewares:
+    sablier-stirlingpdf:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: stirlingpdf
+          dynamic:
+            displayName: Stirling-PDF
+    sablier-metube:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: metube
+          dynamic:
+            displayName: MeTube
+    sablier-pyload:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: pyload
+          dynamic:
+            displayName: PyLoad
+    sablier-pgadmin:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: pgadmin
+          dynamic:
+            displayName: PGAdmin
+    sablier-shelfmark:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: shelfmark
+          dynamic:
+            displayName: Shelfmark

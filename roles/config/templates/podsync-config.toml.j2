@@ -25,7 +25,7 @@ timeout = 15
   update_period = "12h"
   quality = "high"
   format = "audio"
-  filters = { min_duration = 300, max_duration = 14400, max_age = 14, min_age = 1 }
+  filters = { min_duration = 300, max_duration = 21600, max_age = 14, min_age = 0 }
 
   [feeds.darksomnium]
   url = "https://www.youtube.com/channel/UC_e39rWdkQqo5-LbiLiU10g"
@@ -33,4 +33,12 @@ timeout = 15
   update_period = "12h"
   quality = "high"
   format = "audio"
-  filters = { min_duration = 300, max_duration = 14400, max_age = 14, min_age = 1 }
+  filters = { min_duration = 300, max_duration = 21600, max_age = 14, min_age = 0 }
+
+  [feeds.dusklightradio]
+  url = "https://www.youtube.com/channel/UCoTpyhCI2Lm4zA8ItHHzAAw"
+  page_size = 3
+  update_period = "12h"
+  quality = "high"
+  format = "audio"
+  filters = { min_duration = 300, max_duration = 21600, max_age = 14, min_age = 0 }

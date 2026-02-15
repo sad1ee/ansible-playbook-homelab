@@ -61,6 +61,7 @@
             server: local-docker
             container: authelia
 
+    - Network:
         - OPNsense:
             icon: opnsense
             href: https://opnsense.{{ config_domain_base }}
@@ -73,7 +74,7 @@
             icon: omada
             href: https://omada.{{ config_domain_base }}
 
-        - ISP-Router:
+        - Router:
             icon: vodafone
             href: https://router.{{ config_domain_base }}
 
@@ -107,6 +108,18 @@
             href: https://linkding.{{ config_domain_base }}
             server: local-docker
             container: linkding
+
+        - Vaultwarden:
+            icon: vaultwarden
+            href: https://vaultwarden.{{ config_domain_base }}
+            server: local-docker
+            container: vaultwarden
+
+        - FreshRSS:
+            icon: freshrss
+            href: https://freshrss.{{ config_domain_base }}
+            server: local-docker
+            container: freshrss
 
     - Media:
         - Jellyfin:
@@ -152,7 +165,7 @@
             server: local-docker
             container: metube
 
-    - Backend:
+    - Arr:
         - Radarr:
             icon: radarr
             href: https://radarr.{{ config_domain_base }}

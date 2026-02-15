@@ -1,28 +1,32 @@
 services:
   pgadmin:
-    image: dpage/pgadmin4:9.11
+    image: dpage/pgadmin4:9
 
     labels:
       traefik.enable: true
       traefik.http.routers.pgadmin.rule: Host(`pgadmin.{{ container_domain_base }}`)
       traefik.http.services.pgadmin.loadbalancer.server.port: "80"
-      traefik.http.routers.pgadmin.middlewares: authelia@docker
+      traefik.http.routers.pgadmin.middlewares: authelia@docker, sablier-pgadmin@file
+
+      sablier.enable: true
+      sablier.group: pgadmin
+      traefik.docker.allownonrunning: true
 
       dev.dozzle.group: Administration
 
     environment:
-      # PUID: "{{ container_puid }}"
-      # PGID: "{{ container_pgid }}"
-      # TZ: "{{ container_tz }}"
-      PGADMIN_DEFAULT_EMAIL: "{{ container_pgadmin_user }}"
-      PGADMIN_DEFAULT_PASSWORD: "{{ container_pgadmin_pass }}"
+      # Needed for initial creation
+      # PGADMIN_DEFAULT_EMAIL: "{{ container_pgadmin_user }}"
+      # PGADMIN_DEFAULT_PASSWORD: "{{ container_pgadmin_pass }}"
       PGADMIN_DISABLE_POSTFIX: true
 
     volumes:
       - "{{ container_path.pgadmin }}:/var/lib/pgadmin"
+      - "{{ container_path.pgadmin }}/config_local.py:/pgadmin4/config_local.py"
+      - /etc/localtime:/etc/localtime:ro
 
     healthcheck:
-      test: [ CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:80 ]
+      test: [CMD, wget, -q, --tries=1, --spider, http://127.0.0.1:80]
       interval: 300s
       timeout: 30s
       retries: "3"

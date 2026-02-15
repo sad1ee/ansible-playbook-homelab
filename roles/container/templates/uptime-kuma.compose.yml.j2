@@ -17,7 +17,7 @@ services:
       - "{{ container_path.uptime_kuma }}:/app/data"
 
     healthcheck:
-      test: [ CMD, curl, -f, http://127.0.0.1:3001 ]
+      test: [CMD, curl, -sf, http://127.0.0.1:3001]
       interval: 300s
       timeout: 30s
       retries: "3"

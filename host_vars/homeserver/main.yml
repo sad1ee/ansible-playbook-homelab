@@ -45,6 +45,7 @@ container_list:
   - dozzle
   - flaresolverr
   - gluetun
+  - freshrss
   - gotenberg
   - homepage
   - immich
@@ -74,3 +75,4 @@ container_list:
   - tika
   - traefik
   - uptime-kuma
+  - vaultwarden

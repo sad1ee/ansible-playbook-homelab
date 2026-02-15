@@ -3,6 +3,10 @@ services:
     image: ghcr.io/calibrain/shelfmark:latest
 
     labels:
+      sablier.enable: true
+      sablier.group: shelfmark
+      traefik.docker.allownonrunning: true
+
       dev.dozzle.group: Acquisition
 
     environment:

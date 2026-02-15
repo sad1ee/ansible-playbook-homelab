@@ -16,7 +16,7 @@ services:
       DOZZLE_HOSTNAME: homeserver
       DOZZLE_ENABLE_ACTIONS: true
       DOZZLE_NO_ANALYTICS: true
-      # DOZZLE_REMOTE_AGENT: "{{ container_dozzle_remote_agent }}"
+      # DOZZLE_REMOTE_AGENT: "{ { container_dozzle_remote_agent } }"
       DOZZLE_AUTH_PROVIDER: forward-proxy
 
     volumes:
@@ -24,7 +24,7 @@ services:
       - "{{ container_path.dozzle }}:/data"
 
     healthcheck:
-      test: [CMD, /dozzle, healthcheck]
+      test: [ CMD, /dozzle, healthcheck ]
       interval: 300s
       timeout: 30s
       retries: "3"
